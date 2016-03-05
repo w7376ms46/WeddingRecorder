@@ -10,18 +10,58 @@
 
 @interface AttendantTableViewController ()
 
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
+
 @end
 
 @implementation AttendantTableViewController
 
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    userDefaults = [NSUserDefaults standardUserDefaults];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
+    [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!object) {
+            NSLog(@"The getFirstObject request failed.");
+            name.text = @"";
+            phone.text = @"";
+            attendWilling.selectedSegmentIndex = -1;
+            nickName.text = @"";
+            addressRegion.text = @"";
+            addressDetail.text = @"";
+            relation.selectedSegmentIndex = -1;
+            peopleNumber.text = @"0";
+            vagetableNumber.text = @"0";
+            meatNumber.text = @"0";
+            session.selectedSegmentIndex = -1;
+            
+            [peopleCount setValue:0];
+            [vagetableCount setValue:0];
+            [meatCount setValue:0];
+        }
+        else {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved the object.");
+            [name setText:object[@"Name"]];
+            [phone setText:object[@"Phone"]];
+            [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
+            [nickName setText:object[@"NickName"]];
+            [addressRegion setText:object[@"AddressRegion"]];
+            [addressDetail setText:object[@"AddressDetail"]];
+            [relation setSelectedSegmentIndex:[object[@"Relation"]integerValue]];
+            [peopleNumber setText:[NSString stringWithFormat:@"%ld",[object[@"PeopleNumber"] integerValue]]];
+            [peopleCount setValue:[object[@"PeopleNumber"] integerValue]];
+            [vagetableNumber setText:[NSString stringWithFormat:@"%ld",[object[@"VagetableNumber"] integerValue]]];
+            [vagetableCount setValue:[object[@"VagetableNumber"] integerValue]];
+            [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
+            [meatCount setValue:[object[@"MeatNumber"] integerValue]];
+            [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,70 +69,79 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
     return 10;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
+
+- (IBAction)peopleNumberStepper:(id)sender {
+    [peopleNumber setText:[NSString stringWithFormat:@"%.0f", peopleCount.value]];
+    if ([peopleCount value] < [vagetableCount value]+[meatCount value]) {
+        [vagetableCount setValue:0];
+        [meatCount setValue:0];
+        [vagetableNumber setText:@"0"];
+        [meatNumber setText:@"0"];
+    }
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (IBAction)vagetableNumberStepper:(id)sender {
+    if ([vagetableCount value]+[meatNumber.text integerValue]>[peopleNumber.text integerValue]) {
+        [vagetableCount setValue:[vagetableNumber.text integerValue]];
+        return;
+    }
+    [vagetableNumber setText:[NSString stringWithFormat:@"%.0f", vagetableCount.value]];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (IBAction)meatNumberStepper:(id)sender {
+    if ([vagetableNumber.text integerValue]+[meatCount value]>[peopleNumber.text integerValue]) {
+        [meatCount setValue:[meatNumber.text integerValue]];
+        return;
+    }
+    [meatNumber setText:[NSString stringWithFormat:@"%.0f", meatCount.value]];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+- (IBAction)saveData:(id)sender {
+    PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
+    // Retrieve the object by id
+    [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *registrationData, NSError *error) {
+        if (!registrationData) {
+            registrationData = [PFObject objectWithClassName:@"AttendantList"];
+        }
+        registrationData[@"Name"] = name.text;
+        registrationData[@"Phone"] = phone.text;
+        registrationData[@"AttendingWilling"] = @(attendWilling.selectedSegmentIndex);
+        registrationData[@"NickName"] = nickName.text;
+        registrationData[@"AddressRegion"] = addressRegion.text;
+        registrationData[@"AddressDetail"] = addressDetail.text;
+        registrationData[@"Relation"] = @(relation.selectedSegmentIndex);
+        registrationData[@"PeopleNumber"] = @([peopleNumber.text integerValue]);
+        registrationData[@"VagetableNumber"] = @([vagetableNumber.text integerValue]);
+        registrationData[@"MeatNumber"] = @([meatNumber.text integerValue]);
+        registrationData[@"Session"] = @(session.selectedSegmentIndex);
+        registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
+        [registrationData saveInBackground];
+    }];
+    [userDefaults setObject:nickName.text forKey:@"NickName"];
+    [userDefaults synchronize];
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+- (IBAction)clearData:(id)sender {
+    name.text = @"";
+    phone.text = @"";
+    attendWilling.selectedSegmentIndex = -1;
+    nickName.text = @"";
+    addressRegion.text = @"";
+    addressDetail.text = @"";
+    relation.selectedSegmentIndex = -1;
+    peopleNumber.text = @"0";
+    vagetableNumber.text = @"0";
+    meatNumber.text = @"0";
+    session.selectedSegmentIndex = -1;
 }
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

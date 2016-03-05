@@ -24,5 +24,10 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *session;
 @property (weak, nonatomic) IBOutlet UILabel *vagetableNumber;
 @property (weak, nonatomic) IBOutlet UILabel *meatNumber;
+- (IBAction)peopleNumberStepper:(id)sender;
+- (IBAction)vagetableNumberStepper:(id)sender;
+- (IBAction)meatNumberStepper:(id)sender;
+- (IBAction)saveData:(id)sender;
+- (IBAction)clearData:(id)sender;
 
 @end

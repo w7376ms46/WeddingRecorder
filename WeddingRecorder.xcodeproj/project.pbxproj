@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF11C84AAC400821C0A /* PhotoViewController.m */; };
+		08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */; };
+		080E37B71C8427A200461B43 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080E37B61C8427A200461B43 /* DropboxSDK.framework */; };
 		08C0F8FE1C831F7700EE1FFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F8FD1C831F7700EE1FFF /* main.m */; };
 		08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F9001C831F7800EE1FFF /* AppDelegate.m */; };
 		08C0F90A1C831F7800EE1FFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C0F9081C831F7800EE1FFF /* Main.storyboard */; };
@@ -51,6 +54,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08036FF01C84AAC400821C0A /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
+		08036FF11C84AAC400821C0A /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
+		08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		080E37B61C8427A200461B43 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "dropbox-ios-sdk-1.3.13/DropboxSDK.framework"; sourceTree = "<group>"; };
+		08354C391C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		08354C3A1C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		08C0F8F91C831F7700EE1FFF /* WeddingRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08C0F8FD1C831F7700EE1FFF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		08C0F8FF1C831F7700EE1FFF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -90,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080E37B71C8427A200461B43 /* DropboxSDK.framework in Frameworks */,
 				08C0F9561C8341B500EE1FFF /* libsqlite3.tbd in Frameworks */,
 				08C0F9541C8341A500EE1FFF /* libz.tbd in Frameworks */,
 				08C0F9521C83419800EE1FFF /* SystemConfiguration.framework in Frameworks */,
@@ -155,6 +166,10 @@
 				08C0F9401C833E0E00EE1FFF /* AttendantTableViewController.h */,
 				08C0F9411C833E0E00EE1FFF /* AttendantTableViewController.m */,
 				08C0F9081C831F7800EE1FFF /* Main.storyboard */,
+				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
+				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
+				08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */,
+				08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */,
 				08C0F90B1C831F7800EE1FFF /* Assets.xcassets */,
 				08C0F90D1C831F7800EE1FFF /* LaunchScreen.storyboard */,
 				08C0F9101C831F7800EE1FFF /* Info.plist */,
@@ -192,6 +207,7 @@
 		08C0F9571C8341BB00EE1FFF /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				080E37B61C8427A200461B43 /* DropboxSDK.framework */,
 				08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */,
 				08C0F9531C8341A500EE1FFF /* libz.tbd */,
 				08C0F9341C833D4C00EE1FFF /* Bolts.framework */,
@@ -279,6 +295,7 @@
 				TargetAttributes = {
 					08C0F8F81C831F7700EE1FFF = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 4VP8FJ3FB2;
 					};
 					08C0F9141C831F7800EE1FFF = {
 						CreatedOnToolsVersion = 7.2;
@@ -343,7 +360,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */,
+				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
+				08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */,
 				08C0F8FE1C831F7700EE1FFF /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,6 +403,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				08C0F9091C831F7800EE1FFF /* Base */,
+				08354C391C88871600B7EB6C /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -392,6 +412,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				08C0F90E1C831F7800EE1FFF /* Base */,
+				08354C3A1C88871600B7EB6C /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -485,9 +506,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
+					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
 				);
 				INFOPLIST_FILE = WeddingRecorder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -502,9 +525,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
+					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
 				);
 				INFOPLIST_FILE = WeddingRecorder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -582,6 +607,7 @@
 				08C0F92B1C831F7800EE1FFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		08C0F92C1C831F7800EE1FFF /* Build configuration list for PBXNativeTarget "WeddingRecorderTests" */ = {
 			isa = XCConfigurationList;
@@ -590,6 +616,7 @@
 				08C0F92E1C831F7800EE1FFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		08C0F92F1C831F7800EE1FFF /* Build configuration list for PBXNativeTarget "WeddingRecorderUITests" */ = {
 			isa = XCConfigurationList;
@@ -598,6 +625,7 @@
 				08C0F9311C831F7800EE1FFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

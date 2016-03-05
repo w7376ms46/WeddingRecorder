@@ -1,0 +1,22 @@
+//
+//  PhotoViewController.h
+//  WeddingRecorder
+//
+//  Created by 志豪 陳 on 2016/3/1.
+//  Copyright © 2016年 ChihHaoChen. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
+#import "PhotoCollectionViewCell.h"
+@interface PhotoViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@property (weak, nonatomic) IBOutlet UICollectionView *photoCollectionView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *selectButton;
+
+- (IBAction)takePhoto:(id)sender;
+- (IBAction)chooseFromAlbum:(id)sender;
+- (IBAction)selectPhoto:(id)sender;
+- (IBAction)downloadPhoto:(id)sender;
+
+@end
