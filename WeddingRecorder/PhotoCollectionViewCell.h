@@ -10,7 +10,6 @@
 #import <ParseUI/ParseUI.h>
 @interface PhotoCollectionViewCell : PFCollectionViewCell; //UICollectionViewCell
 @property (weak, nonatomic) IBOutlet PFImageView *photo;
-@property (weak, nonatomic) IBOutlet UILabel *shooter;
-@property (weak, nonatomic) IBOutlet UILabel *tookDate;
+@property (weak, nonatomic) IBOutlet UIView *photoBackgroundView;
 
 @end

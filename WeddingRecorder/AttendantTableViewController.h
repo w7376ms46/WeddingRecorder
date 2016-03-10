@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface AttendantTableViewController : UITableViewController
+@interface AttendantTableViewController : UITableViewController<UITextFieldDelegate, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *name;
 @property (weak, nonatomic) IBOutlet UITextField *phone;
 @property (weak, nonatomic) IBOutlet UITextField *nickName;
@@ -24,10 +24,19 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *session;
 @property (weak, nonatomic) IBOutlet UILabel *vagetableNumber;
 @property (weak, nonatomic) IBOutlet UILabel *meatNumber;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *modifyButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cleanButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveDataButton;
+
+- (IBAction)chooseWilling:(id)sender;
+- (IBAction)modify:(id)sender;
+
 - (IBAction)peopleNumberStepper:(id)sender;
 - (IBAction)vagetableNumberStepper:(id)sender;
 - (IBAction)meatNumberStepper:(id)sender;
 - (IBAction)saveData:(id)sender;
 - (IBAction)clearData:(id)sender;
+- (IBAction)chooseSession:(id)sender;
+- (IBAction)chooseRelation:(id)sender;
 
 @end

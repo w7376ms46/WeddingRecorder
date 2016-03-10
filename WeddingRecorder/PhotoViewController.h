@@ -10,6 +10,9 @@
 #import <Parse/Parse.h>
 #import <ParseUI/ParseUI.h>
 #import "PhotoCollectionViewCell.h"
+#import "HeaderCollectionReusableView.h"
+#import "GalleryViewController.h"
+
 @interface PhotoViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *photoCollectionView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *selectButton;

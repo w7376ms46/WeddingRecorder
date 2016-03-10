@@ -10,6 +10,13 @@
 		08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF11C84AAC400821C0A /* PhotoViewController.m */; };
 		08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */; };
 		080E37B71C8427A200461B43 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080E37B61C8427A200461B43 /* DropboxSDK.framework */; };
+		081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */; };
+		081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */; };
+		081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0451C8C29B500B6808D /* GalleryViewController.m */; };
+		087155141C8DC50C00A7DF84 /* page1.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155101C8DC50C00A7DF84 /* page1.png */; };
+		087155151C8DC50C00A7DF84 /* page2.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155111C8DC50C00A7DF84 /* page2.png */; };
+		087155161C8DC50C00A7DF84 /* page3.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155121C8DC50C00A7DF84 /* page3.png */; };
+		087155171C8DC50C00A7DF84 /* page4.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155131C8DC50C00A7DF84 /* page4.png */; };
 		08C0F8FE1C831F7700EE1FFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F8FD1C831F7700EE1FFF /* main.m */; };
 		08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F9001C831F7800EE1FFF /* AppDelegate.m */; };
 		08C0F90A1C831F7800EE1FFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C0F9081C831F7800EE1FFF /* Main.storyboard */; };
@@ -59,8 +66,18 @@
 		08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
 		08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
 		080E37B61C8427A200461B43 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "dropbox-ios-sdk-1.3.13/DropboxSDK.framework"; sourceTree = "<group>"; };
+		081AA03E1C8C099500B6808D /* FullScreenPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenPhotoViewController.h; sourceTree = "<group>"; };
+		081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenPhotoViewController.m; sourceTree = "<group>"; };
+		081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderCollectionReusableView.h; sourceTree = "<group>"; };
+		081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderCollectionReusableView.m; sourceTree = "<group>"; };
+		081AA0441C8C29B500B6808D /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
+		081AA0451C8C29B500B6808D /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
 		08354C391C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		08354C3A1C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		087155101C8DC50C00A7DF84 /* page1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page1.png; sourceTree = "<group>"; };
+		087155111C8DC50C00A7DF84 /* page2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page2.png; sourceTree = "<group>"; };
+		087155121C8DC50C00A7DF84 /* page3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page3.png; sourceTree = "<group>"; };
+		087155131C8DC50C00A7DF84 /* page4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page4.png; sourceTree = "<group>"; };
 		08C0F8F91C831F7700EE1FFF /* WeddingRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08C0F8FD1C831F7700EE1FFF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		08C0F8FF1C831F7700EE1FFF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -161,13 +178,23 @@
 		08C0F8FB1C831F7700EE1FFF /* WeddingRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				087155101C8DC50C00A7DF84 /* page1.png */,
+				087155111C8DC50C00A7DF84 /* page2.png */,
+				087155121C8DC50C00A7DF84 /* page3.png */,
+				087155131C8DC50C00A7DF84 /* page4.png */,
 				08C0F8FF1C831F7700EE1FFF /* AppDelegate.h */,
 				08C0F9001C831F7800EE1FFF /* AppDelegate.m */,
 				08C0F9401C833E0E00EE1FFF /* AttendantTableViewController.h */,
 				08C0F9411C833E0E00EE1FFF /* AttendantTableViewController.m */,
 				08C0F9081C831F7800EE1FFF /* Main.storyboard */,
+				081AA0441C8C29B500B6808D /* GalleryViewController.h */,
+				081AA0451C8C29B500B6808D /* GalleryViewController.m */,
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
+				081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */,
+				081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */,
+				081AA03E1C8C099500B6808D /* FullScreenPhotoViewController.h */,
+				081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */,
 				08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */,
 				08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */,
 				08C0F90B1C831F7800EE1FFF /* Assets.xcassets */,
@@ -334,7 +361,11 @@
 			files = (
 				08C0F90F1C831F7800EE1FFF /* LaunchScreen.storyboard in Resources */,
 				08C0F90C1C831F7800EE1FFF /* Assets.xcassets in Resources */,
+				087155161C8DC50C00A7DF84 /* page3.png in Resources */,
+				087155171C8DC50C00A7DF84 /* page4.png in Resources */,
+				087155141C8DC50C00A7DF84 /* page1.png in Resources */,
 				08C0F90A1C831F7800EE1FFF /* Main.storyboard in Resources */,
+				087155151C8DC50C00A7DF84 /* page2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +390,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */,
+				081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */,
+				081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */,
 				08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */,
 				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
