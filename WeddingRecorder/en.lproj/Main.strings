@@ -14,8 +14,8 @@
 /* Class = "UIBarButtonItem"; title = "清空重填"; ObjectID = "8gz-og-ptx"; */
 "8gz-og-ptx.title" = "清空重填";
 
-/* Class = "UILabel"; text = "時間：2016年12月25日 中午12點"; ObjectID = "8pi-f0-7CT"; */
-"8pi-f0-7CT.text" = "時間";
+/* Class = "UILabel"; text = "時間："; ObjectID = "8pi-f0-7CT"; */
+"8pi-f0-7CT.text" = "時間：";
 
 /* Class = "UINavigationItem"; title = "出席意願"; ObjectID = "9d3-4r-w8C"; */
 "9d3-4r-w8C.title" = "出席意願";
@@ -23,37 +23,31 @@
 /* Class = "UILabel"; text = "聯絡電話"; ObjectID = "9gA-W9-j8R"; */
 "9gA-W9-j8R.text" = "聯絡電話";
 
-/* Class = "UILabel"; text = "時間：2016年12月03日 中午12點"; ObjectID = "Agm-bT-zHH"; */
-"Agm-bT-zHH.text" = "時間";
-
-/* Class = "UILabel"; text = "小明 拍攝"; ObjectID = "BMG-Cw-Ybq"; */
-"BMG-Cw-Ybq.text" = "小明 拍攝";
+/* Class = "UILabel"; text = "時間："; ObjectID = "Agm-bT-zHH"; */
+"Agm-bT-zHH.text" = "時間：";
 
 /* Class = "UIBarButtonItem"; title = "修改"; ObjectID = "DRc-qj-Rcq"; */
 "DRc-qj-Rcq.title" = "修改";
 
-/* Class = "UIButton"; normalTitle = "完成送出"; ObjectID = "DXQ-OC-xd7"; */
-"DXQ-OC-xd7.normalTitle" = "完成送出";
-
 /* Class = "UITextField"; placeholder = "詳細地址"; ObjectID = "Eu8-vo-ou6"; */
 "Eu8-vo-ou6.placeholder" = "詳細地址";
 
-/* Class = "UILabel"; text = "席設：新娘自宅前院"; ObjectID = "GNa-cs-FIH"; */
-"GNa-cs-FIH.text" = "場地";
+/* Class = "UIButton"; normalTitle = "場地"; ObjectID = "GCj-tC-h81"; */
+"GCj-tC-h81.normalTitle" = "場地";
 
-/* Class = "UITabBarItem"; title = "Item"; ObjectID = "Ku5-uk-Flj"; */
-"Ku5-uk-Flj.title" = "影片分享";
+/* Class = "UILabel"; text = "席設："; ObjectID = "GNa-cs-FIH"; */
+"GNa-cs-FIH.text" = "席設：";
+
+/* Class = "UITabBarItem"; title = "影片"; ObjectID = "Ku5-uk-Flj"; */
+"Ku5-uk-Flj.title" = "影片";
 
 /* Class = "UILabel"; text = "臺中市東區"; ObjectID = "L6o-3K-VT8"; */
 "L6o-3K-VT8.text" = "臺中市東區";
 
-/* Class = "UILabel"; text = "2016/12/25 15:00"; ObjectID = "Php-He-b6p"; */
-"Php-He-b6p.text" = "2016/12/25 15:00";
+/* Class = "UILabel"; text = "Label"; ObjectID = "Pod-Am-dvv"; */
+"Pod-Am-dvv.text" = "Label";
 
-/* Class = "UIBarButtonItem"; title = "相片上傳"; ObjectID = "Pkc-RD-sE2"; */
-"Pkc-RD-sE2.title" = "相片上傳";
-
-/* Class = "UIButton"; normalTitle = "XX會館"; ObjectID = "QeR-Og-sJN"; */
+/* Class = "UIButton"; normalTitle = "場地"; ObjectID = "QeR-Og-sJN"; */
 "QeR-Og-sJN.normalTitle" = "場地";
 
 /* Class = "UILabel"; text = "參與意願"; ObjectID = "Sup-3c-gnI"; */
@@ -74,8 +68,8 @@
 /* Class = "UILabel"; text = "參與場次"; ObjectID = "U7v-63-t9s"; */
 "U7v-63-t9s.text" = "參與場次";
 
-/* Class = "UIButton"; normalTitle = "台中市東區"; ObjectID = "WNi-sC-Dxp"; */
-"WNi-sC-Dxp.normalTitle" = "地址";
+/* Class = "UIButton"; normalTitle = "地點"; ObjectID = "WNi-sC-Dxp"; */
+"WNi-sC-Dxp.normalTitle" = "地點";
 
 /* Class = "UILabel"; text = "人"; ObjectID = "Wnx-MZ-S0x"; */
 "Wnx-MZ-S0x.text" = "人";
@@ -83,17 +77,23 @@
 /* Class = "UIBarButtonItem"; title = "影片上傳"; ObjectID = "Zg5-90-VlR"; */
 "Zg5-90-VlR.title" = "影片上傳";
 
+/* Class = "UIButton"; normalTitle = "日期"; ObjectID = "aSQ-XT-0qk"; */
+"aSQ-XT-0qk.normalTitle" = "日期";
+
 /* Class = "UITabBarItem"; title = "出席意願"; ObjectID = "acW-dT-cKf"; */
 "acW-dT-cKf.title" = "出席意願";
 
 /* Class = "UILabel"; text = "人"; ObjectID = "af2-uI-D31"; */
 "af2-uI-D31.text" = "人";
 
-/* Class = "UITabBarItem"; title = "婚禮資訊"; ObjectID = "cPa-gy-q4n"; */
-"cPa-gy-q4n.title" = "婚禮資訊";
+/* Class = "UITabBarItem"; title = "婚宴資訊"; ObjectID = "cPa-gy-q4n"; */
+"cPa-gy-q4n.title" = "婚宴資訊";
 
 /* Class = "UILabel"; text = "地點："; ObjectID = "cpW-DS-BNl"; */
 "cpW-DS-BNl.text" = "地點：";
+
+/* Class = "UIBarButtonItem"; title = "完成"; ObjectID = "fDr-hr-xTX"; */
+"fDr-hr-xTX.title" = "完成";
 
 /* Class = "UILabel"; text = "參加人數(含自己)"; ObjectID = "fZL-Mg-w7E"; */
 "fZL-Mg-w7E.text" = "參加人數(含自己)";
@@ -101,20 +101,26 @@
 /* Class = "UITextField"; placeholder = "縣市區域"; ObjectID = "g6s-Vt-x2m"; */
 "g6s-Vt-x2m.placeholder" = "縣市區域";
 
+/* Class = "UIBarButtonItem"; title = "下載"; ObjectID = "j8s-XU-ISA"; */
+"j8s-XU-ISA.title" = "下載";
+
 /* Class = "UILabel"; text = "喜帖寄送地址"; ObjectID = "jCY-gt-Bo9"; */
 "jCY-gt-Bo9.text" = "喜帖寄送地址";
 
 /* Class = "UILabel"; text = "真實姓名"; ObjectID = "jLP-uB-49E"; */
 "jLP-uB-49E.text" = "真實姓名";
 
+/* Class = "UIBarButtonItem"; title = "完成"; ObjectID = "jM0-Qc-7oB"; */
+"jM0-Qc-7oB.title" = "完成";
+
 /* Class = "UILabel"; text = "素食"; ObjectID = "l4L-VK-Vil"; */
 "l4L-VK-Vil.text" = "素食";
 
-/* Class = "UIBarButtonItem"; title = "相機拍照"; ObjectID = "lQu-s2-nJm"; */
-"lQu-s2-nJm.title" = "相機拍照";
-
-/* Class = "UIButton"; normalTitle = "臺南市六甲區六甲里中正路"; ObjectID = "nlb-yz-WWj"; */
+/* Class = "UIButton"; normalTitle = "地址"; ObjectID = "nlb-yz-WWj"; */
 "nlb-yz-WWj.normalTitle" = "地址";
+
+/* Class = "UIBarButtonItem"; title = "完成送出"; ObjectID = "nnT-r8-44m"; */
+"nnT-r8-44m.title" = "完成送出";
 
 /* Class = "UISegmentedControl"; o9j-Xg-ANk.segmentTitles[0] = "12月03號(訂婚)"; ObjectID = "o9j-Xg-ANk"; */
 "o9j-Xg-ANk.segmentTitles[0]" = "12月03號(訂婚)";
@@ -143,6 +149,15 @@
 /* Class = "UILabel"; text = "0"; ObjectID = "pu6-d4-Th8"; */
 "pu6-d4-Th8.text" = "0";
 
+/* Class = "UIBarButtonItem"; title = "完成"; ObjectID = "q6z-KZ-nay"; */
+"q6z-KZ-nay.title" = "完成";
+
+/* Class = "UIButton"; normalTitle = "日期"; ObjectID = "qZL-qt-Y4T"; */
+"qZL-qt-Y4T.normalTitle" = "日期";
+
+/* Class = "UIBarButtonItem"; title = "選取"; ObjectID = "rYy-qf-4Wr"; */
+"rYy-qf-4Wr.title" = "選取";
+
 /* Class = "UILabel"; text = "席設："; ObjectID = "tIZ-aU-g1X"; */
 "tIZ-aU-g1X.text" = "席設：";
 
@@ -155,8 +170,8 @@
 /* Class = "UILabel"; text = "地點："; ObjectID = "uGb-Yi-NVP"; */
 "uGb-Yi-NVP.text" = "地點：";
 
-/* Class = "UITabBarItem"; title = "照片紀錄"; ObjectID = "vdx-mE-XLU"; */
-"vdx-mE-XLU.title" = "照片紀錄";
+/* Class = "UITabBarItem"; title = "照片"; ObjectID = "vdx-mE-XLU"; */
+"vdx-mE-XLU.title" = "照片";
 
 /* Class = "UILabel"; text = "0"; ObjectID = "xqG-3P-LtU"; */
 "xqG-3P-LtU.text" = "0";

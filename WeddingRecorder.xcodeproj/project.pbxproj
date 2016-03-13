@@ -41,6 +41,7 @@
 		08C0F9521C83419800EE1FFF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9511C83419800EE1FFF /* SystemConfiguration.framework */; };
 		08C0F9541C8341A500EE1FFF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9531C8341A500EE1FFF /* libz.tbd */; };
 		08C0F9561C8341B500EE1FFF /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */; };
+		08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,9 @@
 		08C0F9511C83419800EE1FFF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		08C0F9531C8341A500EE1FFF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingInformationTableViewController.h; sourceTree = "<group>"; };
+		08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingInformationTableViewController.m; sourceTree = "<group>"; };
+		08EFC6121C91BD5F0090E6AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +192,8 @@
 				08C0F9411C833E0E00EE1FFF /* AttendantTableViewController.m */,
 				08C0F9081C831F7800EE1FFF /* Main.storyboard */,
 				081AA0441C8C29B500B6808D /* GalleryViewController.h */,
+				08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */,
+				08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */,
 				081AA0451C8C29B500B6808D /* GalleryViewController.m */,
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
@@ -393,6 +399,7 @@
 				081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */,
 				081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */,
 				081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */,
+				08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */,
 				08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */,
 				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
@@ -438,6 +445,7 @@
 			children = (
 				08C0F9091C831F7800EE1FFF /* Base */,
 				08354C391C88871600B7EB6C /* zh-Hant */,
+				08EFC6121C91BD5F0090E6AE /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
