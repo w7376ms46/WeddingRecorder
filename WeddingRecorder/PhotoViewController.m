@@ -7,7 +7,7 @@
 //
 
 #import "PhotoViewController.h"
-
+extern NSString *deviceName;
 @interface PhotoViewController ()
 
 @property (nonatomic, strong) NSMutableArray *photoData;
@@ -34,13 +34,13 @@
     userDefaults = [NSUserDefaults standardUserDefaults];
     [photoCollectionView setDelegate:self];
     [photoCollectionView setDataSource:self];
-    
+    photoDictionary = [[NSMutableDictionary alloc]init];
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(pullToRefresh)
              forControlEvents:UIControlEventValueChanged];
     [photoCollectionView addSubview:refreshControl];
     [photoCollectionView setAlwaysBounceVertical:YES];
-    
+    usePullRefresh = NO;
     photoData = [[NSMutableArray alloc]init];
     imagePicker = [[UIImagePickerController alloc]init];
     imagePicker.delegate = self;
@@ -52,7 +52,6 @@
 - (void) pullToRefresh{
     usePullRefresh = YES;
     [self loadPhotoData];
-    [refreshControl endRefreshing];
 }
 
 - (void) loadPhotoData{
@@ -61,37 +60,53 @@
             [self presentViewController:processing animated:YES completion:nil];
         });
     }
-    
-    photoDictionary = [[NSMutableDictionary alloc]init];
     PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
     [query orderByAscending:@"Shooter"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSLog(@"ddddddd  count = %d   %@", [objects count], error);
         if (!error) {
-            NSString *sectionTitle = [objects objectAtIndex:0][@"Shooter"];
-            NSMutableArray *photoTempArray = [[NSMutableArray alloc]init];
-            for (PFObject *object in objects) {
-                if ([sectionTitle isEqualToString:object[@"Shooter"]]) {
-                    [photoTempArray addObject:object];
-                }
-                else{
-                    [photoDictionary setObject:[photoTempArray mutableCopy] forKey:sectionTitle];
-                    sectionTitle = object[@"Shooter"];
-                    [photoTempArray removeAllObjects];
-                    [photoTempArray addObject:object];
+            if ([objects count] == 0) {
+                if (!usePullRefresh) {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:nil];
+                    });
                 }
             }
-            [photoDictionary setObject:photoTempArray forKey:sectionTitle];
-            photoDictionaryKey = [photoDictionary allKeys];
-            [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+            else{
+                NSString *sectionTitle = [objects objectAtIndex:0][@"Shooter"];
+                NSMutableArray *photoTempArray = [[NSMutableArray alloc]init];
+                for (PFObject *object in objects) {
+                    if ([sectionTitle isEqualToString:object[@"Shooter"]]) {
+                        [photoTempArray addObject:object];
+                    }
+                    else{
+                        [photoDictionary setObject:[photoTempArray mutableCopy] forKey:sectionTitle];
+                        sectionTitle = object[@"Shooter"];
+                        [photoTempArray removeAllObjects];
+                        [photoTempArray addObject:object];
+                    }
+                }
+                [photoDictionary setObject:photoTempArray forKey:sectionTitle];
+                photoDictionaryKey = [photoDictionary allKeys];
+                [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+                if (!usePullRefresh) {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:nil];
+                    });
+                }
+            }
+            [refreshControl endRefreshing];
+            
         }
         else {
+            [refreshControl endRefreshing];
+            if (!usePullRefresh) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [processing dismissViewControllerAnimated:YES completion:nil];
+                });
+            }
             NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-        if (!usePullRefresh) {
-            dispatch_async(dispatch_get_main_queue(),^{
-                [processing dismissViewControllerAnimated:YES completion:nil];
-            });
         }
     }];
 
@@ -114,13 +129,18 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSString *searchTerm = self.searches[indexPath.section];
-    //FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
-    
-    //CGSize retval = photo.thumbnail.size.width > 0 ? photo.thumbnail.size : CGSizeMake(100, 100);
-    //retval.height += 35;
-    //retval.width += 35;
-    return CGSizeMake(120, 120);
+    if ([deviceName isEqualToString:@"iPhone5"]) {
+        return CGSizeMake(100, 100);
+    }
+    else if ([deviceName isEqualToString:@"iPhone6"]){
+        return CGSizeMake(120, 120);
+    }
+    else if ([deviceName isEqualToString:@"iPhone6Plus"]){
+        return CGSizeMake(125, 125);
+    }
+    else{
+        return CGSizeMake(100,100);
+    }
 }
 
 - (CGFloat)collectionView:(UICollectionView *) collectionView
@@ -135,7 +155,6 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
     if (kind == UICollectionElementKindSectionHeader) {
         HeaderCollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
-        
         NSString *keyString = [[photoDictionary allKeys] objectAtIndex:indexPath.section];
         
         NSString *title = [[NSString alloc]initWithFormat:@"攝影師：%@", keyString];
@@ -163,7 +182,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
     PFObject *object = [tempArray objectAtIndex:[indexPath row]];
     
-    PFFile *thumbnail = object[@"Photo"];
+    PFFile *thumbnail = object[@"miniPhoto"];
     //cell.photo = [[PFImageView alloc]init];
     cell.photo.file = thumbnail;
     [cell.photo loadInBackground];
@@ -179,8 +198,11 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     if (!selection) {
-        [collectionView deselectItemAtIndexPath:indexPath animated:nil];
-        [self performSegueWithIdentifier:@"segueFullScreenPhoto" sender:indexPath];
+        if (![refreshControl isRefreshing]) {
+            [collectionView deselectItemAtIndexPath:indexPath animated:nil];
+            [self performSegueWithIdentifier:@"segueFullScreenPhoto" sender:indexPath];
+        }
+        
     }
     else{
         if (![selectedIndexpath containsObject:indexPath]){
@@ -203,6 +225,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     NSLog(@"temparray.count = %d", [tempArray count]);
     gallery.stringList = tempArray;
     gallery.titleShooter = keyString;
+    gallery.currentIndex = indexPath.row;
 }
 
 - (IBAction)takePhoto:(id)sender {
@@ -277,11 +300,12 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
 
     NSData *imageData = [self scaleImage:image ToSize:10485760];
-    
+    NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
     PFFile *imageFile = [PFFile fileWithName:@"Name.jpg" data:imageData];
-    
+    PFFile *smallImageFile = [PFFile fileWithName:@"Name.jpg" data:smallImageData];
     PFObject *object = [[PFObject alloc]initWithClassName:@"Photo"];
     [object setObject:imageFile forKey:@"Photo"];
+    [object setObject:smallImageFile forKey:@"miniPhoto"];
     [object setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

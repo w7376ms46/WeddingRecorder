@@ -7,7 +7,7 @@
 //
 
 #import "WeddingInformationTableViewController.h"
-#import <Parse/Parse.h>
+
 
 @interface WeddingInformationTableViewController ()
 @property (nonatomic, strong) UIAlertController *processing;
@@ -109,24 +109,85 @@
  }
  */
 - (IBAction)addEngageTimeToSchedule:(id)sender {
+    EKEventStore *store = [EKEventStore new];
+    NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *startDate = [weddingInformation[@"engageDateInDate"] dateByAddingTimeInterval:-timeZoneSeconds];
+    [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        if (!granted) { return; }
+        EKEvent *event = [EKEvent eventWithEventStore:store];
+        event.title = @"志豪＆麗熒訂婚午宴";
+        event.startDate = startDate;
+        event.endDate = [event.startDate dateByAddingTimeInterval:3*60*60];  //set 3 hour meeting
+        event.calendar = [store defaultCalendarForNewEvents];
+        NSError *err = nil;
+        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
+        dispatch_async(dispatch_get_main_queue(),^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"已加入至%@的\"%@\"行事曆！",[[store defaultCalendarForNewEvents] source].title, [[store defaultCalendarForNewEvents] title]] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        });
+    }];
 }
 
 - (IBAction)addMarryTimeToSchedule:(id)sender {
+    EKEventStore *store = [EKEventStore new];
+    NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *startDate = [weddingInformation[@"marryDateInDate"] dateByAddingTimeInterval:-timeZoneSeconds];
+    [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        if (!granted) { return; }
+        EKEvent *event = [EKEvent eventWithEventStore:store];
+        event.title = @"志豪＆麗熒結婚午宴";
+        event.startDate = startDate;
+        event.endDate = [event.startDate dateByAddingTimeInterval:3*60*60];  //set 3 hour meeting
+        event.calendar = [store defaultCalendarForNewEvents];
+        NSError *err = nil;
+        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
+        dispatch_async(dispatch_get_main_queue(),^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"已加入至%@的\"%@\"行事曆！",[[store defaultCalendarForNewEvents] source].title, [[store defaultCalendarForNewEvents] title]] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        });
+    }];
 }
 
 - (IBAction)marryRestaurantIntroduce:(id)sender {
     NSString *weddingInformationAddress = weddingInformation[@"marryPlaceIntroduce"];
+    NSLog(@"%@", weddingInformationAddress);
     NSURL *urlFromString = [NSURL URLWithString:weddingInformationAddress];
     [[UIApplication sharedApplication] openURL:urlFromString];
     
 }
 
 - (IBAction)engageRestaurantIntroduce:(id)sender {
+    NSString *weddingInformationAddress = weddingInformation[@"engagePlaceIntroduce"];
+    NSLog(@"%@", weddingInformationAddress);
+    NSURL *urlFromString = [NSURL URLWithString:weddingInformationAddress];
+    [[UIApplication sharedApplication] openURL:urlFromString];
 }
 
 - (IBAction)marryRestaurantMap:(id)sender {
+    NSString *marryAddressString = [weddingInformation[@"marryAddress"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *urlFromString;
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+        urlFromString = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%@", marryAddressString]];
+    }
+    else{
+        urlFromString = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",marryAddressString]];
+    }
+    [[UIApplication sharedApplication] openURL:urlFromString];
 }
 
 - (IBAction)engageRestaurantMap:(id)sender {
+    NSString *engageAddressString = [weddingInformation[@"engageAddress"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *urlFromString;
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+        urlFromString = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%@", engageAddressString]];
+    }
+    else{
+        urlFromString = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",engageAddressString]];
+    }
+    [[UIApplication sharedApplication] openURL:urlFromString];
 }
 @end

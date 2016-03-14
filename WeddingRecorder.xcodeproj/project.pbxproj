@@ -13,6 +13,7 @@
 		081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */; };
 		081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */; };
 		081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0451C8C29B500B6808D /* GalleryViewController.m */; };
+		083561E81C95B0AC00EDB783 /* CityAndRegion.plist in Resources */ = {isa = PBXBuildFile; fileRef = 083561E71C95B0AC00EDB783 /* CityAndRegion.plist */; };
 		087155141C8DC50C00A7DF84 /* page1.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155101C8DC50C00A7DF84 /* page1.png */; };
 		087155151C8DC50C00A7DF84 /* page2.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155111C8DC50C00A7DF84 /* page2.png */; };
 		087155161C8DC50C00A7DF84 /* page3.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155121C8DC50C00A7DF84 /* page3.png */; };
@@ -75,6 +76,7 @@
 		081AA0451C8C29B500B6808D /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
 		08354C391C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		08354C3A1C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		083561E71C95B0AC00EDB783 /* CityAndRegion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CityAndRegion.plist; sourceTree = "<group>"; };
 		087155101C8DC50C00A7DF84 /* page1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page1.png; sourceTree = "<group>"; };
 		087155111C8DC50C00A7DF84 /* page2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page2.png; sourceTree = "<group>"; };
 		087155121C8DC50C00A7DF84 /* page3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page3.png; sourceTree = "<group>"; };
@@ -192,9 +194,9 @@
 				08C0F9411C833E0E00EE1FFF /* AttendantTableViewController.m */,
 				08C0F9081C831F7800EE1FFF /* Main.storyboard */,
 				081AA0441C8C29B500B6808D /* GalleryViewController.h */,
+				081AA0451C8C29B500B6808D /* GalleryViewController.m */,
 				08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */,
 				08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */,
-				081AA0451C8C29B500B6808D /* GalleryViewController.m */,
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
 				081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */,
@@ -206,6 +208,7 @@
 				08C0F90B1C831F7800EE1FFF /* Assets.xcassets */,
 				08C0F90D1C831F7800EE1FFF /* LaunchScreen.storyboard */,
 				08C0F9101C831F7800EE1FFF /* Info.plist */,
+				083561E71C95B0AC00EDB783 /* CityAndRegion.plist */,
 				08C0F8FC1C831F7700EE1FFF /* Supporting Files */,
 			);
 			path = WeddingRecorder;
@@ -370,6 +373,7 @@
 				087155161C8DC50C00A7DF84 /* page3.png in Resources */,
 				087155171C8DC50C00A7DF84 /* page4.png in Resources */,
 				087155141C8DC50C00A7DF84 /* page1.png in Resources */,
+				083561E81C95B0AC00EDB783 /* CityAndRegion.plist in Resources */,
 				08C0F90A1C831F7800EE1FFF /* Main.storyboard in Resources */,
 				087155151C8DC50C00A7DF84 /* page2.png in Resources */,
 			);

@@ -13,6 +13,9 @@
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 @property (nonatomic, strong) UIAlertController *processing;
 
+@property (nonatomic, strong) NSString *marryAddress;
+@property (nonatomic, strong) NSString *engageAddress;
+
 @end
 
 @implementation AttendantTableViewController
@@ -24,6 +27,15 @@
     userDefaults = [NSUserDefaults standardUserDefaults];
     name.delegate = self;
     phone.delegate = self;
+    phone.keyboardType = UIKeyboardTypePhonePad;
+    
+    UIToolbar *keyboardDoneButtonView = [[UIToolbar alloc] init];
+    [keyboardDoneButtonView sizeToFit];
+    UIBarButtonItem *nilButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(phonTextFiledAccessoryViewDoneClicked)];
+    [keyboardDoneButtonView setItems:@[nilButton, doneButton]];
+    phone.inputAccessoryView = keyboardDoneButtonView;
+    
     nickName.delegate = self;
     addressRegion.delegate = self;
     addressDetail.delegate = self;
@@ -45,13 +57,11 @@
             vagetableNumber.text = @"0";
             meatNumber.text = @"0";
             session.selectedSegmentIndex = -1;
-            
             [peopleCount setValue:0];
             [vagetableCount setValue:0];
             [meatCount setValue:0];
         }
         else {
-            NSLog(@"Successfully retrieved the object.  %d", [object[@"Session"] integerValue]);
             [name setText:object[@"Name"]];
             [phone setText:object[@"Phone"]];
             [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
@@ -66,7 +76,6 @@
             [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
             [meatCount setValue:[object[@"MeatNumber"] integerValue]];
             [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
-            //[self performSelectorOnMainThread:@selector(disableAllObject) withObject:nil waitUntilDone:YES];
             [saveDataButton setEnabled:NO];
             [self disableAllObjects];
         }
@@ -157,6 +166,11 @@
         [textField resignFirstResponder];
     }
     return NO;
+}
+
+- (void)phonTextFiledAccessoryViewDoneClicked{
+    [phone resignFirstResponder];
+    [nickName becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {

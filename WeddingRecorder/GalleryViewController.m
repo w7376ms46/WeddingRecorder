@@ -30,7 +30,7 @@
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
     
-    FullScreenPhotoViewController *startingViewController = [self viewControllerAtIndex:0];
+    FullScreenPhotoViewController *startingViewController = [self viewControllerAtIndex:currentIndex];
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     

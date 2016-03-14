@@ -13,7 +13,6 @@
 @interface GalleryViewController : UIViewController<UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *stringList;
-- (IBAction)dismissGallery:(id)sender;
 @property (nonatomic)NSInteger currentIndex;
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 - (IBAction)finish:(id)sender;

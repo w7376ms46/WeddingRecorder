@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import <sys/utsname.h>
+
+NSString *deviceName;
+NSString *osVersion;
 
 @interface AppDelegate ()
 
@@ -28,6 +32,9 @@
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
+    
+    deviceName = [self currentDeviceName];
+    
     return YES;
 }
 
@@ -57,6 +64,27 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (NSString*) currentDeviceName{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *realDeviceName = [NSString stringWithCString:systemInfo.machine
+                                                  encoding:NSUTF8StringEncoding];
+    if ([realDeviceName isEqualToString:@"iPhone5,1"] || [realDeviceName isEqualToString:@"iPhone5,2"] || [realDeviceName isEqualToString:@"iPhone5,3"] || [realDeviceName isEqualToString:@"iPhone5,4"] || [realDeviceName isEqualToString:@"iPhone6,1"] || [realDeviceName isEqualToString:@"iPhone6,2"]) {
+        return @"iPhone5";
+    }
+    else if ([realDeviceName isEqualToString:@"iPhone7,1"] || [realDeviceName isEqualToString:@"iPhone8,2"]){
+        return @"iPhone6Plus";
+    }
+    else if ([realDeviceName isEqualToString:@"iPhone7,2"] || [realDeviceName isEqualToString:@"iPhone8,1"]){
+        return @"iPhone6";
+    }
+    else if ([realDeviceName rangeOfString:@"iPad"].location != NSNotFound){
+        return @"iPad";
+    }
+    return @"iPhone6Plus";
+    
 }
 
 @end
