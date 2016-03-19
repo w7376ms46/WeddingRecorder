@@ -59,7 +59,7 @@
     
     PFObject *object = [stringList objectAtIndex:index];
     
-    PFFile *thumbnail = object[@"Photo"];
+    PFFile *thumbnail = object[@"miniPhoto"];
     NSLog(@"shooter = %@", object[@"Shooter"]);
     [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {

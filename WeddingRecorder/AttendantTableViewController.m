@@ -60,6 +60,7 @@
             [peopleCount setValue:0];
             [vagetableCount setValue:0];
             [meatCount setValue:0];
+            [userDefaults setObject:@"" forKey:@"NickName"];
         }
         else {
             [name setText:object[@"Name"]];

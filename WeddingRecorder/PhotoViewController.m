@@ -14,7 +14,7 @@ extern NSString *deviceName;
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property (strong, nonatomic) NSUserDefaults *userDefaults;
 @property (strong, nonatomic) NSMutableDictionary *photoDictionary;
-@property (strong, nonatomic) NSArray *photoDictionaryKey;
+@property (strong, nonatomic) NSMutableArray *photoDictionaryKey;
 @property (nonatomic) BOOL selection;
 @property (strong, nonatomic) UIAlertController *processing;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
@@ -60,6 +60,9 @@ extern NSString *deviceName;
             [self presentViewController:processing animated:YES completion:nil];
         });
     }
+    
+    [photoDictionary removeAllObjects];
+    [photoDictionaryKey removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
     [query orderByAscending:@"Shooter"];
     
@@ -88,14 +91,15 @@ extern NSString *deviceName;
                     }
                 }
                 [photoDictionary setObject:photoTempArray forKey:sectionTitle];
-                photoDictionaryKey = [photoDictionary allKeys];
-                [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+                photoDictionaryKey = [[photoDictionary allKeys] mutableCopy];
+                
                 if (!usePullRefresh) {
                     dispatch_async(dispatch_get_main_queue(),^{
                         [processing dismissViewControllerAnimated:YES completion:nil];
                     });
                 }
             }
+            [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
             [refreshControl endRefreshing];
             
         }
@@ -255,43 +259,36 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
 
 - (IBAction)downloadPhoto:(id)sender {
     [self presentViewController:processing animated:YES completion:nil];
-    for (NSIndexPath *indexPath in selectedIndexpath) {
+    //for (NSIndexPath *indexPath in selectedIndexpath) {
+    for (int i = 0 ; i<[selectedIndexpath count] ; i++) {
+        NSIndexPath *indexPath = [selectedIndexpath objectAtIndex:i];
         NSMutableArray *tempArray = [photoDictionary objectForKey:photoDictionaryKey[indexPath.section]];
-        
         PFObject *object = [tempArray objectAtIndex:indexPath.row];
-        
-        PFFile *thumbnail = object[@"Photo"];
-        [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-            if (!error) {
-                UIImage *image = [UIImage imageWithData:data];
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-                [selectedIndexpath removeObject:indexPath];
-                [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-            }
-        }];
-    }
-    [processing dismissViewControllerAnimated:YES completion:nil];
-    /*
-    if (selection) {
-        for (NSIndexPath *i in selectedIndexpaths) {
-            NSLog(@"selectedItem path = %d", i.row);
-            [self presentViewController:processing animated:YES completion:nil];
-            NSMutableArray *tempArray = [photoDictionary objectForKey:photoDictionaryKey[i.section]];
-            
-            PFObject *object = [tempArray objectAtIndex:i.row];
-            
-            PFFile *thumbnail = object[@"Photo"];
-            [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        NSString *originalPhotoObjectID = object[@"OriginalPhotoObjectID"];
+        PFQuery *query = [PFQuery queryWithClassName:@"OriginalPhoto"];
+        [query getObjectInBackgroundWithId:originalPhotoObjectID block:^(PFObject *object, NSError *error) {
+            PFFile *originalPhoto = object[@"Photo"];
+            [originalPhoto getDataInBackgroundWithBlock:^(NSData *data, NSError *error){
                 if (!error) {
                     UIImage *image = [UIImage imageWithData:data];
                     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-                    [photoCollectionView deselectItemAtIndexPath:i animated:YES];
+                    [selectedIndexpath removeObject:indexPath];
+                    [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+                    NSLog(@"i = %d",i);
+                    if (i == [selectedIndexpath count] ) {
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            [processing dismissViewControllerAnimated:YES completion:nil];
+                        });
+                    }
+                    
                 }
+            }progressBlock:^(int percentDone){
+                NSLog(@"download progress = %d, id = %@", percentDone, originalPhotoObjectID);
             }];
-            [processing dismissViewControllerAnimated:YES completion:nil];
-        }
+        }];
     }
-    */
+    
+    [self selectPhoto:self];
     
 }
 
@@ -301,23 +298,34 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
 
     NSData *imageData = [self scaleImage:image ToSize:10485760];
     NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
+    
     PFFile *imageFile = [PFFile fileWithName:@"Name.jpg" data:imageData];
+    
     PFFile *smallImageFile = [PFFile fileWithName:@"Name.jpg" data:smallImageData];
-    PFObject *object = [[PFObject alloc]initWithClassName:@"Photo"];
+
+    
+    PFObject *object = [[PFObject alloc]initWithClassName:@"OriginalPhoto"];
     [object setObject:imageFile forKey:@"Photo"];
-    [object setObject:smallImageFile forKey:@"miniPhoto"];
-    [object setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            [self loadPhotoData];
-        }];
-    } progressBlock:^(int percentDone) {
-        NSLog(@"upload percenttage = %d", percentDone);
+    [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog(@"object.id = %@", object.objectId);
+            PFObject *tempObject = [[PFObject alloc]initWithClassName:@"Photo"];
+            [tempObject setObject:smallImageFile forKey:@"miniPhoto"];
+            [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
+            [tempObject setObject:object.objectId forKey:@"OriginalPhotoObjectID"];
+            [tempObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                NSLog(@"error = %@", error);
+                if (succeeded) {
+                    [self loadPhotoData];
+                }
+                else{
+                    NSLog(@"error = %@", error);
+                }
+            }];
+        }
     }];
     
-    [picker dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [picker dismissViewControllerAnimated:YES completion:nil];
     
 }
 
