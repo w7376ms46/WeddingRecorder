@@ -20,17 +20,25 @@ extern NSString *deviceName;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (nonatomic) BOOL usePullRefresh;
 @property (nonatomic, strong) NSMutableArray *selectedIndexpath;
-
+@property (nonatomic, strong) NSMutableArray *eachPhotoUploadProgress;
+@property (nonatomic) NSInteger uploadingImageCount;
+@property (nonatomic) NSInteger totalProgress;
+@property (nonatomic) BOOL uploading;
 @end
 
 @implementation PhotoViewController
 
-@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath;
+@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     selection = NO;
+    eachPhotoUploadProgress = [[NSMutableArray alloc]init];
     selectedIndexpath = [[NSMutableArray alloc]init];
+    eachPhotoUploadProgress = [[NSMutableArray alloc]init];
+    uploading = NO;
+    uploadingImageCount = 0;
+    totalProgress = 0;
     userDefaults = [NSUserDefaults standardUserDefaults];
     [photoCollectionView setDelegate:self];
     [photoCollectionView setDataSource:self];
@@ -46,6 +54,9 @@ extern NSString *deviceName;
     imagePicker.delegate = self;
     imagePicker.allowsEditing = NO;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self presentViewController:processing animated:YES completion:nil];
+    });
     [self performSelectorInBackground:@selector(loadPhotoData) withObject:nil];
 }
 
@@ -55,11 +66,7 @@ extern NSString *deviceName;
 }
 
 - (void) loadPhotoData{
-    if (!usePullRefresh) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            [self presentViewController:processing animated:YES completion:nil];
-        });
-    }
+
     
     [photoDictionary removeAllObjects];
     [photoDictionaryKey removeAllObjects];
@@ -105,6 +112,7 @@ extern NSString *deviceName;
         }
         else {
             [refreshControl endRefreshing];
+            usePullRefresh = NO;
             if (!usePullRefresh) {
                 dispatch_async(dispatch_get_main_queue(),^{
                     [processing dismissViewControllerAnimated:YES completion:nil];
@@ -186,7 +194,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
     PFObject *object = [tempArray objectAtIndex:[indexPath row]];
     
-    PFFile *thumbnail = object[@"miniPhoto"];
+    PFFile *thumbnail = object[@"microPhoto"];
     //cell.photo = [[PFImageView alloc]init];
     cell.photo.file = thumbnail;
     [cell.photo loadInBackground];
@@ -292,38 +300,119 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
 }
 
+-(UIImage *)imageResize :(UIImage*)img andResizeTo:(CGSize)newSize{
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    /*You can remove the below comment if you dont want to scale the image in retina   device .Dont forget to comment UIGraphicsBeginImageContextWithOptions*/
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, scale);
+    [img drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     //取得影像
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-
+    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     NSData *imageData = [self scaleImage:image ToSize:10485760];
+    //NSData *smallImageData = UIImagePNGRepresentation(image);
     NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
+    
+    CGSize newSize;
+    NSInteger cellWidth;
+    if ([deviceName isEqualToString:@"iPhone5"]) {
+        cellWidth = 100;
+    }
+    else if ([deviceName isEqualToString:@"iPhone6"]){
+        cellWidth = 120;
+    }
+    else if ([deviceName isEqualToString:@"iPhone6Plus"]){
+        cellWidth = 125;
+    }
+    else{
+        cellWidth = 100;
+    }
+    if (image.size.width > image.size.height) {
+        newSize = CGSizeMake(cellWidth, image.size.height*cellWidth/image.size.width);
+    }
+    else{
+        newSize = CGSizeMake(image.size.width*cellWidth/image.size.height, cellWidth);
+    }
+    //NSLog(@"newSize = %@", newSize);
+    UIImage *microImage = [self imageResize:image andResizeTo:newSize];
+    NSData *microImageData = UIImageJPEGRepresentation(microImage, 1);
     
     PFFile *imageFile = [PFFile fileWithName:@"Name.jpg" data:imageData];
     
-    PFFile *smallImageFile = [PFFile fileWithName:@"Name.jpg" data:smallImageData];
-
+    PFFile *smallImageFile = [PFFile fileWithName:@"Name.png" data:smallImageData];
     
-    PFObject *object = [[PFObject alloc]initWithClassName:@"OriginalPhoto"];
-    [object setObject:imageFile forKey:@"Photo"];
-    [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            NSLog(@"object.id = %@", object.objectId);
-            PFObject *tempObject = [[PFObject alloc]initWithClassName:@"Photo"];
-            [tempObject setObject:smallImageFile forKey:@"miniPhoto"];
-            [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
-            [tempObject setObject:object.objectId forKey:@"OriginalPhotoObjectID"];
-            [tempObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                NSLog(@"error = %@", error);
-                if (succeeded) {
-                    [self loadPhotoData];
-                }
-                else{
+    PFFile *microImageFile = [PFFile fileWithName:@"Micro.jpg" data:microImageData];
+    
+    uploadingImageCount++;
+    totalProgress = totalProgress + 100;
+    
+    
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.navigationItem setPrompt:[NSString stringWithFormat:@"處理中..."]];
+        });
+        NSLog(@"save file succeededdddddddd object id ");
+        PFObject *object = [[PFObject alloc]initWithClassName:@"OriginalPhoto"];
+        [object setObject:imageFile forKey:@"Photo"];
+        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                totalProgress = totalProgress-100;
+                uploadingImageCount--;
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳完成！"]];
+                    if ([self presentedViewController] == nil) {
+                        [self presentViewController:processing animated:YES completion:nil];
+                    }
+                    
+                
+                });
+                NSLog(@"object.id = %@", object.objectId);
+                PFObject *tempObject = [[PFObject alloc]initWithClassName:@"Photo"];
+                [tempObject setObject:smallImageFile forKey:@"miniPhoto"];
+                [tempObject setObject:microImageFile forKey:@"microPhoto"];
+                [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
+                [tempObject setObject:object.objectId forKey:@"OriginalPhotoObjectID"];
+                [tempObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                     NSLog(@"error = %@", error);
-                }
-            }];
-        }
+                    if (succeeded) {
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            [self.navigationItem setPrompt:nil];
+                            [self loadPhotoData];
+                        });
+                        
+                    }
+                    else{
+                        NSLog(@"error = %@", error);
+                        
+                    }
+                }];
+            }
+        }];
+        
+    }
+    progressBlock:^(int percentDone) {
+        //NSLog(@"Percentage = %d", percentDone);
+        dispatch_async(dispatch_get_main_queue(),^{
+            
+            //int remainProgress = (totalProgress-percentDone)/uploadingImageCount;
+            //NSLog(@"%d   %d   %d", remainProgress, totalProgress, uploadingImageCount);
+            //if (percentDone < 5) {
+                [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount-1]];
+            //}
+            //else if (remainProgress % 5 == 0) {
+            //    [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳進度：%d %%", 100-remainProgress]];
+            //}
+        });
+        
     }];
+    
+    
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     

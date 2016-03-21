@@ -12,15 +12,18 @@
 
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 @property (nonatomic, strong) UIAlertController *processing;
-
+@property (strong, nonatomic)UIPickerView *pickRegion;
 @property (nonatomic, strong) NSString *marryAddress;
 @property (nonatomic, strong) NSString *engageAddress;
+
+@property (strong, nonatomic)NSMutableArray *cityAndRegionArray;
+@property (strong, nonatomic)NSMutableArray *regionArray;
 
 @end
 
 @implementation AttendantTableViewController
 
-@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing;
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +32,7 @@
     phone.delegate = self;
     phone.keyboardType = UIKeyboardTypePhonePad;
     
+    
     UIToolbar *keyboardDoneButtonView = [[UIToolbar alloc] init];
     [keyboardDoneButtonView sizeToFit];
     UIBarButtonItem *nilButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -36,9 +40,25 @@
     [keyboardDoneButtonView setItems:@[nilButton, doneButton]];
     phone.inputAccessoryView = keyboardDoneButtonView;
     
+    [self loadData];
+    pickRegion = [[UIPickerView alloc]init];
+    
+    UIToolbar *toolBar = [[UIToolbar alloc]init];
+    [toolBar sizeToFit];
+    UIBarButtonItem *right = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(cancelPicker:)];
+    [toolBar setItems:@[nilButton, right]];
+    [pickRegion setDelegate:self];
+    [pickRegion setDataSource:self];
+    [addressRegion setInputView:pickRegion];
+    [addressRegion setInputAccessoryView:toolBar];
+    
+    
+    
+    
     nickName.delegate = self;
     addressRegion.delegate = self;
     addressDetail.delegate = self;
+    notation.delegate = self;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
     [self presentViewController:processing animated:YES completion:nil];
     PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
@@ -60,6 +80,7 @@
             [peopleCount setValue:0];
             [vagetableCount setValue:0];
             [meatCount setValue:0];
+            [notation setText:@""];
             [userDefaults setObject:@"" forKey:@"NickName"];
         }
         else {
@@ -77,6 +98,7 @@
             [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
             [meatCount setValue:[object[@"MeatNumber"] integerValue]];
             [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
+            [notation setText:object[@"Notation"]];
             [saveDataButton setEnabled:NO];
             [self disableAllObjects];
         }
@@ -102,6 +124,7 @@
     [meatCount setTintColor:[UIColor lightGrayColor]];
     [session setEnabled:NO];
     [session setTintColor:[UIColor lightGrayColor]];
+    [notation setEnabled:NO];
 }
 
 - (void)enableSpeceficObjects{
@@ -114,6 +137,7 @@
     [addressDetail setEnabled:YES];
     [relation setEnabled:YES];
     [relation setTintColor:nil];
+    [notation setEnabled:YES];
     if (attendWilling.selectedSegmentIndex != 1) {
         [addressRegion setEnabled:YES];
         [addressDetail setEnabled:YES];
@@ -153,17 +177,18 @@
     }
     else if (textField == phone){
         [textField resignFirstResponder];
-        [nickName becomeFirstResponder];
-    }
-    else if (textField == nickName){
-        [textField resignFirstResponder];
         [addressRegion becomeFirstResponder];
     }
+
     else if (textField == addressRegion){
         [textField resignFirstResponder];
         [addressDetail becomeFirstResponder];
     }
     else if (textField == addressDetail){
+        [textField resignFirstResponder];
+        [notation becomeFirstResponder];
+    }
+    else if (textField == notation){
         [textField resignFirstResponder];
     }
     return NO;
@@ -171,7 +196,7 @@
 
 - (void)phonTextFiledAccessoryViewDoneClicked{
     [phone resignFirstResponder];
-    [nickName becomeFirstResponder];
+    [addressRegion becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -289,6 +314,12 @@
         else if ( session.selectedSegmentIndex == -1) {
             alertString = @"請選擇參加場次。";
         }
+        else if ( [peopleNumber.text isEqualToString:@"0"]){
+            alertString = @"請輸入參加人次。";
+        }
+        else if ( [vagetableNumber.text integerValue] + [meatNumber.text integerValue] != [peopleNumber.text integerValue]){
+            alertString = @"請確認個別飲食習慣的人數。";
+        }
     }
     if (![alertString isEqualToString:@""]) {
         //dispatch_async(dispatch_get_main_queue(),^{
@@ -314,24 +345,24 @@
             registrationData[@"Phone"] = phone.text;
             registrationData[@"Relation"] = @(relation.selectedSegmentIndex);
             registrationData[@"AttendingWilling"] = @(attendWilling.selectedSegmentIndex);
+            registrationData[@"Shooter"] = @"";
             if (attendWilling.selectedSegmentIndex == 0) {
-                registrationData[@"NickName"] = nickName.text;
                 registrationData[@"AddressRegion"] = addressRegion.text;
                 registrationData[@"AddressDetail"] = addressDetail.text;
-                
                 registrationData[@"PeopleNumber"] = @([peopleNumber.text integerValue]);
                 registrationData[@"VagetableNumber"] = @([vagetableNumber.text integerValue]);
                 registrationData[@"MeatNumber"] = @([meatNumber.text integerValue]);
                 registrationData[@"Session"] = @(session.selectedSegmentIndex);
-                NSLog(@"selectedSession = %d", session.selectedSegmentIndex);
-                registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
+                
             }
+            registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
+            registrationData[@"Notation"] = notation.text;
             [registrationData saveInBackground];
             [saveDataButton setEnabled:NO];
             [self disableAllObjects];
             [processing dismissViewControllerAnimated:YES completion:nil];
         }];
-        [userDefaults setObject:nickName.text forKey:@"NickName"];
+        [userDefaults setObject:@"" forKey:@"NickName"];
         [userDefaults synchronize];
         [modifyButton setEnabled:YES];
         
@@ -350,11 +381,60 @@
     vagetableNumber.text = @"0";
     meatNumber.text = @"0";
     session.selectedSegmentIndex = -1;
-    
+    notation.text = @"";
     [saveDataButton setEnabled:YES];
     
     [self enableSpeceficObjects];
 }
+
+
+- (void)loadData {
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *path = [bundle pathForResource:@"CityAndRegion" ofType:@"plist"];
+    
+    cityAndRegionArray = [NSMutableArray arrayWithContentsOfFile:path];
+    
+    regionArray = cityAndRegionArray[0][@"regions"];
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 2;
+}
+-(NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    if (component == 0) {
+        return [cityAndRegionArray count];
+    }
+    else {
+        return [regionArray count];
+    }
+}
+-(NSString*) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    if (component == 0) {
+        return cityAndRegionArray[row][@"city"];
+    }else {
+        return regionArray[row];
+    }
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    if (component == 0) {
+        regionArray = cityAndRegionArray[row][@"regions"];
+        [pickRegion reloadComponent:1];
+    }
+    NSInteger cityRow = [pickRegion selectedRowInComponent:0];
+    NSInteger regionRow = [pickRegion selectedRowInComponent:1];
+    [addressRegion setText:[NSString stringWithFormat:@"%@%@",cityAndRegionArray[cityRow][@"city"],regionArray[regionRow]]];
+}
+
+
+-(void) cancelPicker:(id)sender {
+    NSInteger cityRow = [pickRegion selectedRowInComponent:0];
+    NSInteger regionRow = [pickRegion selectedRowInComponent:1];
+    [addressRegion setText:[NSString stringWithFormat:@"%@%@",cityAndRegionArray[cityRow][@"city"],regionArray[regionRow]]];
+    [addressRegion endEditing:YES];
+}
+
+
 
 - (IBAction)chooseSession:(id)sender {
     [self.view endEditing:YES];

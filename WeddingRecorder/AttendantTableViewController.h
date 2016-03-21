@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface AttendantTableViewController : UITableViewController<UITextFieldDelegate, UITableViewDelegate>
+@interface AttendantTableViewController : UITableViewController<UITextFieldDelegate, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *name;
 @property (weak, nonatomic) IBOutlet UITextField *phone;
 @property (weak, nonatomic) IBOutlet UITextField *nickName;
@@ -27,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *modifyButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cleanButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveDataButton;
+
+@property (weak, nonatomic) IBOutlet UITextField *notation;
 
 - (IBAction)chooseWilling:(id)sender;
 - (IBAction)modify:(id)sender;
