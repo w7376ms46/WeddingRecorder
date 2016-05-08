@@ -24,14 +24,21 @@ extern NSString *deviceName;
 @property (nonatomic) NSInteger uploadingImageCount;
 @property (nonatomic) NSInteger totalProgress;
 @property (nonatomic) BOOL uploading;
+@property (nonatomic) BOOL uploadFromAlbum;
+@property (nonatomic) BOOL loadingPhoto;
+@property (nonatomic) BOOL comeFromAnotherTab; // 是否是從別的tab進入此頁面，若是，則要check是否活動已開始。
 @end
 
 @implementation PhotoViewController
 
-@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading;
+@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, displayNameButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [displayNameButton.layer setCornerRadius:10.0];
+    [displayNameButton.layer setMasksToBounds:YES];
+    displayNameButton.layer.borderColor = [UIColor redColor].CGColor;
+    displayNameButton.layer.borderWidth = 2;
     selection = NO;
     eachPhotoUploadProgress = [[NSMutableArray alloc]init];
     selectedIndexpath = [[NSMutableArray alloc]init];
@@ -54,22 +61,67 @@ extern NSString *deviceName;
     imagePicker.delegate = self;
     imagePicker.allowsEditing = NO;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    dispatch_async(dispatch_get_main_queue(),^{
-        [self presentViewController:processing animated:YES completion:nil];
-    });
-    [self performSelectorInBackground:@selector(loadPhotoData) withObject:nil];
+    comeFromAnotherTab = YES;
+}
+
+- (void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear: animated];
+    NSLog(@"viewdidappear");
+    
+    if (comeFromAnotherTab) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self presentViewController:processing animated:YES completion:nil];
+        });
+        [self performSelectorInBackground:@selector(checkActivityStart) withObject:nil];
+    }
+    comeFromAnotherTab = YES;
+    
 }
 
 - (void) pullToRefresh{
-    usePullRefresh = YES;
-    [self loadPhotoData];
+    NSLog(@"pull to refresh uploading image count = %d", uploadingImageCount);
+    if (uploadingImageCount == 0 && loadingPhoto != YES) {
+        usePullRefresh = YES;
+        [self loadPhotoData];
+    }
+    else{
+        [refreshControl endRefreshing];
+    }
+    
+}
+
+- (void) checkActivityStart{
+    PFQuery *queryStartDate = [PFQuery queryWithClassName:@"Information"];
+    [queryStartDate getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!object) {
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                [processing dismissViewControllerAnimated:YES completion:nil];
+                NSDate *uploadingPhotoStartDate = [object objectForKey:@"uploadingPhotoStartDate"];
+                if ([uploadingPhotoStartDate compare:[NSDate date]] == NSOrderedDescending) {
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"尚未開放！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        [self.tabBarController setSelectedIndex:0];
+                    }];
+                    [message addAction:okButton];
+                    [self presentViewController:message animated:YES completion:nil];
+                    //[self.tabBarController setSelectedIndex:0];
+                    return;
+                }
+                else{
+                    [self performSelectorInBackground:@selector(loadPhotoData) withObject:nil];
+                }
+            });
+            
+        }
+    }];
 }
 
 - (void) loadPhotoData{
-
-    
-    [photoDictionary removeAllObjects];
-    [photoDictionaryKey removeAllObjects];
+    loadingPhoto = YES;
+    //[photoDictionary removeAllObjects];
+    //[photoDictionaryKey removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
     [query orderByAscending:@"Shooter"];
     
@@ -77,11 +129,6 @@ extern NSString *deviceName;
         NSLog(@"ddddddd  count = %d   %@", [objects count], error);
         if (!error) {
             if ([objects count] == 0) {
-                if (!usePullRefresh) {
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        [processing dismissViewControllerAnimated:YES completion:nil];
-                    });
-                }
             }
             else{
                 NSString *sectionTitle = [objects objectAtIndex:0][@"Shooter"];
@@ -99,15 +146,16 @@ extern NSString *deviceName;
                 }
                 [photoDictionary setObject:photoTempArray forKey:sectionTitle];
                 photoDictionaryKey = [[photoDictionary allKeys] mutableCopy];
-                
-                if (!usePullRefresh) {
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        [processing dismissViewControllerAnimated:YES completion:nil];
-                    });
-                }
             }
-            [photoCollectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-            [refreshControl endRefreshing];
+            
+            dispatch_async(dispatch_get_main_queue(),^{
+                [photoCollectionView reloadData];
+                [refreshControl endRefreshing];
+                loadingPhoto = NO;
+                if (!usePullRefresh) {
+                    [processing dismissViewControllerAnimated:YES completion:nil];
+                }
+            });
             
         }
         else {
@@ -225,6 +273,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
             [selectedIndexpath removeObject:indexPath];
             [collectionView reloadData];
         }
+        if ( [selectedIndexpath count] != 0) {
+            [downloadButton setEnabled:YES];
+        }
     }
 }
 
@@ -238,6 +289,12 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     gallery.stringList = tempArray;
     gallery.titleShooter = keyString;
     gallery.currentIndex = indexPath.row;
+
+    
+}
+
+- (UIModalPresentationStyle) adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
+    return  UIModalPresentationNone;
 }
 
 - (IBAction)takePhoto:(id)sender {
@@ -248,6 +305,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
 - (IBAction)chooseFromAlbum:(id)sender {
     imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:imagePicker animated:YES completion:nil];
+    uploadFromAlbum = YES;
 }
 
 - (IBAction)selectPhoto:(id)sender {
@@ -260,6 +318,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
         [selectedIndexpath removeAllObjects];
         [photoCollectionView setAllowsMultipleSelection:NO];
         [photoCollectionView reloadData];
+        [downloadButton setEnabled:NO];
     }
     selection = !selection;
     NSLog(@"selection = %d", selection);
@@ -311,10 +370,20 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     return newImage;
 }
 
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    comeFromAnotherTab = NO;
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    comeFromAnotherTab = NO;
     //取得影像
+    uploadingImageCount++;
+    //[refreshControl setEnabled:NO];
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    if (!uploadFromAlbum) {
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    }
     NSData *imageData = [self scaleImage:image ToSize:10485760];
     //NSData *smallImageData = UIImagePNGRepresentation(image);
     NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
@@ -349,13 +418,13 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
     PFFile *microImageFile = [PFFile fileWithName:@"Micro.jpg" data:microImageData];
     
-    uploadingImageCount++;
+    
     totalProgress = totalProgress + 100;
     
-    
+    NSLog(@"start save in background with block");
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(),^{
-            [self.navigationItem setPrompt:[NSString stringWithFormat:@"處理中..."]];
+            //[self.navigationItem setPrompt:[NSString stringWithFormat:@"處理中..."]];
         });
         NSLog(@"save file succeededdddddddd object id ");
         PFObject *object = [[PFObject alloc]initWithClassName:@"OriginalPhoto"];
@@ -365,12 +434,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                 totalProgress = totalProgress-100;
                 uploadingImageCount--;
                 dispatch_async(dispatch_get_main_queue(),^{
-                    [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳完成！"]];
-                    if ([self presentedViewController] == nil) {
-                        [self presentViewController:processing animated:YES completion:nil];
+                    if (uploadingImageCount == 0) {
+                        [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳完成！"]];
                     }
-                    
-                
                 });
                 NSLog(@"object.id = %@", object.objectId);
                 PFObject *tempObject = [[PFObject alloc]initWithClassName:@"Photo"];
@@ -381,9 +447,12 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                 [tempObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                     NSLog(@"error = %@", error);
                     if (succeeded) {
+                        [self loadPhotoData];
                         dispatch_async(dispatch_get_main_queue(),^{
-                            [self.navigationItem setPrompt:nil];
-                            [self loadPhotoData];
+                            if (uploadingImageCount == 0) {
+                                [self.navigationItem setPrompt:nil];
+                            }
+                            
                         });
                         
                     }
@@ -403,7 +472,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
             //int remainProgress = (totalProgress-percentDone)/uploadingImageCount;
             //NSLog(@"%d   %d   %d", remainProgress, totalProgress, uploadingImageCount);
             //if (percentDone < 5) {
-                [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount-1]];
+                [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount]];
             //}
             //else if (remainProgress % 5 == 0) {
             //    [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳進度：%d %%", 100-remainProgress]];

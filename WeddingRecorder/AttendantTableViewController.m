@@ -87,7 +87,7 @@
             [name setText:object[@"Name"]];
             [phone setText:object[@"Phone"]];
             [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
-            [nickName setText:object[@"NickName"]];
+            [nickName setText:object[@"Name"]];
             [addressRegion setText:object[@"AddressRegion"]];
             [addressDetail setText:object[@"AddressDetail"]];
             [relation setSelectedSegmentIndex:[object[@"Relation"]integerValue]];
@@ -362,7 +362,7 @@
             [self disableAllObjects];
             [processing dismissViewControllerAnimated:YES completion:nil];
         }];
-        [userDefaults setObject:@"" forKey:@"NickName"];
+        [userDefaults setObject:name.text forKey:@"NickName"];
         [userDefaults synchronize];
         [modifyButton setEnabled:YES];
         

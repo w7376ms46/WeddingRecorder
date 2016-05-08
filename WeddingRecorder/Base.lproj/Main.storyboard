@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -169,20 +169,48 @@
                                     </connections>
                                 </collectionReusableView>
                             </collectionView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RdA-9s-xK0">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.23529411759999999" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="RdA-9s-xK0" secondAttribute="height" multiplier="89:39" id="5vc-Cm-0Ye"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="名稱">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5vc-Cm-0Ye"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="5vc-Cm-0Ye"/>
+                                    </mask>
+                                </variation>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="RdA-9s-xK0" firstAttribute="width" secondItem="jBr-hW-szc" secondAttribute="height" multiplier="89:800" id="7hE-CZ-vVU"/>
                             <constraint firstItem="H4K-3C-c9Z" firstAttribute="top" secondItem="DKj-hE-VAL" secondAttribute="bottom" constant="-64" id="IFt-jR-1g1"/>
                             <constraint firstItem="H4K-3C-c9Z" firstAttribute="centerX" secondItem="jBr-hW-szc" secondAttribute="centerX" id="Loo-dQ-qMW"/>
+                            <constraint firstItem="ZUK-e7-SAJ" firstAttribute="top" secondItem="RdA-9s-xK0" secondAttribute="bottom" constant="8" id="RId-Zd-AN0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="H4K-3C-c9Z" secondAttribute="trailing" constant="-20" id="Z3n-zo-Dc7"/>
                             <constraint firstItem="H4K-3C-c9Z" firstAttribute="leading" secondItem="jBr-hW-szc" secondAttribute="leadingMargin" constant="-20" id="epO-11-ofx"/>
                             <constraint firstItem="ZUK-e7-SAJ" firstAttribute="top" secondItem="H4K-3C-c9Z" secondAttribute="bottom" id="fT5-Jn-U6j"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="RdA-9s-xK0" secondAttribute="trailing" id="tpF-qn-dJo"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="H4K-3C-c9Z"/>
+                                <exclude reference="RdA-9s-xK0"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="7hE-CZ-vVU"/>
+                                <exclude reference="tpF-qn-dJo"/>
+                                <exclude reference="RId-Zd-AN0"/>
                                 <exclude reference="fT5-Jn-U6j"/>
                                 <exclude reference="IFt-jR-1g1"/>
                                 <exclude reference="Loo-dQ-qMW"/>
@@ -193,8 +221,12 @@
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="H4K-3C-c9Z"/>
+                                <include reference="RdA-9s-xK0"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="7hE-CZ-vVU"/>
+                                <include reference="tpF-qn-dJo"/>
+                                <include reference="RId-Zd-AN0"/>
                                 <include reference="fT5-Jn-U6j"/>
                                 <include reference="IFt-jR-1g1"/>
                                 <include reference="Loo-dQ-qMW"/>
@@ -203,6 +235,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="照片紀錄" id="2DU-Mp-cRk">
                         <leftBarButtonItems>
                             <barButtonItem title="選取" id="rYy-qf-4Wr">
@@ -210,7 +243,7 @@
                                     <action selector="selectPhoto:" destination="cKy-Bn-L6y" id="1NM-FD-tM5"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="下載" id="j8s-XU-ISA">
+                            <barButtonItem enabled="NO" title="下載" id="j8s-XU-ISA">
                                 <connections>
                                     <action selector="downloadPhoto:" destination="cKy-Bn-L6y" id="ov0-Kj-LQi"/>
                                 </connections>
@@ -229,7 +262,10 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="displayNameButton" destination="RdA-9s-xK0" id="onY-WZ-AIe"/>
+                        <outlet property="downloadButton" destination="j8s-XU-ISA" id="dwO-6p-5n7"/>
                         <outlet property="photoCollectionView" destination="H4K-3C-c9Z" id="fHK-Aa-bwl"/>
                         <outlet property="selectButton" destination="rYy-qf-4Wr" id="Zdd-ev-wjg"/>
                         <segue destination="lov-lA-109" kind="presentation" identifier="segueFullScreenPhoto" id="TgI-2j-rXe"/>
