@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF11C84AAC400821C0A /* PhotoViewController.m */; };
 		08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */; };
-		080E37B71C8427A200461B43 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080E37B61C8427A200461B43 /* DropboxSDK.framework */; };
 		081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */; };
 		081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */; };
 		081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0451C8C29B500B6808D /* GalleryViewController.m */; };
@@ -123,7 +122,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				080E37B71C8427A200461B43 /* DropboxSDK.framework in Frameworks */,
 				08C0F9561C8341B500EE1FFF /* libsqlite3.tbd in Frameworks */,
 				08C0F9541C8341A500EE1FFF /* libz.tbd in Frameworks */,
 				08C0F9521C83419800EE1FFF /* SystemConfiguration.framework in Frameworks */,
