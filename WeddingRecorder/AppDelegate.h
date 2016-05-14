@@ -10,7 +10,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
+//extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic) UIWindow *window;
 
 

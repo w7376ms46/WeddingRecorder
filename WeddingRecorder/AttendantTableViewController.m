@@ -9,7 +9,7 @@
 #import "AttendantTableViewController.h"
 
 @interface AttendantTableViewController ()
-
+extern BOOL checkAttendantDeadLine;
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 @property (nonatomic, strong) UIAlertController *processing;
 @property (strong, nonatomic)UIPickerView *pickRegion;
@@ -32,6 +32,7 @@
     phone.delegate = self;
     phone.keyboardType = UIKeyboardTypePhonePad;
     
+    NSLog(@"attendantTableViewController viewdidload");
     
     UIToolbar *keyboardDoneButtonView = [[UIToolbar alloc] init];
     [keyboardDoneButtonView sizeToFit];
@@ -52,7 +53,7 @@
     [addressRegion setInputView:pickRegion];
     [addressRegion setInputAccessoryView:toolBar];
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationEnteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     
     nickName.delegate = self;
@@ -102,9 +103,45 @@
             [saveDataButton setEnabled:NO];
             [self disableAllObjects];
         }
-        [processing dismissViewControllerAnimated:YES completion:nil];
+        [self checkDeadLine];
     }];
 }
+
+- (void) checkDeadLine{
+    PFQuery *queryStartDate = [PFQuery queryWithClassName:@"Information"];
+    [queryStartDate getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!object) {
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                [processing dismissViewControllerAnimated:YES completion:nil];
+                NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
+                if ([changeAttendantInfoDeadLine compare:[NSDate date]] == NSOrderedAscending) {
+                    [cleanButton setEnabled:NO];
+                    [modifyButton setEnabled:NO];
+                    [saveDataButton setEnabled:NO];
+                    [self disableAllObjects];
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"目前無法在修改資料囉，請直接與新郎/新娘聯絡！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    }];
+                    [message addAction:okButton];
+                    [self presentViewController:message animated:YES completion:nil];
+                }
+                else{
+                    
+                }
+            });
+            
+        }
+        checkAttendantDeadLine = NO;
+    }];
+}
+
+- (void)applicationEnteredForeground:(NSNotification *)notification {
+    NSLog(@"Application Entered Foreground");
+    [self checkDeadLine];
+}
+
 
 - (void)disableAllObjects{
     [name setEnabled:NO];
