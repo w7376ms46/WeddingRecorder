@@ -12,7 +12,7 @@
 #import "PhotoCollectionViewCell.h"
 #import "HeaderCollectionReusableView.h"
 #import "GalleryViewController.h"
-
+#import "MainTabBarController.h"
 @interface PhotoViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *photoCollectionView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *selectButton;

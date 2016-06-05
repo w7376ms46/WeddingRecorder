@@ -16,18 +16,26 @@
 
 @implementation WeddingInformationTableViewController
 
-@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation;
+@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    [self presentViewController:processing animated:YES completion:nil];
+
+    MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+    NSLog(@"tab bar weddingName = %@   %@", tabBarController.weddingName, tabBarController.weddingObjectId);
+    PFUser *currentUser = [PFUser currentUser];
     PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    //[query whereKey:@"managerAccount" equalTo:currentUser.username];
+    //[query whereKey:@"weddingAccount" equalTo:tabBarController.weddingName];
+    
+    //[query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [query getObjectInBackgroundWithId:tabBarController.weddingObjectId block:^(PFObject *object, NSError * error) {
         if (!object) {
-            
+            NSLog(@"No object retrieved");
         }
         else {
+            NSLog(@"getttttt object");
             [engageTime setTitle:object[@"engageDate"] forState:UIControlStateNormal];
             [marryTime setTitle:object[@"marryDate"] forState:UIControlStateNormal];
             [engagePlace setTitle:object[@"engagePlace"] forState:UIControlStateNormal];
@@ -36,9 +44,9 @@
             [marryAddress setTitle:object[@"marryAddress"] forState:UIControlStateNormal];
             weddingInformation = object;
         }
-        [processing dismissViewControllerAnimated:YES completion:nil];
     }];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

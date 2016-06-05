@@ -27,11 +27,13 @@ extern NSString *deviceName;
 @property (nonatomic) BOOL uploadFromAlbum;
 @property (nonatomic) BOOL loadingPhoto;
 @property (nonatomic) BOOL comeFromAnotherTab; // 是否是從別的tab進入此頁面，若是，則要check是否活動已開始。
+@property (strong, nonatomic) NSString *weddingName;
+@property (strong, nonatomic) NSString *weddingInfoObjectId;
 @end
 
 @implementation PhotoViewController
 
-@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, displayNameButton;
+@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, displayNameButton, weddingName, weddingInfoObjectId;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,6 +64,9 @@ extern NSString *deviceName;
     imagePicker.allowsEditing = NO;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
     comeFromAnotherTab = YES;
+    MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+    weddingName = tabBarController.weddingName;
+    weddingInfoObjectId = tabBarController.weddingObjectId;
 }
 
 - (void) viewDidAppear:(BOOL)animated{
@@ -122,7 +127,8 @@ extern NSString *deviceName;
     loadingPhoto = YES;
     //[photoDictionary removeAllObjects];
     //[photoDictionaryKey removeAllObjects];
-    PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
+    PFUser *currentUser = [PFUser currentUser];
+    PFQuery *query = [PFQuery queryWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"Photo"]];
     [query orderByAscending:@"Shooter"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -332,7 +338,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
         NSMutableArray *tempArray = [photoDictionary objectForKey:photoDictionaryKey[indexPath.section]];
         PFObject *object = [tempArray objectAtIndex:indexPath.row];
         NSString *originalPhotoObjectID = object[@"OriginalPhotoObjectID"];
-        PFQuery *query = [PFQuery queryWithClassName:@"OriginalPhoto"];
+        
+        PFUser *currentUser = [PFUser currentUser];
+        PFQuery *query = [PFQuery queryWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"OriginalPhoto"]];
         [query getObjectInBackgroundWithId:originalPhotoObjectID block:^(PFObject *object, NSError *error) {
             PFFile *originalPhoto = object[@"Photo"];
             [originalPhoto getDataInBackgroundWithBlock:^(NSData *data, NSError *error){
@@ -427,7 +435,8 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
             //[self.navigationItem setPrompt:[NSString stringWithFormat:@"處理中..."]];
         });
         NSLog(@"save file succeededdddddddd object id ");
-        PFObject *object = [[PFObject alloc]initWithClassName:@"OriginalPhoto"];
+        PFUser *currentUser = [PFUser currentUser];
+        PFObject *object = [[PFObject alloc]initWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"OriginalPhoto"]];
         [object setObject:imageFile forKey:@"Photo"];
         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
@@ -439,7 +448,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                     }
                 });
                 NSLog(@"object.id = %@", object.objectId);
-                PFObject *tempObject = [[PFObject alloc]initWithClassName:@"Photo"];
+                PFObject *tempObject = [[PFObject alloc]initWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"Photo"]];
                 [tempObject setObject:smallImageFile forKey:@"miniPhoto"];
                 [tempObject setObject:microImageFile forKey:@"microPhoto"];
                 [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];

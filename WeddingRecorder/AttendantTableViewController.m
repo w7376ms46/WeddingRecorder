@@ -15,15 +15,16 @@ extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic)UIPickerView *pickRegion;
 @property (nonatomic, strong) NSString *marryAddress;
 @property (nonatomic, strong) NSString *engageAddress;
-
 @property (strong, nonatomic)NSMutableArray *cityAndRegionArray;
 @property (strong, nonatomic)NSMutableArray *regionArray;
+@property (strong, nonatomic)NSString *marryPlace;
+@property (strong, nonatomic)NSString *engagePlace;
 
 @end
 
 @implementation AttendantTableViewController
 
-@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray;
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,77 +62,102 @@ extern BOOL checkAttendantDeadLine;
     addressDetail.delegate = self;
     notation.delegate = self;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    [self presentViewController:processing animated:YES completion:nil];
-    PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
-    [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!object) {
-            NSLog(@"The getFirstObject request failed.");
-            name.text = @"";
-            phone.text = @"";
-            attendWilling.selectedSegmentIndex = -1;
-            nickName.text = @"";
-            addressRegion.text = @"";
-            addressDetail.text = @"";
-            relation.selectedSegmentIndex = -1;
-            peopleNumber.text = @"0";
-            vagetableNumber.text = @"0";
-            meatNumber.text = @"0";
-            session.selectedSegmentIndex = -1;
-            [peopleCount setValue:0];
-            [vagetableCount setValue:0];
-            [meatCount setValue:0];
-            [notation setText:@""];
-            [userDefaults setObject:@"" forKey:@"NickName"];
-        }
-        else {
-            [name setText:object[@"Name"]];
-            [phone setText:object[@"Phone"]];
-            [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
-            [nickName setText:object[@"Name"]];
-            [addressRegion setText:object[@"AddressRegion"]];
-            [addressDetail setText:object[@"AddressDetail"]];
-            [relation setSelectedSegmentIndex:[object[@"Relation"]integerValue]];
-            [peopleNumber setText:[NSString stringWithFormat:@"%ld",[object[@"PeopleNumber"] integerValue]]];
-            [peopleCount setValue:[object[@"PeopleNumber"] integerValue]];
-            [vagetableNumber setText:[NSString stringWithFormat:@"%ld",[object[@"VagetableNumber"] integerValue]]];
-            [vagetableCount setValue:[object[@"VagetableNumber"] integerValue]];
-            [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
-            [meatCount setValue:[object[@"MeatNumber"] integerValue]];
-            [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
-            [notation setText:object[@"Notation"]];
-            [saveDataButton setEnabled:NO];
-            [self disableAllObjects];
-        }
-        [self checkDeadLine];
-    }];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self presentViewController:processing animated:YES completion:^{
+            PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
+            [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                if (!object) {
+                    NSLog(@"The getFirstObject request failed.");
+                    name.text = @"";
+                    phone.text = @"";
+                    attendWilling.selectedSegmentIndex = -1;
+                    nickName.text = @"";
+                    addressRegion.text = @"";
+                    addressDetail.text = @"";
+                    relation.selectedSegmentIndex = -1;
+                    peopleNumber.text = @"0";
+                    vagetableNumber.text = @"0";
+                    meatNumber.text = @"0";
+                    session.selectedSegmentIndex = -1;
+                    [peopleCount setValue:0];
+                    [vagetableCount setValue:0];
+                    [meatCount setValue:0];
+                    [notation setText:@""];
+                    [userDefaults setObject:@"" forKey:@"NickName"];
+                }
+                else {
+                    [name setText:object[@"Name"]];
+                    [phone setText:object[@"Phone"]];
+                    [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
+                    [nickName setText:object[@"Name"]];
+                    [addressRegion setText:object[@"AddressRegion"]];
+                    [addressDetail setText:object[@"AddressDetail"]];
+                    [relation setSelectedSegmentIndex:[object[@"Relation"]integerValue]];
+                    [peopleNumber setText:[NSString stringWithFormat:@"%ld",[object[@"PeopleNumber"] integerValue]]];
+                    [peopleCount setValue:[object[@"PeopleNumber"] integerValue]];
+                    [vagetableNumber setText:[NSString stringWithFormat:@"%ld",[object[@"VagetableNumber"] integerValue]]];
+                    [vagetableCount setValue:[object[@"VagetableNumber"] integerValue]];
+                    [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
+                    [meatCount setValue:[object[@"MeatNumber"] integerValue]];
+                    [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
+                    [notation setText:object[@"Notation"]];
+                    [saveDataButton setEnabled:NO];
+                    [self disableAllObjects];
+                }
+                NSLog(@"before checkdeadline");
+                [self checkDeadLine];
+                NSLog(@"checkDeadLine");
+            }];
+        }];
+    });
+    
 }
 
 - (void) checkDeadLine{
     PFQuery *queryStartDate = [PFQuery queryWithClassName:@"Information"];
     [queryStartDate getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!object) {
+        NSLog(@"checkDeadLine  %@", error);
+        if (error) {
+            NSLog(@"no objecttttt");
         }
         else {
-            dispatch_async(dispatch_get_main_queue(),^{
-                [processing dismissViewControllerAnimated:YES completion:nil];
-                NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
-                if ([changeAttendantInfoDeadLine compare:[NSDate date]] == NSOrderedAscending) {
-                    [cleanButton setEnabled:NO];
-                    [modifyButton setEnabled:NO];
-                    [saveDataButton setEnabled:NO];
-                    [self disableAllObjects];
-                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"目前無法在修改資料囉，請直接與新郎/新娘聯絡！" preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
+            marryPlace = object[@"marryPlace"];
+            engagePlace = object[@"engagePlace"];
+            if (session.selectedSegmentIndex == 0) {
+                sessionPlace.text = engagePlace;
+            }
+            else if (session.selectedSegmentIndex == 1){
+                sessionPlace.text = marryPlace;
+            }
+            else{
+                sessionPlace.text = @"";
+            }
+            NSLog(@"dismissviewcoasdfasdfasdfasdfntrollerrrrr");
+            if ([changeAttendantInfoDeadLine compare:[NSDate date]] == NSOrderedAscending) {
+                [cleanButton setEnabled:NO];
+                [modifyButton setEnabled:NO];
+                [saveDataButton setEnabled:NO];
+                [self disableAllObjects];
+                UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"目前無法在修改資料囉，請直接與新郎/新娘聯絡！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                }];
+                [message addAction:okButton];
+                NSLog(@"dismissviewcontrollerrrrr");
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [processing dismissViewControllerAnimated:YES completion:^{
+                        [self presentViewController:message animated:YES completion:nil];
                     }];
-                    [message addAction:okButton];
-                    [self presentViewController:message animated:YES completion:nil];
-                }
-                else{
-                    
-                }
-            });
-            
+                });
+
+            }
+            else{
+                NSLog(@"dismissssssssss");
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [processing dismissViewControllerAnimated:YES completion:nil];
+                });
+            }
         }
         checkAttendantDeadLine = NO;
     }];
@@ -275,18 +301,22 @@ extern BOOL checkAttendantDeadLine;
         [session setEnabled:NO];
         [session setTintColor:[UIColor lightGrayColor]];
         [session setSelectedSegmentIndex:-1];
+        sessionPlace.text = @"";
     }
     else{
         [addressRegion setEnabled:YES];
         [addressDetail setEnabled:YES];
         [peopleCount setEnabled:YES];
         [peopleCount setTintColor:segmentedControl.tintColor];
+        [peopleCount setValue:1];
+        [peopleNumber setText:[NSString stringWithFormat:@"%.0f", peopleCount.value]];
         [vagetableCount setEnabled:YES];
         [vagetableCount setTintColor:segmentedControl.tintColor];
         [meatCount setEnabled:YES];
         [meatCount setTintColor:segmentedControl.tintColor];
         [session setEnabled:YES];
         [session setTintColor:segmentedControl.tintColor];
+        
     }
 }
 
@@ -372,6 +402,8 @@ extern BOOL checkAttendantDeadLine;
     }
     else{
         [self presentViewController:processing animated:YES completion:nil];
+        MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+        NSString *weddingObjectId = tabBarController.weddingObjectId;
         PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
         [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *registrationData, NSError *error) {
@@ -394,6 +426,7 @@ extern BOOL checkAttendantDeadLine;
             }
             registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
             registrationData[@"Notation"] = notation.text;
+            registrationData[@"weddingObjectId"] = weddingObjectId;
             [registrationData saveInBackground];
             [saveDataButton setEnabled:NO];
             [self disableAllObjects];
@@ -475,6 +508,12 @@ extern BOOL checkAttendantDeadLine;
 
 - (IBAction)chooseSession:(id)sender {
     [self.view endEditing:YES];
+    if (session.selectedSegmentIndex == 0) {
+        sessionPlace.text = engagePlace;
+    }
+    else if (session.selectedSegmentIndex){
+        sessionPlace.text = marryPlace;
+    }
 }
 
 - (IBAction)chooseRelation:(id)sender {

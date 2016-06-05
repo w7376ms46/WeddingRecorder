@@ -9,14 +9,24 @@
 /* Begin PBXBuildFile section */
 		08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF11C84AAC400821C0A /* PhotoViewController.m */; };
 		08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */; };
+		080F11961CFC83F600688F49 /* GuestListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F11951CFC83F600688F49 /* GuestListTableViewCell.m */; };
 		081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */; };
 		081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */; };
 		081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0451C8C29B500B6808D /* GalleryViewController.m */; };
+		082099231D03450E0045B928 /* FormReviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 082099221D03450E0045B928 /* FormReviewTableViewController.m */; };
 		083561E81C95B0AC00EDB783 /* CityAndRegion.plist in Resources */ = {isa = PBXBuildFile; fileRef = 083561E71C95B0AC00EDB783 /* CityAndRegion.plist */; };
+		084DC1EF1CF74CBF00DCA384 /* WeddingListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084DC1EE1CF74CBF00DCA384 /* WeddingListTableViewController.m */; };
+		084FC99A1CF96E5B00C57AA5 /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084FC9991CF96E5B00C57AA5 /* MainTabBarController.m */; };
 		087155141C8DC50C00A7DF84 /* page1.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155101C8DC50C00A7DF84 /* page1.png */; };
 		087155151C8DC50C00A7DF84 /* page2.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155111C8DC50C00A7DF84 /* page2.png */; };
 		087155161C8DC50C00A7DF84 /* page3.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155121C8DC50C00A7DF84 /* page3.png */; };
 		087155171C8DC50C00A7DF84 /* page4.png in Resources */ = {isa = PBXBuildFile; fileRef = 087155131C8DC50C00A7DF84 /* page4.png */; };
+		0872D6181CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0872D6171CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m */; };
+		088D74FB1CF06AAF0046F038 /* CreateWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */; };
+		089273851CF8BBE100121CCA /* WeddingListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089273841CF8BBE100121CCA /* WeddingListTableViewCell.m */; };
+		08A799501CF08FDD0045B3DC /* AttendWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */; };
+		08A799531CF0959A0045B3DC /* SettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A799521CF0959A0045B3DC /* SettingTableViewController.m */; };
+		08AB05FC1CFAF32D00C1050A /* GuestListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB05FB1CFAF32D00C1050A /* GuestListTableViewController.m */; };
 		08C0F8FE1C831F7700EE1FFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F8FD1C831F7700EE1FFF /* main.m */; };
 		08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F9001C831F7800EE1FFF /* AppDelegate.m */; };
 		08C0F90A1C831F7800EE1FFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C0F9081C831F7800EE1FFF /* Main.storyboard */; };
@@ -41,6 +51,7 @@
 		08C0F9521C83419800EE1FFF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9511C83419800EE1FFF /* SystemConfiguration.framework */; };
 		08C0F9541C8341A500EE1FFF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9531C8341A500EE1FFF /* libz.tbd */; };
 		08C0F9561C8341B500EE1FFF /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */; };
+		08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */; };
 		08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -67,19 +78,39 @@
 		08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
 		08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
 		080E37B61C8427A200461B43 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "dropbox-ios-sdk-1.3.13/DropboxSDK.framework"; sourceTree = "<group>"; };
+		080F11941CFC83F600688F49 /* GuestListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestListTableViewCell.h; sourceTree = "<group>"; };
+		080F11951CFC83F600688F49 /* GuestListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestListTableViewCell.m; sourceTree = "<group>"; };
 		081AA03E1C8C099500B6808D /* FullScreenPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenPhotoViewController.h; sourceTree = "<group>"; };
 		081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenPhotoViewController.m; sourceTree = "<group>"; };
 		081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderCollectionReusableView.h; sourceTree = "<group>"; };
 		081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		081AA0441C8C29B500B6808D /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
 		081AA0451C8C29B500B6808D /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		082099211D03450E0045B928 /* FormReviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormReviewTableViewController.h; sourceTree = "<group>"; };
+		082099221D03450E0045B928 /* FormReviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormReviewTableViewController.m; sourceTree = "<group>"; };
 		08354C391C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		08354C3A1C88871600B7EB6C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		083561E71C95B0AC00EDB783 /* CityAndRegion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CityAndRegion.plist; sourceTree = "<group>"; };
+		084DC1ED1CF74CBF00DCA384 /* WeddingListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingListTableViewController.h; sourceTree = "<group>"; };
+		084DC1EE1CF74CBF00DCA384 /* WeddingListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingListTableViewController.m; sourceTree = "<group>"; };
+		084FC9981CF96E5B00C57AA5 /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
+		084FC9991CF96E5B00C57AA5 /* MainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarController.m; sourceTree = "<group>"; };
 		087155101C8DC50C00A7DF84 /* page1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page1.png; sourceTree = "<group>"; };
 		087155111C8DC50C00A7DF84 /* page2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page2.png; sourceTree = "<group>"; };
 		087155121C8DC50C00A7DF84 /* page3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page3.png; sourceTree = "<group>"; };
 		087155131C8DC50C00A7DF84 /* page4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page4.png; sourceTree = "<group>"; };
+		0872D6161CF011900099E7E5 /* LoginOrCreateAWeddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginOrCreateAWeddingViewController.h; sourceTree = "<group>"; };
+		0872D6171CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginOrCreateAWeddingViewController.m; sourceTree = "<group>"; };
+		088D74F91CF06AAF0046F038 /* CreateWeddingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateWeddingTableViewController.h; sourceTree = "<group>"; };
+		088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateWeddingTableViewController.m; sourceTree = "<group>"; };
+		089273831CF8BBE100121CCA /* WeddingListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingListTableViewCell.h; sourceTree = "<group>"; };
+		089273841CF8BBE100121CCA /* WeddingListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingListTableViewCell.m; sourceTree = "<group>"; };
+		08A7994E1CF08FDD0045B3DC /* AttendWeddingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttendWeddingTableViewController.h; sourceTree = "<group>"; };
+		08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttendWeddingTableViewController.m; sourceTree = "<group>"; };
+		08A799511CF0959A0045B3DC /* SettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableViewController.h; sourceTree = "<group>"; };
+		08A799521CF0959A0045B3DC /* SettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewController.m; sourceTree = "<group>"; };
+		08AB05FA1CFAF32D00C1050A /* GuestListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestListTableViewController.h; sourceTree = "<group>"; };
+		08AB05FB1CFAF32D00C1050A /* GuestListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestListTableViewController.m; sourceTree = "<group>"; };
 		08C0F8F91C831F7700EE1FFF /* WeddingRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08C0F8FD1C831F7700EE1FFF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		08C0F8FF1C831F7700EE1FFF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -112,6 +143,8 @@
 		08C0F9511C83419800EE1FFF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		08C0F9531C8341A500EE1FFF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		08CBA6921CF1F97F0099BD94 /* LoginTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTableViewController.h; sourceTree = "<group>"; };
+		08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTableViewController.m; sourceTree = "<group>"; };
 		08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingInformationTableViewController.h; sourceTree = "<group>"; };
 		08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingInformationTableViewController.m; sourceTree = "<group>"; };
 		08EFC6121C91BD5F0090E6AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -193,8 +226,30 @@
 				08C0F9081C831F7800EE1FFF /* Main.storyboard */,
 				081AA0441C8C29B500B6808D /* GalleryViewController.h */,
 				081AA0451C8C29B500B6808D /* GalleryViewController.m */,
+				0872D6161CF011900099E7E5 /* LoginOrCreateAWeddingViewController.h */,
+				0872D6171CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m */,
+				08AB05FA1CFAF32D00C1050A /* GuestListTableViewController.h */,
+				08AB05FB1CFAF32D00C1050A /* GuestListTableViewController.m */,
+				080F11941CFC83F600688F49 /* GuestListTableViewCell.h */,
+				080F11951CFC83F600688F49 /* GuestListTableViewCell.m */,
+				082099211D03450E0045B928 /* FormReviewTableViewController.h */,
+				082099221D03450E0045B928 /* FormReviewTableViewController.m */,
+				084DC1ED1CF74CBF00DCA384 /* WeddingListTableViewController.h */,
+				084DC1EE1CF74CBF00DCA384 /* WeddingListTableViewController.m */,
+				089273831CF8BBE100121CCA /* WeddingListTableViewCell.h */,
+				089273841CF8BBE100121CCA /* WeddingListTableViewCell.m */,
+				08CBA6921CF1F97F0099BD94 /* LoginTableViewController.h */,
+				08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */,
+				084FC9981CF96E5B00C57AA5 /* MainTabBarController.h */,
+				084FC9991CF96E5B00C57AA5 /* MainTabBarController.m */,
+				088D74F91CF06AAF0046F038 /* CreateWeddingTableViewController.h */,
+				088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */,
+				08A7994E1CF08FDD0045B3DC /* AttendWeddingTableViewController.h */,
+				08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */,
 				08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */,
 				08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */,
+				08A799511CF0959A0045B3DC /* SettingTableViewController.h */,
+				08A799521CF0959A0045B3DC /* SettingTableViewController.m */,
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
 				081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */,
@@ -400,13 +455,24 @@
 			files = (
 				081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */,
 				081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */,
+				08A799501CF08FDD0045B3DC /* AttendWeddingTableViewController.m in Sources */,
+				082099231D03450E0045B928 /* FormReviewTableViewController.m in Sources */,
+				08A799531CF0959A0045B3DC /* SettingTableViewController.m in Sources */,
 				081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */,
+				080F11961CFC83F600688F49 /* GuestListTableViewCell.m in Sources */,
 				08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */,
+				089273851CF8BBE100121CCA /* WeddingListTableViewCell.m in Sources */,
 				08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */,
+				08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */,
 				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
+				084FC99A1CF96E5B00C57AA5 /* MainTabBarController.m in Sources */,
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
 				08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */,
+				084DC1EF1CF74CBF00DCA384 /* WeddingListTableViewController.m in Sources */,
+				0872D6181CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m in Sources */,
 				08C0F8FE1C831F7700EE1FFF /* main.m in Sources */,
+				08AB05FC1CFAF32D00C1050A /* GuestListTableViewController.m in Sources */,
+				088D74FB1CF06AAF0046F038 /* CreateWeddingTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,7 +547,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chih Hao Chen (284FLL9FA7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Chih Hao Chen (284FLL9FA7)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -503,6 +570,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "1a26aace-29a4-4962-b5a5-b4e724cc4b77";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -525,7 +593,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chih Hao Chen (284FLL9FA7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Chih Hao Chen (284FLL9FA7)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -540,6 +609,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "1a26aace-29a4-4962-b5a5-b4e724cc4b77";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -550,8 +620,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Chih Hao Chen (N8VRHBGE2J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Chih Hao Chen (N8VRHBGE2J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
@@ -562,7 +632,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ChihHaoChen.WeddingRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9f08f7a8-fdd5-4c8e-82e2-3ffde845e8aa";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
@@ -571,8 +641,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Chih Hao Chen (N8VRHBGE2J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Chih Hao Chen (N8VRHBGE2J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
@@ -583,7 +653,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ChihHaoChen.WeddingRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9f08f7a8-fdd5-4c8e-82e2-3ffde845e8aa";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;

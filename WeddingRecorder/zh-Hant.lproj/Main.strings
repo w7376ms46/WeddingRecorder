@@ -117,10 +117,10 @@
 "nlb-yz-WWj.normalTitle" = "地址";
 
 /* Class = "UISegmentedControl"; o9j-Xg-ANk.segmentTitles[0] = "12月03號(訂婚)"; ObjectID = "o9j-Xg-ANk"; */
-"o9j-Xg-ANk.segmentTitles[0]" = "12月03號(訂婚)";
+"o9j-Xg-ANk.segmentTitles[0]" = "訂婚";
 
 /* Class = "UISegmentedControl"; o9j-Xg-ANk.segmentTitles[1] = "12月25號(結婚)"; ObjectID = "o9j-Xg-ANk"; */
-"o9j-Xg-ANk.segmentTitles[1]" = "12月25號(結婚)";
+"o9j-Xg-ANk.segmentTitles[1]" = "結婚";
 
 /* Class = "UIBarButtonItem"; title = "相機錄影"; ObjectID = "oTM-u5-vX0"; */
 "oTM-u5-vX0.title" = "相機錄影";
