@@ -84,8 +84,11 @@ BOOL checkAttendantDeadLine;
     else if ([realDeviceName isEqualToString:@"iPhone7,2"] || [realDeviceName isEqualToString:@"iPhone8,1"]){
         return @"iPhone6";
     }
-    else if ([realDeviceName rangeOfString:@"iPad"].location != NSNotFound){
-        return @"iPad";
+    else if ([realDeviceName isEqualToString:@"iPad1,1"] || [realDeviceName isEqualToString:@"iPad2,1"] || [realDeviceName isEqualToString:@"iPad3,1"] ||
+             [realDeviceName isEqualToString:@"iPad3,4"] || [realDeviceName isEqualToString:@"iPad4,1"] || [realDeviceName isEqualToString:@"iPad4,2"] ||
+             [realDeviceName isEqualToString:@"iPad4,3"] || [realDeviceName isEqualToString:@"iPad5,3"] || [realDeviceName isEqualToString:@"iPad5,4"] ||
+             [realDeviceName isEqualToString:@"iPad6,3"] || [realDeviceName isEqualToString:@"iPad6,4"]){
+        return @"iPad9.7";
     }
     return @"iPhone6Plus";
     

@@ -134,27 +134,41 @@ extern NSString *deviceName;
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         NSLog(@"ddddddd  count = %d   %@", [objects count], error);
         if (!error) {
+            NSMutableArray *objectsArray = [objects mutableCopy];
+            NSLog(@"~~~~~~~~~~~~");
             if ([objects count] == 0) {
+                NSLog(@"!!!!!!!!!!!!!!");
             }
             else{
-                NSString *sectionTitle = [objects objectAtIndex:0][@"Shooter"];
+                NSLog(@"jjjjjjjjjjjjjj %d", [objectsArray count]);
+                NSString *sectionTitle = [objectsArray objectAtIndex:0][@"Shooter"];
+                NSLog(@"jjjjjjjjjjjjjj %@", sectionTitle);
                 NSMutableArray *photoTempArray = [[NSMutableArray alloc]init];
-                for (PFObject *object in objects) {
+                for (int i = 0 ; i<[objectsArray count]; i++) {
+                //for (PFObject *object in objects) {
+                    PFObject *object = [objectsArray objectAtIndex:i];
+                    NSLog(@"kkkkkkkkk, %d", i);
                     if ([sectionTitle isEqualToString:object[@"Shooter"]]) {
+                        NSLog(@"aaaaaaaaaaaaaaaa");
                         [photoTempArray addObject:object];
                     }
                     else{
+                        NSLog(@"bbbbbbbbbbbbbbbbb");
                         [photoDictionary setObject:[photoTempArray mutableCopy] forKey:sectionTitle];
                         sectionTitle = object[@"Shooter"];
                         [photoTempArray removeAllObjects];
                         [photoTempArray addObject:object];
                     }
+                    NSLog(@"ccccccc");
                 }
                 [photoDictionary setObject:photoTempArray forKey:sectionTitle];
                 photoDictionaryKey = [[photoDictionary allKeys] mutableCopy];
+                NSLog(@"=============+++++++=");
+
             }
             
             dispatch_async(dispatch_get_main_queue(),^{
+                NSLog(@"==============");
                 [photoCollectionView reloadData];
                 [refreshControl endRefreshing];
                 loadingPhoto = NO;
@@ -187,6 +201,7 @@ extern NSString *deviceName;
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     NSString *keyString = [photoDictionaryKey objectAtIndex:section];
     NSMutableArray *tempArray = [photoDictionary objectForKey:keyString];
+    NSLog(@"tempArray count = %lu", (unsigned long)[tempArray count]);
     return [tempArray count];
 }
 
@@ -204,6 +219,11 @@ extern NSString *deviceName;
     else if ([deviceName isEqualToString:@"iPhone6Plus"]){
         return CGSizeMake(125, 125);
     }
+    /*
+    else if ([deviceName isEqualToString:@"iPad9.7"]){
+        return CGSizeMake(250, 250);
+    }
+     */
     else{
         return CGSizeMake(100,100);
     }
@@ -387,13 +407,11 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     comeFromAnotherTab = NO;
     //取得影像
     uploadingImageCount++;
-    //[refreshControl setEnabled:NO];
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     if (!uploadFromAlbum) {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     }
     NSData *imageData = [self scaleImage:image ToSize:10485760];
-    //NSData *smallImageData = UIImagePNGRepresentation(image);
     NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
     
     CGSize newSize;
@@ -431,9 +449,6 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     
     NSLog(@"start save in background with block");
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            //[self.navigationItem setPrompt:[NSString stringWithFormat:@"處理中..."]];
-        });
         NSLog(@"save file succeededdddddddd object id ");
         PFUser *currentUser = [PFUser currentUser];
         PFObject *object = [[PFObject alloc]initWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"OriginalPhoto"]];
@@ -447,11 +462,17 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                         [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳完成！"]];
                     }
                 });
+                 
                 NSLog(@"object.id = %@", object.objectId);
-                PFObject *tempObject = [[PFObject alloc]initWithClassName:[NSString stringWithFormat:@"%@%@", weddingInfoObjectId, @"Photo"]];
+                PFObject *tempObject = [[PFObject alloc]initWithClassName:[NSString stringWithFormat:@"%@Photo", weddingInfoObjectId]];
                 [tempObject setObject:smallImageFile forKey:@"miniPhoto"];
                 [tempObject setObject:microImageFile forKey:@"microPhoto"];
-                [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
+                if (![userDefaults objectForKey:@"NickName"]) {
+                    [tempObject setObject:@"" forKey:@"Shooter"];
+                }
+                else{
+                    [tempObject setObject:[userDefaults objectForKey:@"NickName"] forKey:@"Shooter"];
+                }
                 [tempObject setObject:object.objectId forKey:@"OriginalPhotoObjectID"];
                 [tempObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                     NSLog(@"error = %@", error);
@@ -459,6 +480,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                         [self loadPhotoData];
                         dispatch_async(dispatch_get_main_queue(),^{
                             if (uploadingImageCount == 0) {
+                                NSLog(@"setprompt nillllllllll");
                                 [self.navigationItem setPrompt:nil];
                             }
                             
@@ -470,25 +492,15 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                         
                     }
                 }];
+                NSLog(@"is it succeeeee");
             }
         }];
-        
     }
-    progressBlock:^(int percentDone) {
-        //NSLog(@"Percentage = %d", percentDone);
-        dispatch_async(dispatch_get_main_queue(),^{
-            
-            //int remainProgress = (totalProgress-percentDone)/uploadingImageCount;
-            //NSLog(@"%d   %d   %d", remainProgress, totalProgress, uploadingImageCount);
-            //if (percentDone < 5) {
-                [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount]];
-            //}
-            //else if (remainProgress % 5 == 0) {
-            //    [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳進度：%d %%", 100-remainProgress]];
-            //}
-        });
-        
-    }];
+                           progressBlock:^(int percentDone) {
+                               dispatch_async(dispatch_get_main_queue(),^{
+                                   [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount]];
+                               });
+                           }];
     
     
     
