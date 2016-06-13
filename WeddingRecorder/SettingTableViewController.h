@@ -12,7 +12,7 @@
 #import "AttendWeddingTableViewController.h"
 #import "MainTabBarController.h"
 #import "GuestListTableViewController.h"
-
+#import "ModifyWeddingTableViewController.h"
 @interface SettingTableViewController : UITableViewController
 
 - (IBAction)logOut:(id)sender;

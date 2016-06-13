@@ -19,12 +19,13 @@ extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic)NSMutableArray *regionArray;
 @property (strong, nonatomic)NSString *marryPlace;
 @property (strong, nonatomic)NSString *engagePlace;
+@property (strong, nonatomic)NSDate *modifyFormDeadline;
 
 @end
 
 @implementation AttendantTableViewController
 
-@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace;
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace, modifyFormDeadline;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -122,7 +123,13 @@ extern BOOL checkAttendantDeadLine;
             NSLog(@"no objecttttt");
         }
         else {
-            NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
+            //NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
+            
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy / MM / dd HH:mm"];
+            modifyFormDeadline = [dateFormatter dateFromString:[object objectForKey:@"modifyFormDeadline"]];
+            
+            
             marryPlace = object[@"marryPlace"];
             engagePlace = object[@"engagePlace"];
             if (session.selectedSegmentIndex == 0) {
@@ -135,7 +142,7 @@ extern BOOL checkAttendantDeadLine;
                 sessionPlace.text = @"";
             }
             NSLog(@"dismissviewcoasdfasdfasdfasdfntrollerrrrr");
-            if ([changeAttendantInfoDeadLine compare:[NSDate date]] == NSOrderedAscending) {
+            if ([modifyFormDeadline compare:[NSDate date]] == NSOrderedAscending) {
                 [cleanButton setEnabled:NO];
                 [modifyButton setEnabled:NO];
                 [saveDataButton setEnabled:NO];
@@ -158,6 +165,9 @@ extern BOOL checkAttendantDeadLine;
                     [processing dismissViewControllerAnimated:YES completion:nil];
                 });
             }
+            dispatch_async(dispatch_get_main_queue(),^{
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+            });
         }
         checkAttendantDeadLine = NO;
     }];
@@ -354,7 +364,36 @@ extern BOOL checkAttendantDeadLine;
     [meatNumber setText:[NSString stringWithFormat:@"%.0f", meatCount.value]];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy / MM / dd HH:mm"];
+    NSString *strDate = [dateFormatter stringFromDate:modifyFormDeadline];
+    if (modifyFormDeadline) {
+        return [NSString stringWithFormat:@"請於 %@ 前填寫出席意願喔！", strDate];
+    }
+    else{
+        return nil;
+    }
+    
+}
+
 - (IBAction)saveData:(id)sender {
+    
+    if ([modifyFormDeadline compare:[NSDate date]] == NSOrderedAscending) {
+        [cleanButton setEnabled:NO];
+        [modifyButton setEnabled:NO];
+        [saveDataButton setEnabled:NO];
+        [self disableAllObjects];
+        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"目前無法在修改資料囉，請直接與新郎/新娘聯絡！" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        }];
+        [message addAction:okButton];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self presentViewController:message animated:YES completion:nil];
+        });
+        return;
+    }
+    
     
     BOOL uploadingData = NO;
     NSString *alertString = @"";

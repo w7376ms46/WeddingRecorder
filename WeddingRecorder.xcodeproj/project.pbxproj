@@ -52,6 +52,7 @@
 		08C0F9541C8341A500EE1FFF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9531C8341A500EE1FFF /* libz.tbd */; };
 		08C0F9561C8341B500EE1FFF /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */; };
 		08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */; };
+		08D944391D0D0B0700EF6212 /* ModifyWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */; };
 		08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -145,6 +146,8 @@
 		08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		08CBA6921CF1F97F0099BD94 /* LoginTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTableViewController.h; sourceTree = "<group>"; };
 		08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTableViewController.m; sourceTree = "<group>"; };
+		08D944371D0D0B0700EF6212 /* ModifyWeddingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifyWeddingTableViewController.h; sourceTree = "<group>"; };
+		08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifyWeddingTableViewController.m; sourceTree = "<group>"; };
 		08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingInformationTableViewController.h; sourceTree = "<group>"; };
 		08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingInformationTableViewController.m; sourceTree = "<group>"; };
 		08EFC6121C91BD5F0090E6AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -244,6 +247,8 @@
 				084FC9991CF96E5B00C57AA5 /* MainTabBarController.m */,
 				088D74F91CF06AAF0046F038 /* CreateWeddingTableViewController.h */,
 				088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */,
+				08D944371D0D0B0700EF6212 /* ModifyWeddingTableViewController.h */,
+				08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */,
 				08A7994E1CF08FDD0045B3DC /* AttendWeddingTableViewController.h */,
 				08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */,
 				08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */,
@@ -467,6 +472,7 @@
 				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
 				084FC99A1CF96E5B00C57AA5 /* MainTabBarController.m in Sources */,
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
+				08D944391D0D0B0700EF6212 /* ModifyWeddingTableViewController.m in Sources */,
 				08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */,
 				084DC1EF1CF74CBF00DCA384 /* WeddingListTableViewController.m in Sources */,
 				0872D6181CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m in Sources */,

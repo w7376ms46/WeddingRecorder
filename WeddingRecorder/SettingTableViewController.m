@@ -37,6 +37,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+        return 2;
+    }
     return 1;
 }
 
@@ -62,11 +65,20 @@
         MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
         guestListTableViewController.weddingObjectId = tabBarController.weddingObjectId;
     }
+    else if ([segue.identifier isEqualToString:@"segueModifyWeddingInfo"]) {
+        UINavigationController *nav = (UINavigationController *)segue.destinationViewController;
+        ModifyWeddingTableViewController *modifyWeddingTableViewController = (ModifyWeddingTableViewController *)nav.topViewController;
+        MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+        modifyWeddingTableViewController.weddingObjectId = tabBarController.weddingObjectId;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0) {
         [self performSegueWithIdentifier:@"segueGuestList" sender:self];
+    }
+    else if (indexPath.section == 0 && indexPath.row == 1) {
+        [self performSegueWithIdentifier:@"segueModifyWeddingInfo" sender:self];
     }
 }
 

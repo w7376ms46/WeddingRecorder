@@ -12,18 +12,20 @@
 
 @property (strong, nonatomic) UIDatePicker *engageDatePicker;
 @property (strong, nonatomic) UIDatePicker *marryDatePicker;
+@property (strong, nonatomic) UIDatePicker *modifyFormDeadlinePicker;
 @property (nonatomic, strong) UIAlertController *processing;
 @property (strong, nonatomic) NSString *weddingInfoObjectId;
 @end
 
 @implementation CreateWeddingTableViewController
 
-@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, processing, weddingInfoObjectId;
+@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, modifyFormDeadline, modifyFormDeadlinePicker, processing, weddingInfoObjectId;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
+    
     engageDatePicker = [[UIDatePicker alloc]init];
     engageDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     engageDatePicker.minuteInterval = 30;
@@ -44,6 +46,17 @@
     [marryDatePickerToolBar setItems:@[nilButton, marryDatePickerToolBarRight]];
     [marryDate setInputView:marryDatePicker];
     [marryDate setInputAccessoryView:marryDatePickerToolBar];
+    
+    
+    modifyFormDeadlinePicker = [[UIDatePicker alloc]init];
+    modifyFormDeadlinePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    modifyFormDeadlinePicker.minuteInterval = 30;
+    UIToolbar *modifyFormDeadlinePickerToolBar = [[UIToolbar alloc]init];
+    [modifyFormDeadlinePickerToolBar sizeToFit];
+    UIBarButtonItem *modifyFormDeadlinePickerToolBarRight = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(modifyFormDeadlinePickerToolBarDonePicker:)];
+    [modifyFormDeadlinePickerToolBar setItems:@[nilButton, modifyFormDeadlinePickerToolBarRight]];
+    [modifyFormDeadline setInputView:modifyFormDeadlinePicker];
+    [modifyFormDeadline setInputAccessoryView:modifyFormDeadlinePickerToolBar];
 }
 
 
@@ -59,6 +72,13 @@
     [formatter setDateFormat:@"YYYY / MM / dd  HH:mm"];
     [marryDate setText:[formatter stringFromDate:marryDatePicker.date]];
     [marryDate endEditing:YES];
+}
+
+-(void) modifyFormDeadlinePickerToolBarDonePicker:(id)sender {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY / MM / dd  HH:mm"];
+    [modifyFormDeadline setText:[formatter stringFromDate:modifyFormDeadlinePicker.date]];
+    [modifyFormDeadline endEditing:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -79,7 +99,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 12;
+    return 13;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -122,6 +142,9 @@
     else if ([marryRestaurantAddress.text isEqualToString:@""]) {
         alertString = @"請輸入結婚餐廳地址。";
     }
+    else if ([engageDate.text isEqualToString:@""]) {
+        alertString = @"請輸入填寫出席意願期限。";
+    }
     if (![alertString isEqualToString:@""]) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
@@ -142,6 +165,7 @@
         [object setObject:marryRestaurantName.text forKey:@"marryPlace"];
         [object setObject:marryRestaurantAddress.text forKey:@"marryAddress"];
         [object setObject:marryRestaurantUrl.text forKey:@"marryPlaceIntroduce"];
+        [object setObject:modifyFormDeadline.text forKey:@"modifyFormDeadline"];
         PFUser *user = [PFUser currentUser];
         [object setObject:user.username forKey:@"managerAccount"];
         
