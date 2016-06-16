@@ -19,7 +19,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    
+    weddingAccount.delegate = self;
+    weddingPassword.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if (textField == weddingAccount) {
+        [textField resignFirstResponder];
+        [weddingPassword becomeFirstResponder];
+    }
+    else if (textField == weddingPassword){
+        [textField resignFirstResponder];
+    }
+    return NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

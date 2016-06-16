@@ -54,6 +54,8 @@
 		08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */; };
 		08D944391D0D0B0700EF6212 /* ModifyWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */; };
 		08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */; };
+		08FCB23A1D104AF90061E0C2 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FCB2391D104AF90061E0C2 /* GoogleMobileAds.framework */; };
+		08FCB23D1D104DFE0061E0C2 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FCB23C1D104DFE0061E0C2 /* SettingViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +153,9 @@
 		08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingInformationTableViewController.h; sourceTree = "<group>"; };
 		08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingInformationTableViewController.m; sourceTree = "<group>"; };
 		08EFC6121C91BD5F0090E6AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		08FCB2391D104AF90061E0C2 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		08FCB23B1D104DFE0061E0C2 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		08FCB23C1D104DFE0061E0C2 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +178,7 @@
 				08C0F93C1C833D4C00EE1FFF /* ParseFacebookUtils.framework in Frameworks */,
 				08C0F93D1C833D4C00EE1FFF /* ParseFacebookUtilsV4.framework in Frameworks */,
 				08C0F93E1C833D4C00EE1FFF /* ParseTwitterUtils.framework in Frameworks */,
+				08FCB23A1D104AF90061E0C2 /* GoogleMobileAds.framework in Frameworks */,
 				08C0F93F1C833D4C00EE1FFF /* ParseUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,6 +261,8 @@
 				08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */,
 				08A799511CF0959A0045B3DC /* SettingTableViewController.h */,
 				08A799521CF0959A0045B3DC /* SettingTableViewController.m */,
+				08FCB23B1D104DFE0061E0C2 /* SettingViewController.h */,
+				08FCB23C1D104DFE0061E0C2 /* SettingViewController.m */,
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
 				081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */,
@@ -301,6 +309,7 @@
 		08C0F9571C8341BB00EE1FFF /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				08FCB2391D104AF90061E0C2 /* GoogleMobileAds.framework */,
 				080E37B61C8427A200461B43 /* DropboxSDK.framework */,
 				08C0F9551C8341B500EE1FFF /* libsqlite3.tbd */,
 				08C0F9531C8341A500EE1FFF /* libz.tbd */,
@@ -467,6 +476,7 @@
 				080F11961CFC83F600688F49 /* GuestListTableViewCell.m in Sources */,
 				08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */,
 				089273851CF8BBE100121CCA /* WeddingListTableViewCell.m in Sources */,
+				08FCB23D1D104DFE0061E0C2 /* SettingViewController.m in Sources */,
 				08C0F9011C831F7800EE1FFF /* AppDelegate.m in Sources */,
 				08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */,
 				08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */,
@@ -632,6 +642,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
 					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = WeddingRecorder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -654,6 +665,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.12.0",
 					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = WeddingRecorder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

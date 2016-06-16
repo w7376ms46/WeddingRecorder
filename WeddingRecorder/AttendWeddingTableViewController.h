@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Parse/Parse.h"
 #import "MainTabBarController.h"
-@interface AttendWeddingTableViewController : UITableViewController
+@interface AttendWeddingTableViewController : UITableViewController<UITextFieldDelegate>
 - (IBAction)login:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *weddingAccount;
 @property (weak, nonatomic) IBOutlet UITextField *weddingPassword;

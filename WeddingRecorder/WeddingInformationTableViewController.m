@@ -16,7 +16,7 @@
 
 @implementation WeddingInformationTableViewController
 
-@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName;
+@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,6 +42,7 @@
             [marryPlace setTitle:object[@"marryPlace"] forState:UIControlStateNormal];
             [engageAddress setTitle:object[@"engageAddress"] forState:UIControlStateNormal];
             [marryAddress setTitle:object[@"marryAddress"] forState:UIControlStateNormal];
+            [groomAndBrideName setText:[NSString stringWithFormat:@"%@&%@",object[@"groomName"],object[@"brideName"]]];
             weddingInformation = object;
         }
     }];
@@ -118,15 +119,25 @@
  */
 - (IBAction)addEngageTimeToSchedule:(id)sender {
     EKEventStore *store = [EKEventStore new];
-    NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSDate *startDate = [weddingInformation[@"engageDateInDate"] dateByAddingTimeInterval:-timeZoneSeconds];
+    
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy / MM / dd HH:mm"];
+    NSDate *startDate = [dateFormatter dateFromString:weddingInformation[@"engageDate"]];
+    
+    
+    //NSDate *startDate = [engageDate dateByAddingTimeInterval:];
     [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
         if (!granted) { return; }
         EKEvent *event = [EKEvent eventWithEventStore:store];
-        event.title = @"志豪＆麗熒訂婚午宴";
+        event.title = [NSString stringWithFormat:@"%@的訂婚宴(%@)",groomAndBrideName.text, weddingInformation[@"engagePlace"]];
         event.startDate = startDate;
         event.endDate = [event.startDate dateByAddingTimeInterval:3*60*60];  //set 3 hour meeting
         event.calendar = [store defaultCalendarForNewEvents];
+        event.location = weddingInformation[@"engageAddress"];
+        EKAlarm *alarm = [[EKAlarm alloc]init];
+        [alarm setRelativeOffset:-60*60*24];
+        [event setAlarms:[NSArray arrayWithObject:alarm]];
         NSError *err = nil;
         [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
         dispatch_async(dispatch_get_main_queue(),^{
@@ -140,15 +151,25 @@
 
 - (IBAction)addMarryTimeToSchedule:(id)sender {
     EKEventStore *store = [EKEventStore new];
-    NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSDate *startDate = [weddingInformation[@"marryDateInDate"] dateByAddingTimeInterval:-timeZoneSeconds];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy / MM / dd HH:mm"];
+    NSDate *startDate = [dateFormatter dateFromString:weddingInformation[@"marryDate"]];
+    
+    
+    //NSDate *startDate = [weddingInformation[@"marryDateInDate"] dateByAddingTimeInterval:-timeZoneSeconds];
     [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
         if (!granted) { return; }
         EKEvent *event = [EKEvent eventWithEventStore:store];
-        event.title = @"志豪＆麗熒結婚午宴";
+        event.title = [NSString stringWithFormat:@"%@的結婚宴(%@)",groomAndBrideName.text, weddingInformation[@"marryPlace"]];
         event.startDate = startDate;
         event.endDate = [event.startDate dateByAddingTimeInterval:3*60*60];  //set 3 hour meeting
         event.calendar = [store defaultCalendarForNewEvents];
+        event.location = weddingInformation[@"marryAddress"];
+        EKAlarm *alarm = [[EKAlarm alloc]init];
+        [alarm setRelativeOffset:-60*60*24];
+        [event setAlarms:[NSArray arrayWithObject:alarm]];
+        
         NSError *err = nil;
         [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
         dispatch_async(dispatch_get_main_queue(),^{

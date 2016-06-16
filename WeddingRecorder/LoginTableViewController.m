@@ -20,6 +20,9 @@
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
+    account.delegate = self;
+    password.delegate = self;
+    email.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -27,7 +30,25 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if (textField == account) {
+        [textField resignFirstResponder];
+        [password becomeFirstResponder];
+    }
+    if (createOrLoginSelector.selectedSegmentIndex == 0) {
+        if (textField == password){
+            [textField resignFirstResponder];
+            [email becomeFirstResponder];
+        }
+        else if (textField == email){
+            [textField resignFirstResponder];
+        }
+    }
+    else if (textField == password){
+        [textField resignFirstResponder];
+    }
+    return NO;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

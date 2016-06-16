@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-@interface LoginTableViewController : UITableViewController
+@interface LoginTableViewController : UITableViewController<UITextFieldDelegate>
 - (IBAction)selectAccountStatus:(id)sender;
 - (IBAction)createOrLogin:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *createOrLoginSelector;
