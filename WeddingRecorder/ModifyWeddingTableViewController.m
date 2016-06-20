@@ -102,6 +102,16 @@
             [modifyFormDeadlinePicker setDate:[dateFormatter dateFromString:object[@"modifyFormDeadline"]]];
         }
     }];
+    weddingName.delegate = self;
+    weddingPassword.delegate = self;
+    groomName.delegate = self;
+    brideName.delegate = self;
+    engageRestaurantName.delegate = self;
+    engageRestaurantUrl.delegate = self;
+    engageRestaurantAddress.delegate = self;
+    marryRestaurantUrl.delegate = self;
+    marryRestaurantName.delegate = self;
+    marryRestaurantAddress.delegate = self;
 }
 
 -(void) modifyFormDeadlinePickerToolBarDonePicker:(id)sender {
@@ -117,11 +127,16 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 13;
+    if (section == 0) {
+        return 2;
+    }
+    else{
+        return 11;
+    }
 }
 
 -(void) donePicker:(id)sender {
@@ -193,5 +208,50 @@
             }];
         }
     }];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if (textField == weddingName) {
+        [textField resignFirstResponder];
+        [weddingPassword becomeFirstResponder];
+    }
+    else if (textField == weddingPassword){
+        [textField resignFirstResponder];
+        [groomName becomeFirstResponder];
+    }
+    
+    else if (textField == groomName){
+        [textField resignFirstResponder];
+        [brideName becomeFirstResponder];
+    }
+    else if (textField == brideName){
+        [textField resignFirstResponder];
+        [engageDate becomeFirstResponder];
+    }
+    else if (textField == engageRestaurantName){
+        [textField resignFirstResponder];
+        [engageRestaurantAddress becomeFirstResponder];
+    }
+    
+    else if (textField == engageRestaurantAddress){
+        [textField resignFirstResponder];
+        [engageRestaurantUrl becomeFirstResponder];
+    }
+    else if (textField == engageRestaurantUrl){
+        [textField resignFirstResponder];
+        [marryDate becomeFirstResponder];
+    }else if (textField == marryRestaurantName){
+        [textField resignFirstResponder];
+        [marryRestaurantAddress becomeFirstResponder];
+    }
+    else if (textField == marryRestaurantAddress){
+        [textField resignFirstResponder];
+        [marryRestaurantUrl becomeFirstResponder];
+    }
+    else if (textField == marryRestaurantUrl){
+        [textField resignFirstResponder];
+        [modifyFormDeadLine becomeFirstResponder];
+    }
+    return NO;
 }
 @end

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		08036FF21C84AAC400821C0A /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF11C84AAC400821C0A /* PhotoViewController.m */; };
 		08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */; };
+		080B84311D145E9F00704DFB /* SlideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080B84301D145E9F00704DFB /* SlideShowViewController.m */; };
 		080F11961CFC83F600688F49 /* GuestListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F11951CFC83F600688F49 /* GuestListTableViewCell.m */; };
 		081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */; };
 		081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */; };
@@ -80,6 +81,8 @@
 		08036FF11C84AAC400821C0A /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
 		08036FF31C84AC4100821C0A /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
 		08036FF41C84AC4100821C0A /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		080B842F1D145E9F00704DFB /* SlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShowViewController.h; sourceTree = "<group>"; };
+		080B84301D145E9F00704DFB /* SlideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideShowViewController.m; sourceTree = "<group>"; };
 		080E37B61C8427A200461B43 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "dropbox-ios-sdk-1.3.13/DropboxSDK.framework"; sourceTree = "<group>"; };
 		080F11941CFC83F600688F49 /* GuestListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestListTableViewCell.h; sourceTree = "<group>"; };
 		080F11951CFC83F600688F49 /* GuestListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestListTableViewCell.m; sourceTree = "<group>"; };
@@ -266,6 +269,8 @@
 				08036FF01C84AAC400821C0A /* PhotoViewController.h */,
 				08036FF11C84AAC400821C0A /* PhotoViewController.m */,
 				081AA0411C8C0D0600B6808D /* HeaderCollectionReusableView.h */,
+				080B842F1D145E9F00704DFB /* SlideShowViewController.h */,
+				080B84301D145E9F00704DFB /* SlideShowViewController.m */,
 				081AA0421C8C0D0600B6808D /* HeaderCollectionReusableView.m */,
 				081AA03E1C8C099500B6808D /* FullScreenPhotoViewController.h */,
 				081AA03F1C8C099500B6808D /* FullScreenPhotoViewController.m */,
@@ -471,6 +476,7 @@
 				081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */,
 				08A799501CF08FDD0045B3DC /* AttendWeddingTableViewController.m in Sources */,
 				082099231D03450E0045B928 /* FormReviewTableViewController.m in Sources */,
+				080B84311D145E9F00704DFB /* SlideShowViewController.m in Sources */,
 				08A799531CF0959A0045B3DC /* SettingTableViewController.m in Sources */,
 				081AA0431C8C0D0600B6808D /* HeaderCollectionReusableView.m in Sources */,
 				080F11961CFC83F600688F49 /* GuestListTableViewCell.m in Sources */,

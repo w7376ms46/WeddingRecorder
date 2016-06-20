@@ -12,11 +12,12 @@
 @interface WeddingInformationTableViewController ()
 @property (nonatomic, strong) UIAlertController *processing;
 @property (nonatomic, strong) PFObject *weddingInformation;
+
 @end
 
 @implementation WeddingInformationTableViewController
 
-@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName;
+@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName, shareButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,6 +26,10 @@
     MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
     NSLog(@"tab bar weddingName = %@   %@", tabBarController.weddingName, tabBarController.weddingObjectId);
     PFUser *currentUser = [PFUser currentUser];
+    NSLog(@"currentUser = %@", currentUser);
+    if (!currentUser) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
     PFQuery *query = [PFQuery queryWithClassName:@"Information"];
     //[query whereKey:@"managerAccount" equalTo:currentUser.username];
     //[query whereKey:@"weddingAccount" equalTo:tabBarController.weddingName];
@@ -218,5 +223,28 @@
         urlFromString = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",engageAddressString]];
     }
     [[UIApplication sharedApplication] openURL:urlFromString];
+}
+- (IBAction)shareWedding:(id)sender {
+    
+    NSString *textToShare = [NSString stringWithFormat:@"我們要結婚囉～誠摯邀請您來與我們共享喜悅！請透過\"婚宴小幫手\"app協助填寫參加意願呦！進入app後請選擇\"參加婚宴\"，並輸入婚宴名稱：「%@」及通關密語：「%@」就可以囉！https://itunes.apple.com/tw/app/hun-yan-xiao-bang-shou/id1114281870?l=zh&mt=8",weddingInformation[@"weddingAccount"], weddingInformation[@"weddingPassword"]];
+    //NSURL *myWebsite = [NSURL URLWithString:@""];
+    
+    NSArray *objectsToShare = @[textToShare/*, myWebsite*/];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    NSArray *excludeActivities = @[UIActivityTypeAirDrop,
+                                   UIActivityTypePrint,
+                                   UIActivityTypeAssignToContact,
+                                   UIActivityTypeSaveToCameraRoll,
+                                   UIActivityTypeAddToReadingList,
+                                   UIActivityTypePostToFlickr,
+                                   UIActivityTypePostToVimeo,
+                                   UIActivityTypeCopyToPasteboard];
+    
+    activityVC.excludedActivityTypes = excludeActivities;
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+    
 }
 @end

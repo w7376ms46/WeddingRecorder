@@ -33,14 +33,10 @@ extern NSString *deviceName;
 
 @implementation PhotoViewController
 
-@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, displayNameButton, weddingName, weddingInfoObjectId;
+@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, weddingName, weddingInfoObjectId;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [displayNameButton.layer setCornerRadius:10.0];
-    [displayNameButton.layer setMasksToBounds:YES];
-    displayNameButton.layer.borderColor = [UIColor redColor].CGColor;
-    displayNameButton.layer.borderWidth = 2;
     selection = NO;
     eachPhotoUploadProgress = [[NSMutableArray alloc]init];
     selectedIndexpath = [[NSMutableArray alloc]init];
@@ -53,8 +49,7 @@ extern NSString *deviceName;
     [photoCollectionView setDataSource:self];
     photoDictionary = [[NSMutableDictionary alloc]init];
     refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(pullToRefresh)
-             forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(pullToRefresh) forControlEvents:UIControlEventValueChanged];
     [photoCollectionView addSubview:refreshControl];
     [photoCollectionView setAlwaysBounceVertical:YES];
     usePullRefresh = NO;
@@ -166,7 +161,6 @@ extern NSString *deviceName;
                 NSLog(@"=============+++++++=");
 
             }
-            
             dispatch_async(dispatch_get_main_queue(),^{
                 NSLog(@"==============");
                 [photoCollectionView reloadData];
@@ -176,7 +170,6 @@ extern NSString *deviceName;
                     [processing dismissViewControllerAnimated:YES completion:nil];
                 }
             });
-            
         }
         else {
             [refreshControl endRefreshing];
@@ -189,7 +182,6 @@ extern NSString *deviceName;
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
     }];
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -306,21 +298,33 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    UINavigationController *nav = segue.destinationViewController;
-    GalleryViewController *gallery = (GalleryViewController *)nav.topViewController;
-    NSIndexPath *indexPath = (NSIndexPath *)sender;
-    NSString *keyString = [photoDictionaryKey objectAtIndex:indexPath.section];
-    NSMutableArray *tempArray = [photoDictionary objectForKey:keyString];
-    NSLog(@"temparray.count = %d", [tempArray count]);
-    gallery.stringList = tempArray;
-    gallery.titleShooter = keyString;
-    gallery.currentIndex = indexPath.row;
+    if ([segue.identifier isEqualToString:@"segueFullScreenPhoto"]) {
+        UINavigationController *nav = segue.destinationViewController;
+        GalleryViewController *gallery = (GalleryViewController *)nav.topViewController;
+        NSIndexPath *indexPath = (NSIndexPath *)sender;
+        NSString *keyString = [photoDictionaryKey objectAtIndex:indexPath.section];
+        NSMutableArray *tempArray = [photoDictionary objectForKey:keyString];
+        NSLog(@"temparray.count = %d", [tempArray count]);
+        gallery.stringList = tempArray;
+        gallery.titleShooter = keyString;
+        gallery.currentIndex = indexPath.row;
+    }
+    else if([segue.identifier isEqualToString:@"seguePlayShow"]){
+        UINavigationController *nav = segue.destinationViewController;
+        SlideShowViewController *slideShowViewController = (SlideShowViewController *)nav.topViewController;
+        slideShowViewController.weddingInfoObjectId = weddingInfoObjectId;
+    }
+    
 
     
 }
 
 - (UIModalPresentationStyle) adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
     return  UIModalPresentationNone;
+}
+
+- (IBAction)playPhoto:(id)sender {
+    [self performSegueWithIdentifier:@"seguePlayShow" sender:self];
 }
 
 - (IBAction)takePhoto:(id)sender {

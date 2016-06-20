@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIDatePicker *modifyFormDeadlinePicker;
 @property (nonatomic, strong) UIAlertController *processing;
 @property (strong, nonatomic) NSString *weddingInfoObjectId;
+
 @end
 
 @implementation CreateWeddingTableViewController
@@ -57,6 +58,62 @@
     [modifyFormDeadlinePickerToolBar setItems:@[nilButton, modifyFormDeadlinePickerToolBarRight]];
     [modifyFormDeadline setInputView:modifyFormDeadlinePicker];
     [modifyFormDeadline setInputAccessoryView:modifyFormDeadlinePickerToolBar];
+    
+    weddingName.delegate = self;
+    weddingPassword.delegate = self;
+    groomName.delegate = self;
+    brideName.delegate = self;
+    engageRestaurantName.delegate = self;
+    engageRestaurantUrl.delegate = self;
+    engageRestaurantAddress.delegate = self;
+    marryRestaurantUrl.delegate = self;
+    marryRestaurantName.delegate = self;
+    marryRestaurantAddress.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if (textField == weddingName) {
+        [textField resignFirstResponder];
+        [weddingPassword becomeFirstResponder];
+    }
+    else if (textField == weddingPassword){
+        [textField resignFirstResponder];
+        [groomName becomeFirstResponder];
+    }
+    
+    else if (textField == groomName){
+        [textField resignFirstResponder];
+        [brideName becomeFirstResponder];
+    }
+    else if (textField == brideName){
+        [textField resignFirstResponder];
+        [engageDate becomeFirstResponder];
+    }
+    else if (textField == engageRestaurantName){
+        [textField resignFirstResponder];
+        [engageRestaurantAddress becomeFirstResponder];
+    }
+    
+    else if (textField == engageRestaurantAddress){
+        [textField resignFirstResponder];
+        [engageRestaurantUrl becomeFirstResponder];
+    }
+    else if (textField == engageRestaurantUrl){
+        [textField resignFirstResponder];
+        [marryDate becomeFirstResponder];
+    }else if (textField == marryRestaurantName){
+        [textField resignFirstResponder];
+        [marryRestaurantAddress becomeFirstResponder];
+    }
+    else if (textField == marryRestaurantAddress){
+        [textField resignFirstResponder];
+        [marryRestaurantUrl becomeFirstResponder];
+    }
+    else if (textField == marryRestaurantUrl){
+        [textField resignFirstResponder];
+        [modifyFormDeadline becomeFirstResponder];
+    }
+    return NO;
 }
 
 
@@ -157,6 +214,7 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
     else{
+        [self presentViewController:processing animated:YES completion:nil];
         PFObject *object = [[PFObject alloc]initWithClassName:@"Information"];
         [object setObject:weddingName.text forKey:@"weddingAccount"];
         [object setObject:weddingPassword.text forKey:@"weddingPassword"];
@@ -179,26 +237,32 @@
         [checkWeddingExist whereKey:@"weddingPassword" equalTo:weddingPassword.text];
         [checkWeddingExist countObjectsInBackgroundWithBlock:^(int number, NSError * error) {
             if (!error) {
+                NSLog(@"eeeeee = %@", error);
                 if (number == 0) {
                     [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         if (succeeded) {
                             weddingInfoObjectId = object.objectId;
                             dispatch_async(dispatch_get_main_queue(),^{
-                                [self performSegueWithIdentifier:@"segueMainTab" sender:self];
+                                [processing dismissViewControllerAnimated:YES completion:^{
+                                    [self performSegueWithIdentifier:@"segueMainTab" sender:self];
+                                }];
+                                
                             });
                         }
                     }];
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(),^{
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"婚宴名稱與通關密語已被他人使用，請用其他婚宴名稱或通關密碼。" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-                        [alert addAction:okAction];
-                        [self presentViewController:alert animated:YES completion:nil];
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"婚宴名稱與通關密語已被他人使用，請用其他婚宴名稱或通關密碼。" preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                            [alert addAction:okAction];
+                            [self presentViewController:alert animated:YES completion:nil];
+                        }];
                     });
                 }
             }
-            
+            NSLog(@"error = %@", error);
         }];
     }
     

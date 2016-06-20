@@ -27,5 +27,7 @@
 - (IBAction)engageRestaurantMap:(id)sender;
 
 @property (strong, nonatomic) NSString *weddingName;
+- (IBAction)shareWedding:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *shareButton;
 
 @end
