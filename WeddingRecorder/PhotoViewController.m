@@ -62,6 +62,8 @@ extern NSString *deviceName;
     MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
     weddingName = tabBarController.weddingName;
     weddingInfoObjectId = tabBarController.weddingObjectId;
+    
+    NSLog(@"installation object id = %@", [PFInstallation currentInstallation].objectId);
 }
 
 - (void) viewDidAppear:(BOOL)animated{
@@ -294,6 +296,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
         if ( [selectedIndexpath count] != 0) {
             [downloadButton setEnabled:YES];
         }
+        else{
+            [downloadButton setEnabled:NO];
+        }
     }
 }
 
@@ -390,6 +395,15 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     [self selectPhoto:self];
     
 }
+/*
+- (IBAction)likePhoto:(id)sender {
+    UIButton *theButton = (UIButton *)sender;
+    theButton.selected = !theButton.selected;
+    CGPoint hitPoint = [theButton convertPoint:CGPointZero toView:photoCollectionView];
+    NSIndexPath *hitIndex = [photoCollectionView indexPathForItemAtPoint:hitPoint];
+    NSLog(@"hitIndex = %@", hitIndex);
+}
+*/
 
 -(UIImage *)imageResize :(UIImage*)img andResizeTo:(CGSize)newSize{
     CGFloat scale = [[UIScreen mainScreen]scale];

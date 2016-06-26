@@ -11,12 +11,13 @@
 @interface WeddingListTableViewController ()
 
 @property (strong, nonatomic) NSMutableArray *weddingList;
+@property (strong, nonatomic) UIAlertController *processing;
 
 @end
 
 @implementation WeddingListTableViewController
 
-@synthesize weddingList;
+@synthesize weddingList, editingTableButton, processing;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,6 +26,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
     PFUser *currentUser = [PFUser currentUser];
     PFQuery *query = [PFQuery queryWithClassName:@"Information"];
     [query whereKey:@"managerAccount" equalTo:currentUser.username];
@@ -86,17 +88,23 @@
 }
 */
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        [self presentViewController:processing animated:YES completion:^{
+            PFObject *deletedObject = weddingList[indexPath.row];
+            [deletedObject deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                [weddingList removeObjectAtIndex:indexPath.row];
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [processing dismissViewControllerAnimated:YES completion:nil];
+            }];
+        }];
+        
+        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
@@ -138,5 +146,20 @@
 
 - (IBAction)createWedding:(id)sender {
     [self performSegueWithIdentifier:@"segueCreateWedding" sender:self];
+}
+
+- (IBAction)editTable:(id)sender {
+    if (self.tableView.editing) {
+        [self.tableView setEditing:NO animated: YES];
+        [editingTableButton setTitle:@"編輯"];
+        
+    }
+    else{
+        [self.tableView setEditing:YES animated: YES];
+        [editingTableButton setTitle:@"完成"];
+
+    }
+    
+
 }
 @end

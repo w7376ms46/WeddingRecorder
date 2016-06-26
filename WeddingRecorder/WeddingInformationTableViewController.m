@@ -17,7 +17,7 @@
 
 @implementation WeddingInformationTableViewController
 
-@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName, shareButton;
+@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName, shareButton, engageLabel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,7 +48,14 @@
             [engageAddress setTitle:object[@"engageAddress"] forState:UIControlStateNormal];
             [marryAddress setTitle:object[@"marryAddress"] forState:UIControlStateNormal];
             [groomAndBrideName setText:[NSString stringWithFormat:@"%@&%@",object[@"groomName"],object[@"brideName"]]];
+            if ([object[@"onlyOneSession"] boolValue]) {
+                engageLabel.text = @"婚宴";
+            }
             weddingInformation = object;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
         }
     }];
 }
@@ -66,18 +73,17 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    NSLog(@"weddingInformation[onlyOneSession]  = %d", [weddingInformation[@"onlyOneSession"]  boolValue]);
+    
+    if ([weddingInformation[@"onlyOneSession"] boolValue]) {
+        return 5;
+    }
+    else{
+        return 10;
+    }
 }
 
-/*
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
- UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
- 
- // Configure the cell...
- 
- return cell;
- }
- */
+
 
 /*
  // Override to support conditional editing of the table view.

@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *marryAddress;
 @property (weak, nonatomic) IBOutlet UIButton *engagePlace;
 @property (weak, nonatomic) IBOutlet UILabel *groomAndBrideName;
+@property (weak, nonatomic) IBOutlet UILabel *engageLabel;
 - (IBAction)addEngageTimeToSchedule:(id)sender;
 - (IBAction)addMarryTimeToSchedule:(id)sender;
 - (IBAction)marryRestaurantIntroduce:(id)sender;

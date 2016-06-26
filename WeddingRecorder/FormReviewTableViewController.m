@@ -14,7 +14,7 @@
 
 @implementation FormReviewTableViewController
 
-@synthesize data, identity, attendWilling, peopleNumber, diet, address, detailAddress, comment, identityCell, phoneCell, attendWillingCell, peopleNumberCell, dietCell, addressCell, commentCell, phone;
+@synthesize data, identity, attendWilling, peopleNumber, diet, address, identityCell, phoneCell, attendWillingCell, peopleNumberCell, dietCell, addressCell, commentCell, phone, commentTextView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,22 +36,20 @@
         diet.text = [NSString stringWithFormat:@"%ld人葷食，%ld人素食", [data[@"MeatNumber"] integerValue], [data[@"VagetableNumber"] integerValue]];
         
         
-        address.text = data[@"AddressRegion"];
-        detailAddress.text = data[@"AddressDetail"];
+        address.text = [NSString stringWithFormat:@"%@\n%@",data[@"AddressRegion"], data[@"AddressDetail"]];
+        //detailAddress.text = data[@"AddressDetail"];
+        /*
         NSLog(@"address.length = %lu", detailAddress.text.length);
         if (detailAddress.text.length>=21 && detailAddress.text.length <=22) {
             [address setFont:[address.font fontWithSize:15]];
-            [detailAddress setFont:[detailAddress.font fontWithSize:15]];
         }
         else if (detailAddress.text.length>=23) {
             [address setFont:[address.font fontWithSize:11]];
-            [detailAddress setFont:[detailAddress.font fontWithSize:11]];
         }
         else{
             [address setFont:[address.font fontWithSize:17]];
-            [detailAddress setFont:[detailAddress.font fontWithSize:17]];
         }
-        
+        */
         
     }
     else{
@@ -63,10 +61,10 @@
     [phone setTitle:data[@"Phone"] forState:UIControlStateNormal];
     NSString *notation = data[@"Notation"];
     if (notation.length == 0) {
-        comment.text = @"無備注";
+        commentTextView.text = @"無備注";
     }
     else{
-        comment.text = notation;
+        commentTextView.text = notation;
     }
     
     
@@ -105,6 +103,9 @@
         if (indexPath.row == 4) {
             return 0;
         }
+    }
+    if (indexPath.row == 6 || indexPath.row == 5) {
+        return 88;
     }
     return 44;
 }

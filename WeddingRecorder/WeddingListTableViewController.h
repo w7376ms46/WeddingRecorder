@@ -14,5 +14,7 @@
 @interface WeddingListTableViewController : UITableViewController
 - (IBAction)logout:(id)sender;
 - (IBAction)createWedding:(id)sender;
+- (IBAction)editTable:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editingTableButton;
 
 @end

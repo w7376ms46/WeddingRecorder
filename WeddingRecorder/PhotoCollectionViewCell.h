@@ -11,5 +11,7 @@
 @interface PhotoCollectionViewCell : PFCollectionViewCell; //UICollectionViewCell
 @property (weak, nonatomic) IBOutlet PFImageView *photo;
 @property (weak, nonatomic) IBOutlet UIView *photoBackgroundView;
+//@property (weak, nonatomic) IBOutlet UIButton *likeButton;
+//- (IBAction)likePhoto:(id)sender;
 
 @end

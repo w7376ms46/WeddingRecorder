@@ -19,7 +19,7 @@
 
 @implementation ModifyWeddingTableViewController
 
-@synthesize weddingObjectId, weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, processing, modifyFormDeadlinePicker, modifyFormDeadLine;
+@synthesize weddingObjectId, weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, processing, modifyFormDeadlinePicker, modifyFormDeadLine, engageRestaurantUrlLabel, engageRestaurantAddressLabel, engageRestaurantNameLabel, marryDateCell, marryRestaurantUrlCell, marryRestaurantAddressCell, marryRestaurantNameCell, engageDateLabel, weddingForm;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -91,14 +91,42 @@
             engageRestaurantAddress.text = object[@"engageAddress"];
             engageRestaurantUrl.text = object[@"engagePlaceIntroduce"];
             
-            marryDate.text = object[@"marryDate"];
-            [marryDatePicker setDate:[dateFormatter dateFromString:object[@"marryDate"]]];
-            
-            marryRestaurantName.text = object[@"marryPlace"];
-            marryRestaurantAddress.text = object[@"marryAddress"];
-            marryRestaurantUrl.text = object[@"marryPlaceIntroduce"];
-            
+            if ([object[@"onlyOneSession"] boolValue]) {
+                [weddingForm setSelectedSegmentIndex:0];
+                [marryDateCell setHidden:YES];
+                [marryRestaurantNameCell setHidden:YES];
+                [marryRestaurantAddressCell setHidden:YES];
+                [marryRestaurantUrlCell setHidden: YES];
+                [engageDateLabel setText:@"婚宴日期"];
+                [engageRestaurantNameLabel setText:@"婚宴餐廳名稱"];
+                [engageRestaurantAddressLabel setText:@"婚宴餐廳地址"];
+                [engageRestaurantUrlLabel setText:@"婚宴餐廳網址"];
+                [self.tableView reloadData];
+            }
+            else{
+                [weddingForm setSelectedSegmentIndex:1];
+                [marryDateCell setHidden:NO];
+                [marryRestaurantNameCell setHidden:NO];
+                [marryRestaurantAddressCell setHidden:NO];
+                [marryRestaurantUrlCell setHidden: NO];
+                [engageDateLabel setText:@"訂婚日期"];
+                [engageRestaurantNameLabel setText:@"訂婚餐廳名稱"];
+                [engageRestaurantAddressLabel setText:@"訂婚餐廳地址"];
+                [engageRestaurantUrlLabel setText:@"訂婚餐廳網址"];
+                [self.tableView reloadData];
+                marryDate.text = object[@"marryDate"];
+                [marryDatePicker setDate:[dateFormatter dateFromString:object[@"marryDate"]]];
+                
+                marryRestaurantName.text = object[@"marryPlace"];
+                marryRestaurantAddress.text = object[@"marryAddress"];
+                marryRestaurantUrl.text = object[@"marryPlaceIntroduce"];
+                
+                
+            }
             modifyFormDeadLine.text = object[@"modifyFormDeadline"];
+            NSLog(@"modifyFormDeadline = %@", object[@"modifyFormDeadline"]);
+            
+            
             [modifyFormDeadlinePicker setDate:[dateFormatter dateFromString:object[@"modifyFormDeadline"]]];
         }
     }];
@@ -119,6 +147,7 @@
     [formatter setDateFormat:@"YYYY / MM / dd  HH:mm"];
     [modifyFormDeadLine setText:[formatter stringFromDate:modifyFormDeadlinePicker.date]];
     [modifyFormDeadLine endEditing:YES];
+    NSLog(@"modifyFormDeadlinePickerToolBarDonePicker");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -127,16 +156,31 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 2;
     }
+    if (section == 1) {
+        return 1;
+    }
     else{
         return 11;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (weddingForm.selectedSegmentIndex == 0) {
+        if (indexPath.section == 2) {
+            if (indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
+                NSLog(@"hiddenCell row == 0");
+                return 0;
+            }
+        }
+    }
+    return 44;
 }
 
 -(void) donePicker:(id)sender {
@@ -174,40 +218,133 @@
         }
         else{
             NSLog(@"The getObjectInBackgroundWithId succeed.");
-            object[@"weddingAccount"] = weddingName.text;
-            object[@"weddingPassword"] = weddingPassword.text;
-            object[@"groomName"] = groomName.text;
-            object[@"brideName"] = brideName.text;
-            object[@"engageDate"] = engageDate.text;
             
+            NSString *alertString = @"";
+            if ([weddingName.text isEqualToString:@""]) {
+                alertString = @"請輸入婚宴名稱。";
+            }
+            else if ([weddingPassword.text isEqualToString:@""]) {
+                alertString = @"請輸入通關密語。";
+            }
+            else if ([groomName.text isEqualToString:@""]) {
+                alertString = @"請輸入新郎姓名。";
+            }
+            else if ([brideName.text isEqualToString:@""]) {
+                alertString = @"請輸入新娘姓名。";
+            }
+            else if ([engageDate.text isEqualToString:@""]) {
+                if (weddingForm.selectedSegmentIndex == 1) {
+                    alertString = @"請輸入訂婚日期。";
+                }
+                else if (weddingForm.selectedSegmentIndex == 0) {
+                    alertString = @"請輸入婚宴日期。";
+                }
+            }
+            else if ([engageRestaurantName.text isEqualToString:@""]) {
+                if (weddingForm.selectedSegmentIndex == 1) {
+                    alertString = @"請輸入訂婚餐廳名稱。";
+                }
+                else if (weddingForm.selectedSegmentIndex == 0) {
+                    alertString = @"請輸入婚宴餐廳名稱。";
+                }
+            }
+            else if ([engageRestaurantAddress.text isEqualToString:@""]) {
+                if (weddingForm.selectedSegmentIndex == 1) {
+                    alertString = @"請輸入訂婚餐廳地址。";
+                }
+                else if (weddingForm.selectedSegmentIndex == 0) {
+                    alertString = @"請輸入婚宴餐廳地址。";
+                }
+            }
+            else{
+                if (weddingForm.selectedSegmentIndex == 1) {
+                    if ([marryDate.text isEqualToString:@""]) {
+                        alertString = @"請輸入結婚日期。";
+                    }
+                    else if ([marryRestaurantName.text isEqualToString:@""]) {
+                        alertString = @"請輸入結婚餐廳名稱。";
+                    }
+                    else if ([marryRestaurantAddress.text isEqualToString:@""]) {
+                        alertString = @"請輸入結婚餐廳地址。";
+                    }
+                    else if ([modifyFormDeadLine.text isEqualToString:@""]) {
+                        alertString = @"請輸入填寫出席意願期限。";
+                    }
+                }
+                else{
+                    if ([modifyFormDeadLine.text isEqualToString:@""]) {
+                        alertString = @"請輸入填寫出席意願期限。";
+                    }
+                }
+            }
             
-            object[@"engagePlace"] = engageRestaurantName.text;
-            object[@"engageAddress"] = engageRestaurantAddress.text;
-            object[@"engagePlaceIntroduce"] = engageRestaurantUrl.text;
-            
-            object[@"marryDate"] = marryDate.text;
-            
-            object[@"marryPlace"] = marryRestaurantName.text;
-            object[@"marryAddress"] = marryRestaurantAddress.text;
-            object[@"marryPlaceIntroduce"] = marryRestaurantUrl.text;
-            
-            object[@"modifyFormDeadline"] = modifyFormDeadLine.text;
-            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"修改完成！" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [message addAction:okButton];
-                NSLog(@"dismissviewcontrollerrrrr");
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [processing dismissViewControllerAnimated:YES completion:^{
-                        [self presentViewController:message animated:YES completion:nil];
-                    }];
-                });
+            if (![alertString isEqualToString:@""]) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                [alert addAction:okAction];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+            else{
+                object[@"weddingAccount"] = weddingName.text;
+                object[@"weddingPassword"] = weddingPassword.text;
+                object[@"groomName"] = groomName.text;
+                object[@"brideName"] = brideName.text;
+                object[@"engageDate"] = engageDate.text;
                 
-            }];
+                
+                object[@"engagePlace"] = engageRestaurantName.text;
+                object[@"engageAddress"] = engageRestaurantAddress.text;
+                object[@"engagePlaceIntroduce"] = engageRestaurantUrl.text;
+                
+                object[@"marryDate"] = marryDate.text;
+                
+                object[@"marryPlace"] = marryRestaurantName.text;
+                object[@"marryAddress"] = marryRestaurantAddress.text;
+                object[@"marryPlaceIntroduce"] = marryRestaurantUrl.text;
+                
+                object[@"modifyFormDeadline"] = modifyFormDeadLine.text;
+                [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"修改完成！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    [message addAction:okButton];
+                    NSLog(@"dismissviewcontrollerrrrr");
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self presentViewController:message animated:YES completion:nil];
+                        }];
+                    });
+                    
+                }];
+            }
         }
     }];
+}
+
+- (IBAction)selectWeddingForm:(id)sender {
+    if (weddingForm.selectedSegmentIndex == 0) {
+        [marryDateCell setHidden:YES];
+        [marryRestaurantNameCell setHidden:YES];
+        [marryRestaurantAddressCell setHidden:YES];
+        [marryRestaurantUrlCell setHidden: YES];
+        [engageDateLabel setText:@"婚宴日期"];
+        [engageRestaurantNameLabel setText:@"婚宴餐廳名稱"];
+        [engageRestaurantAddressLabel setText:@"婚宴餐廳地址"];
+        [engageRestaurantUrlLabel setText:@"婚宴餐廳網址"];
+        [self.tableView reloadData];
+    }
+    else{
+        [marryDateCell setHidden:NO];
+        [marryRestaurantNameCell setHidden:NO];
+        [marryRestaurantAddressCell setHidden:NO];
+        [marryRestaurantUrlCell setHidden: NO];
+        [engageDateLabel setText:@"訂婚日期"];
+        [engageRestaurantNameLabel setText:@"訂婚餐廳名稱"];
+        [engageRestaurantAddressLabel setText:@"訂婚餐廳地址"];
+        [engageRestaurantUrlLabel setText:@"訂婚餐廳網址"];
+        [self.tableView reloadData];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -240,17 +377,30 @@
     else if (textField == engageRestaurantUrl){
         [textField resignFirstResponder];
         [marryDate becomeFirstResponder];
-    }else if (textField == marryRestaurantName){
-        [textField resignFirstResponder];
-        [marryRestaurantAddress becomeFirstResponder];
     }
-    else if (textField == marryRestaurantAddress){
-        [textField resignFirstResponder];
-        [marryRestaurantUrl becomeFirstResponder];
+    if (weddingForm.selectedSegmentIndex == 0) {
+        if (textField == engageRestaurantUrl){
+            [textField resignFirstResponder];
+            [modifyFormDeadLine becomeFirstResponder];
+        }
     }
-    else if (textField == marryRestaurantUrl){
-        [textField resignFirstResponder];
-        [modifyFormDeadLine becomeFirstResponder];
+    else{
+        if (textField == engageRestaurantUrl){
+            [textField resignFirstResponder];
+            [marryDate becomeFirstResponder];
+        }
+        else if (textField == marryRestaurantName){
+            [textField resignFirstResponder];
+            [marryRestaurantAddress becomeFirstResponder];
+        }
+        else if (textField == marryRestaurantAddress){
+            [textField resignFirstResponder];
+            [marryRestaurantUrl becomeFirstResponder];
+        }
+        else if (textField == marryRestaurantUrl){
+            [textField resignFirstResponder];
+            [modifyFormDeadLine becomeFirstResponder];
+        }
     }
     return NO;
 }

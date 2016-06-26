@@ -10,4 +10,11 @@
 
 @implementation PhotoCollectionViewCell
 
+//@synthesize likeButton;
+/*
+- (IBAction)likePhoto:(id)sender {
+    NSLog(@"likebutton.selected = %d", likeButton.selected);
+    //likeButton.selected = !likeButton.selected;
+}
+ */
 @end

@@ -25,5 +25,21 @@
 @property (weak, nonatomic) IBOutlet UITextField *marryRestaurantAddress;
 @property (weak, nonatomic) IBOutlet UITextField *marryRestaurantUrl;
 @property (weak, nonatomic) IBOutlet UITextField *modifyFormDeadline;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *weddingForm;
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *marryDateCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *marryRestaurantNameCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *marryRestaurantAddressCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *marryRestaurantUrlCell;
+
+@property (weak, nonatomic) IBOutlet UILabel *engageDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *engageRestaurantNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *engageRestaurantAddressLabel;
+@property (weak, nonatomic) IBOutlet UILabel *engageRestaurantUrlLabel;
+
+
+
+
+- (IBAction)selectWeddingForm:(id)sender;
 
 @end

@@ -24,5 +24,6 @@
 - (IBAction)chooseFromAlbum:(id)sender;
 - (IBAction)selectPhoto:(id)sender;
 - (IBAction)downloadPhoto:(id)sender;
+//- (IBAction)likePhoto:(id)sender;
 
 @end

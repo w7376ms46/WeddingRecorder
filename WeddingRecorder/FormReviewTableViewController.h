@@ -16,11 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *attendWilling;
 @property (weak, nonatomic) IBOutlet UILabel *peopleNumber;
 @property (weak, nonatomic) IBOutlet UILabel *diet;
-@property (weak, nonatomic) IBOutlet UILabel *address;
-@property (weak, nonatomic) IBOutlet UILabel *detailAddress;
-@property (weak, nonatomic) IBOutlet UIButton *phone;
 
-@property (weak, nonatomic) IBOutlet UILabel *comment;
+@property (weak, nonatomic) IBOutlet UIButton *phone;
+@property (weak, nonatomic) IBOutlet UITextView *commentTextView;
+@property (weak, nonatomic) IBOutlet UITextView *address;
 
 - (IBAction)makePhone:(id)sender;
 

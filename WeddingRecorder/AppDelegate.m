@@ -35,12 +35,17 @@ BOOL checkAttendantDeadLine;
     NSLog(@"DidFinishLaunchingWithOptions");
     deviceName = [self currentDeviceName];
     checkAttendantDeadLine = YES;
+    NSLog(@"%@",[NSUUID UUID].UUIDString);
     return YES;
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    NSLog(@"didRegisterForRemoteNotificationwithdeviceTo");
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+    NSString *version =[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
+    currentInstallation[@"realAppVersion"] = version;
+    NSLog(@"didRegisterForRemoteNotificationwithdeviceTo  %@", version);
     [currentInstallation saveInBackground];
 }
 
