@@ -161,7 +161,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IMh-p0-xVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5134" y="754"/>
+            <point key="canvasLocation" x="4455" y="603.75"/>
         </scene>
         <!--設定-->
         <scene sceneID="irt-ud-epK">
@@ -195,7 +195,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="CUh-x5-qJl">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" delaysContentTouches="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="CUh-x5-qJl">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -274,6 +274,7 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EHK-6E-WEI">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <state key="normal" title="離開此婚宴">
                                                         <color key="titleColor" red="1" green="0.23529411759999999" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -1085,6 +1086,9 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                <rect key="frame" x="8" y="7" width="224" height="21"/>
+                                            </variation>
                                         </label>
                                     </subviews>
                                     <constraints>
@@ -4243,6 +4247,7 @@
                         <outlet property="addressDetail" destination="Eu8-vo-ou6" id="Ql6-HX-gkf"/>
                         <outlet property="addressRegion" destination="g6s-Vt-x2m" id="Y36-hv-Y6m"/>
                         <outlet property="attendWilling" destination="ona-JP-gAi" id="jgW-Ni-RB7"/>
+                        <outlet property="chooseSessionCell" destination="d2a-lf-RVJ" id="vf7-vX-gwR"/>
                         <outlet property="cleanButton" destination="8gz-og-ptx" id="q4V-ad-aHZ"/>
                         <outlet property="meatCount" destination="2MM-wv-9g7" id="Bte-vC-pOI"/>
                         <outlet property="meatNumber" destination="pu6-d4-Th8" id="dfj-e9-mwE"/>
@@ -5265,11 +5270,11 @@
         <image name="Willing" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="WeS-JG-qoY"/>
-        <segue reference="WUa-b6-C0Q"/>
-        <segue reference="DTH-kB-6H7"/>
         <segue reference="lzU-1b-eKA"/>
+        <segue reference="WeS-JG-qoY"/>
+        <segue reference="DTH-kB-6H7"/>
         <segue reference="NEf-b5-bMU"/>
         <segue reference="kvW-40-KaA"/>
+        <segue reference="WUa-b6-C0Q"/>
     </inferredMetricsTieBreakers>
 </document>

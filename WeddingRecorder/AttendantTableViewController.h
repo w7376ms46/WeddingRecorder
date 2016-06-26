@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *sessionPlace;
 
 @property (weak, nonatomic) IBOutlet UITextField *notation;
+@property (weak, nonatomic) IBOutlet UITableViewCell *chooseSessionCell;
 
 - (IBAction)chooseWilling:(id)sender;
 - (IBAction)modify:(id)sender;

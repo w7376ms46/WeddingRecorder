@@ -21,11 +21,13 @@ extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic)NSString *engagePlace;
 @property (strong, nonatomic)NSDate *modifyFormDeadline;
 
+@property (nonatomic) BOOL onlyOneSession;
+
 @end
 
 @implementation AttendantTableViewController
 
-@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace, modifyFormDeadline;
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace, modifyFormDeadline, onlyOneSession, chooseSessionCell;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -117,6 +119,9 @@ extern BOOL checkAttendantDeadLine;
 
 - (void) checkDeadLine{
     PFQuery *queryStartDate = [PFQuery queryWithClassName:@"Information"];
+    MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+    NSString *weddingObjectId = tabBarController.weddingObjectId;
+    [queryStartDate whereKey:@"objectId" equalTo:weddingObjectId];
     [queryStartDate getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSLog(@"checkDeadLine  %@", error);
         if (error) {
@@ -132,6 +137,20 @@ extern BOOL checkAttendantDeadLine;
             
             marryPlace = object[@"marryPlace"];
             engagePlace = object[@"engagePlace"];
+            onlyOneSession = [object[@"onlyOneSession"] boolValue];
+            if (onlyOneSession) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [chooseSessionCell setHidden:YES];
+                    NSRange range = NSMakeRange(0, 0);
+                    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                });
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [chooseSessionCell setHidden:NO];
+                });
+            }
             if (session.selectedSegmentIndex == 0) {
                 sessionPlace.text = engagePlace;
             }
@@ -418,7 +437,9 @@ extern BOOL checkAttendantDeadLine;
             alertString = @"請選擇身份(新郎/新娘的親朋好友)。";
         }
         else if ( session.selectedSegmentIndex == -1) {
-            alertString = @"請選擇參加場次。";
+            if (!onlyOneSession) {
+                alertString = @"請選擇參加場次。";
+            }
         }
         else if ( [peopleNumber.text isEqualToString:@"0"]){
             alertString = @"請輸入參加人次。";
@@ -460,8 +481,12 @@ extern BOOL checkAttendantDeadLine;
                 registrationData[@"PeopleNumber"] = @([peopleNumber.text integerValue]);
                 registrationData[@"VagetableNumber"] = @([vagetableNumber.text integerValue]);
                 registrationData[@"MeatNumber"] = @([meatNumber.text integerValue]);
-                registrationData[@"Session"] = @(session.selectedSegmentIndex);
-                
+                if (onlyOneSession) {
+                    registrationData[@"Session"] = @(-1);
+                }
+                else{
+                    registrationData[@"Session"] = @(session.selectedSegmentIndex);
+                }
             }
             registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
             registrationData[@"Notation"] = notation.text;
@@ -522,6 +547,39 @@ extern BOOL checkAttendantDeadLine;
         return cityAndRegionArray[row][@"city"];
     }else {
         return regionArray[row];
+    }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    /*
+    if (indexPath.row == 8) {
+        if (onlyOneSession) {
+            return 0;
+        }
+        else{
+            return 75;
+        }
+    }
+    else if (indexPath.row<=6 || indexPath.row == 9){
+        return 44;
+    }
+    else {
+        return 75;
+    }
+     */
+    if (indexPath.row == 7) {
+        return 75;
+    }
+    else if (indexPath.row == 8) {
+        if (onlyOneSession) {
+            return 0;
+        }
+        else{
+            return 75;
+        }
+    }
+    else{
+        return 44;
     }
 }
 
