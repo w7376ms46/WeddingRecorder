@@ -72,7 +72,13 @@
     }
     
     cell.weddingName.text = weddingList[indexPath.row][@"weddingAccount"];
-    cell.marryDate.text = weddingList[indexPath.row][@"marryDate"];
+    if (weddingList[indexPath.row][@"onlyOneSession"]) {
+        cell.marryDate.text = weddingList[indexPath.row][@"engageDate"];
+    }
+    else{
+        cell.marryDate.text = weddingList[indexPath.row][@"marryDate"];
+    }
+    
     return cell;
 }
 

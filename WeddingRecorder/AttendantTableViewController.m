@@ -68,7 +68,10 @@ extern BOOL checkAttendantDeadLine;
     dispatch_async(dispatch_get_main_queue(),^{
         [self presentViewController:processing animated:YES completion:^{
             PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
+            MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
+            NSString *weddingObjectId = tabBarController.weddingObjectId;
             [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
+            [query whereKey:@"weddingObjectId" equalTo:weddingObjectId];
             [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                 if (!object) {
                     NSLog(@"The getFirstObject request failed.");
@@ -466,6 +469,7 @@ extern BOOL checkAttendantDeadLine;
         NSString *weddingObjectId = tabBarController.weddingObjectId;
         PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
         [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
+        [query whereKey:@"weddingObjectId" equalTo:weddingObjectId];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *registrationData, NSError *error) {
             if (!registrationData) {
                 registrationData = [PFObject objectWithClassName:@"AttendantList"];
