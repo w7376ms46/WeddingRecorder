@@ -72,7 +72,7 @@
     }
     
     cell.weddingName.text = weddingList[indexPath.row][@"weddingAccount"];
-    if (weddingList[indexPath.row][@"onlyOneSession"]) {
+    if ([weddingList[indexPath.row][@"onlyOneSession"]boolValue]) {
         cell.marryDate.text = weddingList[indexPath.row][@"engageDate"];
     }
     else{
