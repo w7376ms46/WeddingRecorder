@@ -282,7 +282,13 @@
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
                 [alert addAction:okAction];
-                [self presentViewController:alert animated:YES completion:nil];
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [processing dismissViewControllerAnimated:YES completion:^{
+                        [self presentViewController:alert animated:YES completion:nil];
+                    }];
+                });
+                
+                
             }
             else{
                 object[@"weddingAccount"] = weddingName.text;
@@ -301,6 +307,7 @@
                 object[@"marryPlace"] = marryRestaurantName.text;
                 object[@"marryAddress"] = marryRestaurantAddress.text;
                 object[@"marryPlaceIntroduce"] = marryRestaurantUrl.text;
+                object[@"onlyOneSession"] = (weddingForm.selectedSegmentIndex == 0 ? @YES:@NO);
                 
                 object[@"modifyFormDeadline"] = modifyFormDeadLine.text;
                 [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
