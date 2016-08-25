@@ -186,7 +186,7 @@
         
         cell.attendEngageNumber.text = [NSString stringWithFormat:@"出席訂婚場次人數：%ld 人", (long)attendEngageNumber];
         cell.attendEngageFriendNumber.text = [NSString stringWithFormat:@"攜友人數：%ld 人", (long)attendEngageFriendNumber];
-        cell.totalEngageNumber.text = [NSString stringWithFormat:@"總人數：%ld 人", (long)(attendEngageNumber+attendEngageNumber)];
+        cell.totalEngageNumber.text = [NSString stringWithFormat:@"總人數：%ld 人", (long)(attendEngageNumber+attendEngageFriendNumber)];
         
         cell.attendMarryMeat.text = [NSString stringWithFormat:@"葷食人數：%ld 人", (long)attendMarryMeatNumber];
         cell.attendMarryVagetable.text = [NSString stringWithFormat:@"素食人數：%ld 人", (long)attendMarryVagetableNumber];
