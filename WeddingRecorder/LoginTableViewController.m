@@ -180,6 +180,28 @@
                             }];
                         });
                     }
+                    else if ([error.userInfo[@"code"] isEqual:@202]){
+                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此帳號已被使用！" preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        }];
+                        [message addAction:okButton];
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            [processing dismissViewControllerAnimated:YES completion:^{
+                                [self presentViewController:message animated:YES completion:nil];
+                            }];
+                        });
+                    }
+                    else if ([error.userInfo[@"code"] isEqual:@203]){
+                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此E-Mail已註冊過！" preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        }];
+                        [message addAction:okButton];
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            [processing dismissViewControllerAnimated:YES completion:^{
+                                [self presentViewController:message animated:YES completion:nil];
+                            }];
+                        });
+                    }
                 }
             }];
         }

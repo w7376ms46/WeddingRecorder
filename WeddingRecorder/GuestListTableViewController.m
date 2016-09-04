@@ -39,7 +39,7 @@
         PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
         [query whereKey:@"weddingObjectId" equalTo:weddingObjectId];
         [query orderByAscending:@"AttendingWilling"];
-        [query orderByAscending:@"Session"];
+        [query addAscendingOrder:@"Session"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
             if (error) {
                 NSLog(@"No object retrieved %@",error);
@@ -215,6 +215,8 @@
             
         }
         else{
+            [cell.attendSession setHidden:NO];
+            [cell.peopleNumber setHidden:NO];
             cell.peopleNumber.text = [NSString stringWithFormat:@"%ld 人出席", [object[@"PeopleNumber"] integerValue]];
             [cell.peopleNumber setBackgroundColor:(formData[indexPath.row][@"Session"] == [NSNumber numberWithInteger:0])? [UIColor colorWithRed:236.0/255.0 green:170.0/255.0 blue:176.0/255.0 alpha:1]:[UIColor redColor]];
             

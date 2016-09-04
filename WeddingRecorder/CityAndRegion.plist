@@ -4,7 +4,7 @@
 <array>
     <dict>
         <key>city</key>
-        <string>台北市</string>
+        <string>臺北市</string>
         <key>regions</key>
         <array>
            <string>中正區</string>
@@ -102,7 +102,6 @@
            <string>冬山鄉</string>
            <string>蘇澳鎮</string>
            <string>南澳鄉</string>
-           <string>釣魚台</string>
         </array>
     </dict>
     
@@ -111,7 +110,9 @@
            <string>新竹市</string>
            <key>regions</key>
            <array>
-               <string>新竹市</string>
+               <string>北區</string>
+               <string>東區</string>
+               <string>香山區</string>
            </array>
     </dict>
     
@@ -138,22 +139,22 @@
     
     <dict>
         <key>city</key>
-        <string>桃園縣</string>
+        <string>桃園市</string>
         <key>regions</key>
         <array>
-           <string>中壢市</string>
-           <string>平鎮市</string>
-           <string>龍潭鄉</string>
-           <string>楊梅市</string>
-           <string>新屋鄉</string>
-           <string>觀音鄉</string>
-           <string>桃園市</string>
-           <string>龜山鄉</string>
-           <string>八德市</string>
-           <string>大溪鎮</string>
-           <string>復興鄉</string>
-           <string>大園鄉</string>
-           <string>蘆竹鄉</string>
+            <string>中壢區</string>
+            <string>平鎮區</string>
+            <string>龍潭區</string>
+            <string>楊梅區</string>
+            <string>新屋區</string>
+            <string>觀音區</string>
+            <string>桃園區</string>
+            <string>龜山區</string>
+            <string>八德區</string>
+            <string>大溪區</string>
+            <string>復興區</string>
+            <string>大園區</string>
+            <string>蘆竹區</string>
         </array>
     </dict>
     
@@ -163,7 +164,7 @@
         <key>regions</key>
         <array>
            <string>竹南鎮</string>
-           <string>頭份鎮</string>
+           <string>頭份市</string>
            <string>三灣鄉</string>
            <string>南庄鄉</string>
            <string>獅潭鄉</string>
@@ -185,7 +186,7 @@
     
     <dict>
         <key>city</key>
-        <string>台中市</string>
+        <string>臺中市</string>
         <key>regions</key>
         <array>
             <string>中區</string>
@@ -234,7 +235,7 @@
                <string>線西鄉</string>
                <string>和美鎮</string>
                <string>伸港鄉</string>
-               <string>員林鎮</string>
+               <string>員林市</string>
                <string>社頭鄉</string>
                <string>永靖鄉</string>
                <string>埔心鄉</string>
@@ -280,7 +281,8 @@
            <string>嘉義市</string>
            <key>regions</key>
            <array>
-               <string>嘉義市</string>
+               <string>東區</string>
+               <string>西區</string>
             </array>
     </dict>
     
@@ -321,7 +323,7 @@
                <string>土庫鎮</string>
                <string>東勢鄉</string>
                <string>褒忠鄉</string>
-               <string>台西鄉</string>
+               <string>臺西鄉</string>
                <string>崙背鄉</string>
                <string>麥寮鄉</string>
                <string>斗六市</string>
@@ -340,7 +342,7 @@
     
     <dict>
         <key>city</key>
-           <string>台南市</string>
+           <string>臺南市</string>
            <key>regions</key>
            <array>
                <string>中西區</string>
@@ -380,7 +382,7 @@
                <string>新市區</string>
                <string>安定區</string>
                <string>山上區</string>
-            </array>
+           </array>
     </dict>
     
     <dict>
@@ -401,10 +403,8 @@
                <string>左營區</string>
                <string>仁武區</string>
                <string>大社區</string>
-               <string>東沙群島</string>
                <string>岡山區</string>
                <string>路竹區</string>
-               <string>南沙群島</string>
                <string>阿蓮區</string>
                <string>田寮區</string>
                <string>燕巢區</string>
@@ -502,10 +502,10 @@
            
     <dict>
         <key>city</key>
-           <string>台東縣</string>
+           <string>臺東縣</string>
            <key>regions</key>
            <array>
-               <string>台東市</string>
+               <string>臺東市</string>
                <string>綠島鄉</string>
                <string>蘭嶼鄉</string>
                <string>卑南鄉</string>
