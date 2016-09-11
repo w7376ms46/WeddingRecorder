@@ -384,7 +384,6 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                             [processing dismissViewControllerAnimated:YES completion:nil];
                         });
                     }
-                    
                 }
             }progressBlock:^(int percentDone){
                 NSLog(@"download progress = %d, id = %@", percentDone, originalPhotoObjectID);

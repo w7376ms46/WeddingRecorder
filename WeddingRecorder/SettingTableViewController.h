@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CreateWeddingTableViewController.h"
 #import "WeddingListTableViewController.h"
-#import "AttendWeddingTableViewController.h"
+#import "AttendWeddingViewController.h"
 #import "MainTabBarController.h"
 #import "GuestListTableViewController.h"
 #import "ModifyWeddingTableViewController.h"

@@ -6,29 +6,39 @@
 //  Copyright © 2016年 ChihHaoChen. All rights reserved.
 //
 
-#import "AttendWeddingTableViewController.h"
+#import "AttendWeddingViewController.h"
 
-@interface AttendWeddingTableViewController ()
+@interface AttendWeddingViewController ()
+
 @property (nonatomic, strong) UIAlertController *processing;
+@property (weak, nonatomic) GeneralTableViewCell *weddingNameCell;
+@property (weak, nonatomic) GeneralTableViewCell *weddingPasswordCell;
+@property (weak, nonatomic) GeneralTableViewCell *rememberInfoCell;
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
+
 @end
 
-@implementation AttendWeddingTableViewController
+@implementation AttendWeddingViewController
 
-@synthesize weddingAccount, weddingPassword, processing;
+@synthesize attendTableView, processing, weddingNameCell, weddingPasswordCell, rememberInfoCell, userDefaults, advertisementBanner;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    attendTableView.delegate = self;
+    attendTableView.dataSource = self;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    weddingAccount.delegate = self;
-    weddingPassword.delegate = self;
+    userDefaults = [NSUserDefaults standardUserDefaults];
+    advertisementBanner.adUnitID = @"ca-app-pub-6991194125878512/9446351751";
+    advertisementBanner.rootViewController = self;
+    [advertisementBanner loadRequest:[GADRequest request]];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    if (textField == weddingAccount) {
+    if (textField == weddingNameCell.weddingName) {
         [textField resignFirstResponder];
-        [weddingPassword becomeFirstResponder];
+        [weddingPasswordCell.weddingPassword becomeFirstResponder];
     }
-    else if (textField == weddingPassword){
+    else if (textField == weddingPasswordCell.weddingPassword){
         [textField resignFirstResponder];
     }
     return NO;
@@ -37,6 +47,12 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear: animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear: animated];
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -58,18 +74,45 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+
+- (GeneralTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    GeneralTableViewCell *cell;
+    NSString *weddingName = @"";
+    NSString *weddingPassword = @"";
+    BOOL remember;
+    if ([userDefaults boolForKey:@"rememberAttendWeddingSwitch"]) {
+        weddingName=[userDefaults objectForKey:@"attendWeddingName"];
+        weddingPassword =[userDefaults objectForKey:@"attendWeddingPassword"];
+        remember = YES;
+    }
+    else {
+        remember = NO;
+    }
     
-    // Configure the cell...
-    
+    if (indexPath.row == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell0" forIndexPath:indexPath];
+        cell.weddingName.delegate = self;
+        cell.weddingName.text = weddingName;
+        weddingNameCell = cell;
+    }
+    else if(indexPath.row == 1){
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
+        cell.weddingPassword.delegate = self;
+        cell.weddingPassword.text = weddingPassword;
+        weddingPasswordCell = cell;
+        
+    }
+    else if (indexPath.row == 2){
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell2" forIndexPath:indexPath];
+        rememberInfoCell = cell;
+        [cell.rememberInfoSwitch setOn:remember];
+    }
     return cell;
 }
-*/
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -117,7 +160,13 @@
 
 
 - (IBAction)login:(id)sender {
-    if ([weddingPassword.text isEqualToString:@""] || [weddingAccount.text isEqualToString:@""]) {
+    NSString *weddingName, *weddingPassword;
+    BOOL rememberInfo;
+    
+    weddingName = weddingNameCell.weddingName.text;
+    weddingPassword = weddingPasswordCell.weddingPassword.text;
+    
+    if ([weddingPassword isEqualToString:@""] || [weddingName isEqualToString:@""]) {
         UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"請輸入婚宴名稱及通關密語！" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         }];
@@ -126,14 +175,25 @@
         return;
     }
     else{
+        if (rememberInfoCell.rememberInfoSwitch.isOn) {
+            [userDefaults setObject:weddingName forKey:@"attendWeddingName"];
+            [userDefaults setObject:weddingPassword forKey:@"attendWeddingPassword"];
+            [userDefaults setBool:YES forKey:@"rememberAttendWeddingSwitch"];
+        }
+        else{
+            [userDefaults setObject:@"" forKey:@"attendWeddingName"];
+            [userDefaults setObject:@"" forKey:@"attendWeddingPassword"];
+            [userDefaults setBool:NO forKey:@"rememberAttendWeddingSwitch"];
+        }
+        [userDefaults synchronize];
         [self.view endEditing:YES];
         dispatch_async(dispatch_get_main_queue(),^{
             [self presentViewController:processing animated:YES completion:nil];
         });
         PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-        [query whereKey:@"weddingPassword" equalTo:weddingPassword.text];
-        [query whereKey:@"weddingAccount" equalTo:weddingAccount.text];
-        NSLog(@"%@     %@", weddingPassword.text, weddingAccount.text);
+        [query whereKey:@"weddingPassword" equalTo:weddingPassword];
+        [query whereKey:@"weddingAccount" equalTo:weddingName];
+        NSLog(@"%@     %@", weddingName, weddingPassword);
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             NSLog(@"objectid = %@", object.objectId);
             if (error) {

@@ -146,7 +146,7 @@
         else if ([nav.topViewController class] == [WeddingListTableViewController class]){
             [nav popViewControllerAnimated:NO];
         }
-        else if ([nav.topViewController class] == [AttendWeddingTableViewController class]){
+        else if ([nav.topViewController class] == [AttendWeddingViewController class]){
             [nav dismissViewControllerAnimated:YES completion:nil];
         }
     }];

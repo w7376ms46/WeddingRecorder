@@ -25,7 +25,7 @@
 		0872D6181CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0872D6171CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m */; };
 		088D74FB1CF06AAF0046F038 /* CreateWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */; };
 		089273851CF8BBE100121CCA /* WeddingListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089273841CF8BBE100121CCA /* WeddingListTableViewCell.m */; };
-		08A799501CF08FDD0045B3DC /* AttendWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */; };
+		08A799501CF08FDD0045B3DC /* AttendWeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7994F1CF08FDD0045B3DC /* AttendWeddingViewController.m */; };
 		08A799531CF0959A0045B3DC /* SettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A799521CF0959A0045B3DC /* SettingTableViewController.m */; };
 		08AB05FC1CFAF32D00C1050A /* GuestListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB05FB1CFAF32D00C1050A /* GuestListTableViewController.m */; };
 		08C0F8FE1C831F7700EE1FFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C0F8FD1C831F7700EE1FFF /* main.m */; };
@@ -55,6 +55,7 @@
 		08CBA6941CF1F97F0099BD94 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA6931CF1F97F0099BD94 /* LoginTableViewController.m */; };
 		08D944391D0D0B0700EF6212 /* ModifyWeddingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */; };
 		08EFC60D1C91B0A80090E6AE /* WeddingInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */; };
+		08FA57B91D8527CB0012443B /* GeneralTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FA57B81D8527CB0012443B /* GeneralTableViewCell.m */; };
 		08FCB23A1D104AF90061E0C2 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FCB2391D104AF90061E0C2 /* GoogleMobileAds.framework */; };
 		08FCB23D1D104DFE0061E0C2 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FCB23C1D104DFE0061E0C2 /* SettingViewController.m */; };
 /* End PBXBuildFile section */
@@ -111,8 +112,8 @@
 		088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateWeddingTableViewController.m; sourceTree = "<group>"; };
 		089273831CF8BBE100121CCA /* WeddingListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingListTableViewCell.h; sourceTree = "<group>"; };
 		089273841CF8BBE100121CCA /* WeddingListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingListTableViewCell.m; sourceTree = "<group>"; };
-		08A7994E1CF08FDD0045B3DC /* AttendWeddingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttendWeddingTableViewController.h; sourceTree = "<group>"; };
-		08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttendWeddingTableViewController.m; sourceTree = "<group>"; };
+		08A7994E1CF08FDD0045B3DC /* AttendWeddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttendWeddingViewController.h; sourceTree = "<group>"; };
+		08A7994F1CF08FDD0045B3DC /* AttendWeddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttendWeddingViewController.m; sourceTree = "<group>"; };
 		08A799511CF0959A0045B3DC /* SettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableViewController.h; sourceTree = "<group>"; };
 		08A799521CF0959A0045B3DC /* SettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewController.m; sourceTree = "<group>"; };
 		08AB05FA1CFAF32D00C1050A /* GuestListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestListTableViewController.h; sourceTree = "<group>"; };
@@ -156,6 +157,8 @@
 		08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeddingInformationTableViewController.h; sourceTree = "<group>"; };
 		08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeddingInformationTableViewController.m; sourceTree = "<group>"; };
 		08EFC6121C91BD5F0090E6AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		08FA57B71D8527CB0012443B /* GeneralTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralTableViewCell.h; sourceTree = "<group>"; };
+		08FA57B81D8527CB0012443B /* GeneralTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralTableViewCell.m; sourceTree = "<group>"; };
 		08FCB2391D104AF90061E0C2 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		08FCB23B1D104DFE0061E0C2 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		08FCB23C1D104DFE0061E0C2 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
@@ -258,8 +261,10 @@
 				088D74FA1CF06AAF0046F038 /* CreateWeddingTableViewController.m */,
 				08D944371D0D0B0700EF6212 /* ModifyWeddingTableViewController.h */,
 				08D944381D0D0B0700EF6212 /* ModifyWeddingTableViewController.m */,
-				08A7994E1CF08FDD0045B3DC /* AttendWeddingTableViewController.h */,
-				08A7994F1CF08FDD0045B3DC /* AttendWeddingTableViewController.m */,
+				08A7994E1CF08FDD0045B3DC /* AttendWeddingViewController.h */,
+				08A7994F1CF08FDD0045B3DC /* AttendWeddingViewController.m */,
+				08FA57B71D8527CB0012443B /* GeneralTableViewCell.h */,
+				08FA57B81D8527CB0012443B /* GeneralTableViewCell.m */,
 				08EFC60B1C91B0A80090E6AE /* WeddingInformationTableViewController.h */,
 				08EFC60C1C91B0A80090E6AE /* WeddingInformationTableViewController.m */,
 				08A799511CF0959A0045B3DC /* SettingTableViewController.h */,
@@ -474,7 +479,7 @@
 			files = (
 				081AA0401C8C099500B6808D /* FullScreenPhotoViewController.m in Sources */,
 				081AA0461C8C29B500B6808D /* GalleryViewController.m in Sources */,
-				08A799501CF08FDD0045B3DC /* AttendWeddingTableViewController.m in Sources */,
+				08A799501CF08FDD0045B3DC /* AttendWeddingViewController.m in Sources */,
 				082099231D03450E0045B928 /* FormReviewTableViewController.m in Sources */,
 				080B84311D145E9F00704DFB /* SlideShowViewController.m in Sources */,
 				08A799531CF0959A0045B3DC /* SettingTableViewController.m in Sources */,
@@ -490,6 +495,7 @@
 				08C0F9421C833E0E00EE1FFF /* AttendantTableViewController.m in Sources */,
 				08D944391D0D0B0700EF6212 /* ModifyWeddingTableViewController.m in Sources */,
 				08036FF51C84AC4100821C0A /* PhotoCollectionViewCell.m in Sources */,
+				08FA57B91D8527CB0012443B /* GeneralTableViewCell.m in Sources */,
 				084DC1EF1CF74CBF00DCA384 /* WeddingListTableViewController.m in Sources */,
 				0872D6181CF011900099E7E5 /* LoginOrCreateAWeddingViewController.m in Sources */,
 				08C0F8FE1C831F7700EE1FFF /* main.m in Sources */,
