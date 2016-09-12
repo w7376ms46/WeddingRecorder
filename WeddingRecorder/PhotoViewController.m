@@ -430,7 +430,6 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     }
     NSData *imageData = [self scaleImage:image ToSize:10485760];
     NSData *smallImageData = UIImageJPEGRepresentation(image, 0.01);
-    
     CGSize newSize;
     NSInteger cellWidth;
     if ([deviceName isEqualToString:@"iPhone5"]) {

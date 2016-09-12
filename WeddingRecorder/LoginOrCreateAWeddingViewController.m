@@ -40,6 +40,15 @@
     [super viewWillAppear: animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    //[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    //[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
