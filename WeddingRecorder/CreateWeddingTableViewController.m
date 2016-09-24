@@ -20,7 +20,7 @@
 
 @implementation CreateWeddingTableViewController
 
-@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, modifyFormDeadline, modifyFormDeadlinePicker, processing, weddingInfoObjectId, weddingForm, marryDateCell, marryRestaurantNameCell, marryRestaurantAddressCell, marryRestaurantUrlCell, engageDateLabel, engageRestaurantUrlLabel, engageRestaurantNameLabel, engageRestaurantAddressLabel;
+@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, modifyFormDeadline, modifyFormDeadlinePicker, processing, weddingInfoObjectId, weddingForm, marryDateCell, marryRestaurantNameCell, marryRestaurantAddressCell, marryRestaurantUrlCell, engageDateLabel, engageRestaurantUrlLabel, engageRestaurantNameLabel, engageRestaurantAddressLabel, mobileNumber;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,6 +69,7 @@
     marryRestaurantUrl.delegate = self;
     marryRestaurantName.delegate = self;
     marryRestaurantAddress.delegate = self;
+    mobileNumber.delegate = self;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -78,9 +79,12 @@
     }
     else if (textField == weddingPassword){
         [textField resignFirstResponder];
+        [mobileNumber becomeFirstResponder];
+    }
+    else if (textField == mobileNumber){
+        [textField resignFirstResponder];
         [groomName becomeFirstResponder];
     }
-    
     else if (textField == groomName){
         [textField resignFirstResponder];
         [brideName becomeFirstResponder];
@@ -163,14 +167,14 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 2;
     }
-    if (section == 1) {
+    else if (section == 1 || section == 2) {
         return 1;
     }
     else{
@@ -180,7 +184,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (weddingForm.selectedSegmentIndex == 0) {
-        if (indexPath.section == 2) {
+        if (indexPath.section == 3) {
             if (indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
                 NSLog(@"hiddenCell row == 0");
                 return 0;
@@ -199,6 +203,7 @@
 }
 
 - (IBAction)holdWedding:(id)sender {
+    [self.view endEditing:YES];
     NSString *alertString = @"";
     if ([weddingName.text isEqualToString:@""]) {
         alertString = @"請輸入婚宴名稱。";
@@ -269,6 +274,7 @@
         PFObject *object = [[PFObject alloc]initWithClassName:@"Information"];
         [object setObject:weddingName.text forKey:@"weddingAccount"];
         [object setObject:weddingPassword.text forKey:@"weddingPassword"];
+        [object setObject:mobileNumber.text forKey:@"MobileNumber"];
         [object setObject:groomName.text forKey:@"groomName"];
         [object setObject:brideName.text forKey:@"brideName"];
         [object setObject:engageDate.text forKey:@"engageDate"];

@@ -10,14 +10,14 @@
 
 @interface WeddingListTableViewController ()
 
-@property (strong, nonatomic) NSMutableArray *weddingList;
+
 @property (strong, nonatomic) UIAlertController *processing;
 
 @end
 
 @implementation WeddingListTableViewController
 
-@synthesize weddingList, editingTableButton, processing;
+@synthesize weddingList, editingTableButton, processing, isAdmin, logutButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,25 +27,42 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
-    PFUser *currentUser = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-    [query whereKey:@"managerAccount" equalTo:currentUser.username];
+    if (isAdmin) {
+        PFUser *currentUser = [PFUser currentUser];
+        PFQuery *query = [PFQuery queryWithClassName:@"Information"];
+        [query whereKey:@"managerAccount" equalTo:currentUser.username];
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                if ([objects count] == 0) {
+                }
+                else{
+                    weddingList = [objects mutableCopy];
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [self.tableView reloadData];
+                    });
+                }
+            }
+            else {
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
+    }
+    else{
+        NSLog(@"objects count = %d in weddingList", [weddingList count]);
+        [self.navigationItem setRightBarButtonItem:nil];
+        [logutButton setTitle:@"離開"];
+        NSMutableArray *leftButtonArray = [self.navigationItem.leftBarButtonItems mutableCopy];
+        for (UINavigationItem *button in leftButtonArray) {
+            if (![button.title isEqualToString:@"離開"]) {
+                [leftButtonArray removeObject:button];
+                break;
+            }
+        }
+        [self.navigationItem setLeftBarButtonItems:leftButtonArray];
+        
+    }
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            if ([objects count] == 0) {
-            }
-            else{
-                weddingList = [objects mutableCopy];
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self.tableView reloadData];
-                });
-            }
-        }
-        else {
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,7 +100,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self performSegueWithIdentifier:@"segueMainTab" sender:indexPath];
+    if (isAdmin) {
+        [self performSegueWithIdentifier:@"segueMainTab" sender:indexPath];
+    }
+    else{
+        [self performSegueWithIdentifier:@"segueAttendMainTab" sender:indexPath];
+    }
+    
 }
 
 /*
@@ -106,8 +129,6 @@
                 [processing dismissViewControllerAnimated:YES completion:nil];
             }];
         }];
-        
-        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -129,8 +150,8 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSIndexPath *index = (NSIndexPath *) sender;
     if ([segue.identifier isEqualToString:@"segueMainTab"]) {
-        NSIndexPath *index = (NSIndexPath *) sender;
         MainTabBarController *tabBarController = (MainTabBarController *)segue.destinationViewController;
         PFObject *weddingInformation = weddingList[index.row];
         tabBarController.weddingName = weddingInformation[@"weddingAccount"];
@@ -141,11 +162,21 @@
         //informationTableViewController.weddingName = weddingList[index.row][@"weddingAccount"];
         //NSLog(@"selectedindex = %d", index.row);
     }
+    else if ([segue.identifier isEqualToString:@"segueAttendMainTab"]){
+        MainTabBarController *tabBarController = (MainTabBarController *)segue.destinationViewController;
+        PFObject *weddingInformation = weddingList[index.row];
+        tabBarController.weddingName = weddingInformation[@"weddingAccount"];
+        tabBarController.weddingObjectId = weddingInformation.objectId;
+        tabBarController.manager = NO;
+    }
     
 }
 
 - (IBAction)logout:(id)sender {
-    [PFUser logOut];
+    NSLog(@"current User =  %@ is logging out", [PFUser currentUser] );
+    if (isAdmin) {
+        [PFUser logOut];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
     //PFUser *currentUser = [PFUser currentUser];
 }

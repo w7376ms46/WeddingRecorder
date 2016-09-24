@@ -108,15 +108,17 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"segueWeddingList"]) {
+        UINavigationController *nav = (UINavigationController *)segue.destinationViewController;
+        WeddingListTableViewController *weddingListTableViewController = (WeddingListTableViewController *)nav.topViewController;
+        weddingListTableViewController.isAdmin = YES;
+    }
 }
-*/
+
 
 - (IBAction)selectAccountStatus:(id)sender {
     UISegmentedControl *selector = (UISegmentedControl *)sender;

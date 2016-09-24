@@ -39,6 +39,11 @@ BOOL checkAttendantDeadLine;
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    NSLog(@"url: %@", [NSString stringWithFormat:@"%@", [url description]]);
+    return YES;
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     NSLog(@"didRegisterForRemoteNotificationwithdeviceTo");
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];

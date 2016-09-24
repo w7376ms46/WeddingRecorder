@@ -94,7 +94,7 @@
 - (void) photoSlideShow{
     NSLog(@"photo slide show photoMutableArray count = %d", [photoMutableArray count]);
     dispatch_async(dispatch_get_main_queue(), ^{
-        slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(changePhoto:) userInfo:nil repeats:YES];
+        slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:5  target:self selector:@selector(changePhoto:) userInfo:nil repeats:YES];
         [slideShowTimer fire];
     });
 }
@@ -126,7 +126,7 @@
                          }];
     });
 }
-
+/*
 - (void)changePhoto{//:(NSTimer *)sender{
     NSLog(@"startchangephoto");
     while (1) {
@@ -166,7 +166,7 @@
     
     
 }
-
+*/
 /*
 - (void)slidShow:(NSArray *)photoArray{
     for(PFObject *object in photoArray){

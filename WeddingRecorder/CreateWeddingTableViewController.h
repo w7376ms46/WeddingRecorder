@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *engageRestaurantAddressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *engageRestaurantUrlLabel;
 
+@property (weak, nonatomic) IBOutlet UITextField *mobileNumber;
 
 
 

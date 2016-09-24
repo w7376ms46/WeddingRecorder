@@ -19,7 +19,7 @@
 
 @implementation ModifyWeddingTableViewController
 
-@synthesize weddingObjectId, weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, processing, modifyFormDeadlinePicker, modifyFormDeadLine, engageRestaurantUrlLabel, engageRestaurantAddressLabel, engageRestaurantNameLabel, marryDateCell, marryRestaurantUrlCell, marryRestaurantAddressCell, marryRestaurantNameCell, engageDateLabel, weddingForm;
+@synthesize weddingObjectId, weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, processing, modifyFormDeadlinePicker, modifyFormDeadLine, engageRestaurantUrlLabel, engageRestaurantAddressLabel, engageRestaurantNameLabel, marryDateCell, marryRestaurantUrlCell, marryRestaurantAddressCell, marryRestaurantNameCell, engageDateLabel, weddingForm, mobileNumber;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -82,7 +82,7 @@
             groomName.text = object[@"groomName"];
             brideName.text = object[@"brideName"];
             engageDate.text = object[@"engageDate"];
-            
+            mobileNumber.text = object[@"MobileNumber"];
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"YYYY / MM / dd  HH:mm"];
             [engageDatePicker setDate:[dateFormatter dateFromString:object[@"engageDate"]]];
@@ -156,14 +156,14 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 2;
     }
-    if (section == 1) {
+    else if (section == 1 || section == 2) {
         return 1;
     }
     else{
@@ -173,7 +173,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (weddingForm.selectedSegmentIndex == 0) {
-        if (indexPath.section == 2) {
+        if (indexPath.section == 3) {
             if (indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
                 NSLog(@"hiddenCell row == 0");
                 return 0;
@@ -202,6 +202,7 @@
 }
 
 - (IBAction)save:(id)sender {
+    [self.view endEditing:YES];
     PFQuery *query = [PFQuery queryWithClassName:@"Information"];
     [self presentViewController:processing animated:YES completion:nil];
     [query getObjectInBackgroundWithId:weddingObjectId block:^(PFObject *object, NSError *error) {
@@ -293,10 +294,10 @@
             else{
                 object[@"weddingAccount"] = weddingName.text;
                 object[@"weddingPassword"] = weddingPassword.text;
+                object[@"MobileNumber"] = mobileNumber.text;
                 object[@"groomName"] = groomName.text;
                 object[@"brideName"] = brideName.text;
                 object[@"engageDate"] = engageDate.text;
-                
                 
                 object[@"engagePlace"] = engageRestaurantName.text;
                 object[@"engageAddress"] = engageRestaurantAddress.text;
@@ -361,9 +362,8 @@
     }
     else if (textField == weddingPassword){
         [textField resignFirstResponder];
-        [groomName becomeFirstResponder];
+        [mobileNumber becomeFirstResponder];
     }
-    
     else if (textField == groomName){
         [textField resignFirstResponder];
         [brideName becomeFirstResponder];

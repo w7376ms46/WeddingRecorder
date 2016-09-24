@@ -10,6 +10,7 @@
 #import "Parse/Parse.h"
 #import "MainTabBarController.h"
 #import "GeneralTableViewCell.h"
+#import "WeddingListTableViewController.h"
 @import GoogleMobileAds;
 @interface AttendWeddingViewController : UIViewController<UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 

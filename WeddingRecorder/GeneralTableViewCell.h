@@ -12,5 +12,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *weddingName;
 @property (weak, nonatomic) IBOutlet UITextField *weddingPassword;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberInfoSwitch;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *searchMode;
+@property (weak, nonatomic) IBOutlet UITextField *mobileNumber;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *createOrLoginSelector;
 
 @end

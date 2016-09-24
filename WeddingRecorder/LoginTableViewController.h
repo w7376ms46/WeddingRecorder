@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "WeddingListTableViewController.h"
 @interface LoginTableViewController : UITableViewController<UITextFieldDelegate>
 - (IBAction)selectAccountStatus:(id)sender;
 - (IBAction)createOrLogin:(id)sender;

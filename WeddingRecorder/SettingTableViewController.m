@@ -138,13 +138,13 @@
 
 - (IBAction)logOut:(id)sender {
     UINavigationController *nav = (UINavigationController *)self.presentingViewController;
-    [self dismissViewControllerAnimated:NO completion:^{
+    [self dismissViewControllerAnimated:YES completion:^{
         NSLog(@"class = %@", [nav.topViewController class]);
         if ([nav.topViewController class] == [CreateWeddingTableViewController class]) {
             [nav dismissViewControllerAnimated:YES completion:nil];
         }
         else if ([nav.topViewController class] == [WeddingListTableViewController class]){
-            [nav popViewControllerAnimated:NO];
+            //[nav popViewControllerAnimated:YES];
         }
         else if ([nav.topViewController class] == [AttendWeddingViewController class]){
             [nav dismissViewControllerAnimated:YES completion:nil];

@@ -16,5 +16,7 @@
 - (IBAction)createWedding:(id)sender;
 - (IBAction)editTable:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editingTableButton;
-
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *logutButton;
+@property (strong, nonatomic) NSMutableArray *weddingList;
+@property (nonatomic) BOOL isAdmin;
 @end

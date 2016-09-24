@@ -13,6 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *weddingName;
 @property (weak, nonatomic) IBOutlet UITextField *weddingPassword;
+@property (weak, nonatomic) IBOutlet UITextField *mobileNumber;
 @property (weak, nonatomic) IBOutlet UITextField *groomName;
 @property (weak, nonatomic) IBOutlet UITextField *brideName;
 @property (weak, nonatomic) IBOutlet UITextField *engageDate;
