@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "MainTabBarController.h"
+
+@import Firebase;
+@import FirebaseDatabase;
+
 @interface CreateWeddingTableViewController : UITableViewController<UITextFieldDelegate>
 - (IBAction)holdWedding:(id)sender;
 - (IBAction)cancelCreate:(id)sender;

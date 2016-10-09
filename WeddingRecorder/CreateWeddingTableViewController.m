@@ -15,12 +15,13 @@
 @property (strong, nonatomic) UIDatePicker *modifyFormDeadlinePicker;
 @property (nonatomic, strong) UIAlertController *processing;
 @property (strong, nonatomic) NSString *weddingInfoObjectId;
+@property (nonatomic, strong) FIRDatabaseReference *databaseRef;
 
 @end
 
 @implementation CreateWeddingTableViewController
 
-@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, modifyFormDeadline, modifyFormDeadlinePicker, processing, weddingInfoObjectId, weddingForm, marryDateCell, marryRestaurantNameCell, marryRestaurantAddressCell, marryRestaurantUrlCell, engageDateLabel, engageRestaurantUrlLabel, engageRestaurantNameLabel, engageRestaurantAddressLabel, mobileNumber;
+@synthesize weddingName, weddingPassword, groomName, brideName, engageDate, engageRestaurantName, engageRestaurantAddress, engageRestaurantUrl, marryDate, marryRestaurantName, marryRestaurantAddress, marryRestaurantUrl, engageDatePicker, marryDatePicker, modifyFormDeadline, modifyFormDeadlinePicker, processing, weddingInfoObjectId, weddingForm, marryDateCell, marryRestaurantNameCell, marryRestaurantAddressCell, marryRestaurantUrlCell, engageDateLabel, engageRestaurantUrlLabel, engageRestaurantNameLabel, engageRestaurantAddressLabel, mobileNumber, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -70,6 +71,8 @@
     marryRestaurantName.delegate = self;
     marryRestaurantAddress.delegate = self;
     mobileNumber.delegate = self;
+    databaseRef = [[FIRDatabase database] reference];
+
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -262,7 +265,6 @@
             }
         }
     }
-    
     if (![alertString isEqualToString:@""]) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
@@ -271,24 +273,54 @@
     }
     else{
         [self presentViewController:processing animated:YES completion:nil];
-        PFObject *object = [[PFObject alloc]initWithClassName:@"Information"];
-        [object setObject:weddingName.text forKey:@"weddingAccount"];
-        [object setObject:weddingPassword.text forKey:@"weddingPassword"];
-        [object setObject:mobileNumber.text forKey:@"MobileNumber"];
-        [object setObject:groomName.text forKey:@"groomName"];
-        [object setObject:brideName.text forKey:@"brideName"];
-        [object setObject:engageDate.text forKey:@"engageDate"];
-        [object setObject:engageRestaurantName.text forKey:@"engagePlace"];
-        [object setObject:engageRestaurantAddress.text forKey:@"engageAddress"];
-        [object setObject:engageRestaurantUrl.text forKey:@"engagePlaceIntroduce"];
+        NSMutableDictionary *weddingData = [[NSMutableDictionary alloc]init];
+        
+        FIRUser *user = [FIRAuth auth].currentUser;
+        [weddingData setObject:user.email forKey:@"userEmail"];
+        [weddingData setObject:weddingName.text forKey:@"weddingName"];
+        [weddingData setObject:weddingPassword.text forKey:@"weddingPassword"];
+        [weddingData setObject:[NSString stringWithFormat:@"%@-%@",weddingName.text, weddingPassword.text] forKey:@"weddingNameAndWeddingPassword"];
+        [weddingData setObject:mobileNumber.text forKey:@"mobileNumber"];
+        [weddingData setObject:groomName.text forKey:@"groomName"];
+        [weddingData setObject:brideName.text forKey:@"brideName"];
+        [weddingData setObject:engageDate.text forKey:@"engageDate"];
+        [weddingData setObject:engageRestaurantName.text forKey:@"engagePlace"];
+        [weddingData setObject:engageRestaurantAddress.text forKey:@"engageAddress"];
+        [weddingData setObject:engageRestaurantUrl.text forKey:@"engagePlaceIntroduce"];
         if (weddingForm.selectedSegmentIndex == 1) {
-            [object setObject:marryDate.text forKey:@"marryDate"];
-            [object setObject:marryRestaurantName.text forKey:@"marryPlace"];
-            [object setObject:marryRestaurantAddress.text forKey:@"marryAddress"];
-            [object setObject:marryRestaurantUrl.text forKey:@"marryPlaceIntroduce"];
+            [weddingData setObject:marryDate.text forKey:@"marryDate"];
+            [weddingData setObject:marryRestaurantName.text forKey:@"marryPlace"];
+            [weddingData setObject:marryRestaurantAddress.text forKey:@"marryAddress"];
+            [weddingData setObject:marryRestaurantUrl.text forKey:@"marryPlaceIntroduce"];
         }
-        [object setObject:(weddingForm.selectedSegmentIndex == 0 ? @YES:@NO) forKey:@"onlyOneSession"];
-        [object setObject:modifyFormDeadline.text forKey:@"modifyFormDeadline"];
+        [weddingData setObject:(weddingForm.selectedSegmentIndex == 0 ? @YES:@NO) forKey:@"onlyOneSession"];
+        [weddingData setObject:modifyFormDeadline.text forKey:@"modifyFormDeadline"];
+        
+        
+        [[[[databaseRef child:@"weddingInformation"] queryOrderedByChild:@"weddingNameAndWeddingPassword"] queryEqualToValue:[NSString stringWithFormat:@"%@-%@",weddingName.text, weddingPassword.text]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            if (![snapshot hasChildren]){
+                [[[databaseRef child:@"weddingInformation"] childByAutoId]setValue:weddingData withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                    weddingInfoObjectId = ref.key;
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self performSegueWithIdentifier:@"segueMainTab" sender:self];
+                        }];
+                        
+                    });
+                }];
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [processing dismissViewControllerAnimated:YES completion:^{
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"婚宴名稱與通關密語已被他人使用，請用其他婚宴名稱或通關密碼。" preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                        [alert addAction:okAction];
+                        [self presentViewController:alert animated:YES completion:nil];
+                    }];
+                });
+            }
+        }];
+        /*
         
         PFUser *user = [PFUser currentUser];
         [object setObject:user.username forKey:@"managerAccount"];
@@ -325,6 +357,7 @@
             }
             NSLog(@"error = %@", error);
         }];
+         */
     }
     
 }

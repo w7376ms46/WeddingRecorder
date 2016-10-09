@@ -11,6 +11,9 @@
 #import "WeddingListTableViewCell.h"
 #import "WeddingInformationTableViewController.h"
 #import "MainTabBarController.h"
+@import Firebase;
+@import FirebaseDatabase;
+
 @interface WeddingListTableViewController : UITableViewController
 - (IBAction)logout:(id)sender;
 - (IBAction)createWedding:(id)sender;

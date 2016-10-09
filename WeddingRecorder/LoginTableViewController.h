@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
+//#import <Parse/Parse.h>
 #import "WeddingListTableViewController.h"
+
+//@import FirebaseAuth;
+//@import FirebaseDatabase;
+@import Firebase;
+//@import FirebaseAuth;
+@import FirebaseDatabase;
 @interface LoginTableViewController : UITableViewController<UITextFieldDelegate>
 - (IBAction)selectAccountStatus:(id)sender;
 - (IBAction)createOrLogin:(id)sender;

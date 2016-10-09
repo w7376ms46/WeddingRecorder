@@ -10,24 +10,43 @@
 
 @interface WeddingListTableViewController ()
 
-
+@property (strong, nonatomic) FIRDatabaseReference *databaseRef;
 @property (strong, nonatomic) UIAlertController *processing;
 
 @end
 
 @implementation WeddingListTableViewController
 
-@synthesize weddingList, editingTableButton, processing, isAdmin, logutButton;
+@synthesize weddingList, editingTableButton, processing, isAdmin, logutButton, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    databaseRef = [[FIRDatabase database]reference];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
     if (isAdmin) {
+        FIRUser *user = [FIRAuth auth].currentUser;
+        [[[[databaseRef child:@"weddingInformation"] queryOrderedByChild:@"userEmail"] queryEqualToValue:user.email] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            if (![snapshot hasChildren]){
+                
+            }
+            else {
+                weddingList = [[NSMutableArray alloc] init];
+                for (NSString *keyString in [snapshot.value allKeys]) {
+                    NSMutableDictionary *weddingInformationPackage = [[NSMutableDictionary alloc] init];
+                    [weddingInformationPackage setValue: [snapshot.value objectForKey:keyString] forKey:keyString];
+                    
+                    [weddingList addObject:weddingInformationPackage];
+                }
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [self.tableView reloadData];
+                });
+            }
+        }];
+        /*
         PFUser *currentUser = [PFUser currentUser];
         PFQuery *query = [PFQuery queryWithClassName:@"Information"];
         [query whereKey:@"managerAccount" equalTo:currentUser.username];
@@ -47,6 +66,7 @@
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
             }
         }];
+         */
     }
     else{
         NSLog(@"objects count = %d in weddingList", [weddingList count]);
@@ -87,13 +107,14 @@
     if (cell == nil) {
         cell = [[WeddingListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    
-    cell.weddingName.text = weddingList[indexPath.row][@"weddingAccount"];
-    if ([weddingList[indexPath.row][@"onlyOneSession"]boolValue]) {
-        cell.marryDate.text = weddingList[indexPath.row][@"engageDate"];
+    NSDictionary *weddingInfo = weddingList[indexPath.row];
+    NSDictionary *weddingDetail = [weddingInfo objectForKey:[[weddingInfo allKeys]firstObject]];
+    cell.weddingName.text = weddingDetail[@"weddingName"];
+    if ([weddingDetail[@"onlyOneSession"]boolValue]) {
+        cell.marryDate.text = weddingDetail[@"engageDate"];
     }
     else{
-        cell.marryDate.text = weddingList[indexPath.row][@"marryDate"];
+        cell.marryDate.text = weddingDetail[@"marryDate"];
     }
     
     return cell;
@@ -153,9 +174,11 @@
     NSIndexPath *index = (NSIndexPath *) sender;
     if ([segue.identifier isEqualToString:@"segueMainTab"]) {
         MainTabBarController *tabBarController = (MainTabBarController *)segue.destinationViewController;
-        PFObject *weddingInformation = weddingList[index.row];
-        tabBarController.weddingName = weddingInformation[@"weddingAccount"];
-        tabBarController.weddingObjectId = weddingInformation.objectId;
+        NSString *keyString = [[weddingList[index.row] allKeys] firstObject];
+        NSDictionary *weddingInformation = [weddingList[index.row] objectForKey:keyString];
+        NSLog(@"key and information = %@, %@", keyString, weddingInformation);
+        tabBarController.weddingName = weddingInformation[@"weddingName"];
+        tabBarController.weddingObjectId = keyString;
         tabBarController.manager = YES;
         //UINavigationController *navController = tabBarController.viewControllers[0];
         //WeddingInformationTableViewController *informationTableViewController = (WeddingInformationTableViewController *)navController.topViewController;

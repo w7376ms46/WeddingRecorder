@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import <DropboxSDK/DropboxSDK.h>
-
+@import Firebase;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 //extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic) UIWindow *window;

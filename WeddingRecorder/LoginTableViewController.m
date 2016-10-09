@@ -8,13 +8,15 @@
 
 #import "LoginTableViewController.h"
 
+
 @interface LoginTableViewController ()
 @property (nonatomic, strong) UIAlertController *processing;
+@property (nonatomic, strong) FIRDatabaseReference *databaseRef;
 @end
 
 @implementation LoginTableViewController
 
-@synthesize account, password, email, createOrLoginButton, createOrLoginSelector, processing;
+@synthesize account, password, email, createOrLoginButton, createOrLoginSelector, processing, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,11 +25,17 @@
     account.delegate = self;
     password.delegate = self;
     email.delegate = self;
+    //FIRDatabaseReference *ref;
+    //FIRDatabaseReference
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear: animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    databaseRef = [[FIRDatabase database] reference];
+    
+    
+    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -150,60 +158,32 @@
         }
         else{
             [self presentViewController:processing animated:YES completion:nil];
-            [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (!error) {
+            [[[[databaseRef child:@"user"] queryOrderedByChild:@"account"] queryEqualToValue:account.text] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                if([snapshot hasChildren]){
+                    NSLog(@"result = %@", snapshot.value);
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此帳號已被使用！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    }];
+                    [message addAction:okButton];
                     dispatch_async(dispatch_get_main_queue(),^{
                         [processing dismissViewControllerAnimated:YES completion:^{
-                            [self performSegueWithIdentifier:@"segueWeddingList" sender:self];
+                            [self presentViewController:message animated:YES completion:nil];
                         }];
                     });
-                } else {
-                    NSString *errorString = [error userInfo][@"error"];
-                    NSLog(@"errorrrrrrrrrrr: %@", errorString);
-                    if ([error.userInfo[@"code"] isEqual:@100]) {
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"請連上網路！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                }
+                else {
+                    NSDictionary *accountData = @{@"email":email.text, @"account":account.text};
+                    [[[databaseRef child:@"user"] childByAutoId]setValue:accountData withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                        [[FIRAuth auth]createUserWithEmail:email.text password:password.text completion:^(FIRUser * _Nullable user, NSError * _Nullable error) {
+                            if (!error) {
+                                dispatch_async(dispatch_get_main_queue(),^{
+                                    [processing dismissViewControllerAnimated:YES completion:^{
+                                        [self performSegueWithIdentifier:@"segueWeddingList" sender:self];
+                                    }];
+                                });
+                            }
                         }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
-                    else if ([error.userInfo[@"code"] isEqual:@125]){
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"E-Mail格式錯誤！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                        }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
-                    else if ([error.userInfo[@"code"] isEqual:@202]){
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此帳號已被使用！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                        }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
-                    else if ([error.userInfo[@"code"] isEqual:@203]){
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此E-Mail已註冊過！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                        }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
+                    }];
                 }
             }];
         }
@@ -221,46 +201,47 @@
             dispatch_async(dispatch_get_main_queue(),^{
                 [self presentViewController:processing animated:YES completion:nil];
             });
-            [PFUser logInWithUsernameInBackground:account.text password:password.text
-                                            block:^(PFUser *user, NSError *error) {
-                                                //dispatch_async(dispatch_get_main_queue(),^{
-                                                    
-                                                //});
-                                                if (user) {
-                                                    dispatch_async(dispatch_get_main_queue(),^{
-                                                        [processing dismissViewControllerAnimated:YES completion:^{
-                                                            [self performSegueWithIdentifier:@"segueWeddingList" sender:self];
-                                                        }];
-                                                        
-                                                    });
-                                                } else {
-                                                    if ([error.userInfo[@"code"] isEqual:@100]) {
-                                                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"請連上網路！" preferredStyle:UIAlertControllerStyleAlert];
-                                                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                                                        }];
-                                                        [message addAction:okButton];
-                                                        dispatch_async(dispatch_get_main_queue(),^{
-                                                            [processing dismissViewControllerAnimated:YES completion:^{
-                                                                [self presentViewController:message animated:YES completion:nil];
-                                                            }];
-                                                        });
-                                                    }
-                                                    else if ([error.userInfo[@"code"] isEqual:@101]) {
-                                                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"帳號或密碼輸入錯誤！" preferredStyle:UIAlertControllerStyleAlert];
-                                                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                                                        }];
-                                                        [message addAction:okButton];
-                                                        dispatch_async(dispatch_get_main_queue(),^{
-                                                            [processing dismissViewControllerAnimated:YES completion:^{
-                                                                [self presentViewController:message animated:YES completion:nil];
-                                                            }];
-                                                            
-                                                        });
-                                                    }
-                                                    NSString *errorString = [error userInfo][@"error"];
-                                                    NSLog(@"error: %@   %@", errorString, error);
-                                                }
-                                            }];
+            
+            [[[[databaseRef child:@"user"] queryOrderedByChild:@"account"] queryEqualToValue:account.text] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                if([snapshot hasChildren]){
+                    NSDictionary *accountData = [snapshot.value objectForKey:[snapshot.value allKeys][0]];
+                    [[FIRAuth auth]signInWithEmail:accountData[@"email"] password:password.text completion:^(FIRUser * _Nullable user, NSError * _Nullable error) {
+                        if (error) {
+                            if (error.code == 17009) {
+                                UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"密碼輸入錯誤！" preferredStyle:UIAlertControllerStyleAlert];
+                                UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                                }];
+                                [message addAction:okButton];
+                                dispatch_async(dispatch_get_main_queue(),^{
+                                    [processing dismissViewControllerAnimated:YES completion:^{
+                                        [self presentViewController:message animated:YES completion:nil];
+                                    }];
+                                });
+                            }
+                        }
+                        else{
+                            dispatch_async(dispatch_get_main_queue(),^{
+                                [processing dismissViewControllerAnimated:YES completion:^{
+                                    [self performSegueWithIdentifier:@"segueWeddingList" sender:self];
+                                }];
+                            });
+                        }
+                        
+                    }];
+                }
+                //帳號不存在
+                else {
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"此帳號不存在！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    }];
+                    [message addAction:okButton];
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self presentViewController:message animated:YES completion:nil];
+                        }];
+                    });
+                }
+            }];
         }
     
     }

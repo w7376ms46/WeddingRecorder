@@ -10,6 +10,10 @@
 #import <Parse/Parse.h>
 #import <sys/utsname.h>
 
+//@import FirebaseDatabase;
+//@import FirebaseAuth;
+//@import FirebaseDatabase;
+
 NSString *deviceName;
 NSString *osVersion;
 BOOL checkAttendantDeadLine;
@@ -22,20 +26,19 @@ BOOL checkAttendantDeadLine;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [Parse setApplicationId:@"TlUPVfv4VFf6O5sWppgvE1Koo80oqvhvBB0FePUC" clientKey:@"jObLwhnPEsWGRWkjAhwDVcPv1RUcznytT2X83iet"];
-    //DBSession *dbSession = [[DBSession alloc]
-                            //initWithAppKey:@"4szor352eu58atv"
-                            //appSecret:@"irhmjazovmmq6ea"
-                            //root:kDBRootAppFolder]; // either kDBRootAppFolder or kDBRootDropbox
-    //[DBSession setSharedSession:dbSession];
     // Register for Push Notitications
+    /*
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |UIUserNotificationTypeBadge |UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
+    */
     NSLog(@"DidFinishLaunchingWithOptions");
     deviceName = [self currentDeviceName];
     checkAttendantDeadLine = YES;
     NSLog(@"%@",[NSUUID UUID].UUIDString);
+    
+    [FIRApp configure];
     return YES;
 }
 
