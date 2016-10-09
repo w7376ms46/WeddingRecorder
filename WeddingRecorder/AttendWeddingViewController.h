@@ -11,7 +11,10 @@
 #import "MainTabBarController.h"
 #import "GeneralTableViewCell.h"
 #import "WeddingListTableViewController.h"
+@import Firebase;
+@import FirebaseDatabase;
 @import GoogleMobileAds;
+
 @interface AttendWeddingViewController : UIViewController<UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 - (IBAction)login:(id)sender;

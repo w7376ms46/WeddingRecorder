@@ -9,7 +9,6 @@
 #import "AttendantTableViewController.h"
 
 @interface AttendantTableViewController ()
-extern BOOL checkAttendantDeadLine;
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 @property (nonatomic, strong) UIAlertController *processing;
 @property (strong, nonatomic)UIPickerView *pickRegion;
@@ -20,14 +19,14 @@ extern BOOL checkAttendantDeadLine;
 @property (strong, nonatomic)NSString *marryPlace;
 @property (strong, nonatomic)NSString *engagePlace;
 @property (strong, nonatomic)NSDate *modifyFormDeadline;
-
+@property (strong, nonatomic)FIRDatabaseReference *databaseRef;
 @property (nonatomic) BOOL onlyOneSession;
 
 @end
 
 @implementation AttendantTableViewController
 
-@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace, modifyFormDeadline, onlyOneSession, chooseSessionCell;
+@synthesize name, phone, attendWilling, nickName, addressRegion, addressDetail, relation, peopleNumber, peopleCount, vagetableNumber, vagetableCount, meatNumber, meatCount, session, userDefaults, modifyButton, cleanButton, saveDataButton, processing, notation, pickRegion, cityAndRegionArray, regionArray, engagePlace, marryPlace, sessionPlace, modifyFormDeadline, onlyOneSession, chooseSessionCell, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,82 +64,74 @@ extern BOOL checkAttendantDeadLine;
     addressDetail.delegate = self;
     notation.delegate = self;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
+    databaseRef = [[FIRDatabase database]reference];
+    
     dispatch_async(dispatch_get_main_queue(),^{
         [self presentViewController:processing animated:YES completion:^{
-            PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
             MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
             NSString *weddingObjectId = tabBarController.weddingObjectId;
-            [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
-            [query whereKey:@"weddingObjectId" equalTo:weddingObjectId];
-            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                if (!object) {
-                    NSLog(@"The getFirstObject request failed.");
-                    name.text = @"";
-                    phone.text = @"";
-                    attendWilling.selectedSegmentIndex = -1;
-                    nickName.text = @"";
-                    addressRegion.text = @"";
-                    addressDetail.text = @"";
-                    relation.selectedSegmentIndex = -1;
-                    peopleNumber.text = @"0";
-                    vagetableNumber.text = @"0";
-                    meatNumber.text = @"0";
-                    session.selectedSegmentIndex = -1;
-                    [peopleCount setValue:0];
-                    [vagetableCount setValue:0];
-                    [meatCount setValue:0];
-                    [notation setText:@""];
-                    [userDefaults setObject:@"" forKey:@"NickName"];
-                }
-                else {
-                    [name setText:object[@"Name"]];
-                    [phone setText:object[@"Phone"]];
-                    [attendWilling setSelectedSegmentIndex:[object[@"AttendingWilling"]integerValue]];
-                    [nickName setText:object[@"Name"]];
-                    [addressRegion setText:object[@"AddressRegion"]];
-                    [addressDetail setText:object[@"AddressDetail"]];
-                    [relation setSelectedSegmentIndex:[object[@"Relation"]integerValue]];
-                    [peopleNumber setText:[NSString stringWithFormat:@"%ld",[object[@"PeopleNumber"] integerValue]]];
-                    [peopleCount setValue:[object[@"PeopleNumber"] integerValue]];
-                    [vagetableNumber setText:[NSString stringWithFormat:@"%ld",[object[@"VagetableNumber"] integerValue]]];
-                    [vagetableCount setValue:[object[@"VagetableNumber"] integerValue]];
-                    [meatNumber setText:[NSString stringWithFormat:@"%ld",[object[@"MeatNumber"] integerValue]]];
-                    [meatCount setValue:[object[@"MeatNumber"] integerValue]];
-                    [session setSelectedSegmentIndex:[object[@"Session"] integerValue]];
-                    [notation setText:object[@"Notation"]];
-                    [saveDataButton setEnabled:NO];
-                    [self disableAllObjects];
-                }
-                NSLog(@"before checkdeadline");
-                [self checkDeadLine];
-                NSLog(@"checkDeadLine");
-            }];
+            NSString *theInstallationId = [userDefaults objectForKey:@"InstallationId"];
+            //[[FIRAuth auth] signInAnonymouslyWithCompletion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
+                [[databaseRef child:[NSString stringWithFormat:@"AttendantList/%@/%@",weddingObjectId, theInstallationId]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                    if ([snapshot hasChildren]) {
+                        NSDictionary *attendantInfomation = snapshot.value;
+                        [name setText:attendantInfomation[@"name"]];
+                        [phone setText:attendantInfomation[@"phone"]];
+                        [attendWilling setSelectedSegmentIndex:[attendantInfomation[@"attendingWilling"]integerValue]];
+                        [nickName setText:attendantInfomation[@"name"]];
+                        [addressRegion setText:attendantInfomation[@"addressRegion"]];
+                        [addressDetail setText:attendantInfomation[@"addressDetail"]];
+                        [relation setSelectedSegmentIndex:[attendantInfomation[@"relation"]integerValue]];
+                        [peopleNumber setText:[NSString stringWithFormat:@"%ld",[attendantInfomation[@"peopleNumber"] integerValue]]];
+                        [peopleCount setValue:[attendantInfomation[@"peopleNumber"] integerValue]];
+                        [vagetableNumber setText:[NSString stringWithFormat:@"%ld",[attendantInfomation[@"vagetableNumber"] integerValue]]];
+                        [vagetableCount setValue:[attendantInfomation[@"vagetableNumber"] integerValue]];
+                        [meatNumber setText:[NSString stringWithFormat:@"%ld",[attendantInfomation[@"meatNumber"] integerValue]]];
+                        [meatCount setValue:[attendantInfomation[@"meatNumber"] integerValue]];
+                        [session setSelectedSegmentIndex:[attendantInfomation[@"session"] integerValue]];
+                        [notation setText:attendantInfomation[@"notation"]];
+                        [saveDataButton setEnabled:NO];
+                        [self disableAllObjects];
+                    }
+                    else{
+                        NSLog(@"First fill the form");
+                        name.text = @"";
+                        phone.text = @"";
+                        attendWilling.selectedSegmentIndex = -1;
+                        nickName.text = @"";
+                        addressRegion.text = @"";
+                        addressDetail.text = @"";
+                        relation.selectedSegmentIndex = -1;
+                        peopleNumber.text = @"0";
+                        vagetableNumber.text = @"0";
+                        meatNumber.text = @"0";
+                        session.selectedSegmentIndex = -1;
+                        [peopleCount setValue:0];
+                        [vagetableCount setValue:0];
+                        [meatCount setValue:0];
+                        [notation setText:@""];
+                        [userDefaults setObject:@"" forKey:@"NickName"];
+                    }
+                    [self checkDeadLine];
+                }];
+            //}];
         }];
     });
     
 }
 
 - (void) checkDeadLine{
-    PFQuery *queryStartDate = [PFQuery queryWithClassName:@"Information"];
     MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
     NSString *weddingObjectId = tabBarController.weddingObjectId;
-    [queryStartDate whereKey:@"objectId" equalTo:weddingObjectId];
-    [queryStartDate getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        NSLog(@"checkDeadLine  %@", error);
-        if (error) {
-            NSLog(@"no objecttttt");
-        }
-        else {
-            //NSDate *changeAttendantInfoDeadLine = [object objectForKey:@"changeAttendantInfoDeadLine"];
-            
+    [[databaseRef child:[NSString stringWithFormat:@"weddingInformation/%@",weddingObjectId]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if ([snapshot hasChildren]) {
+            NSDictionary *weddingInformation = snapshot.value;
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy / MM / dd HH:mm"];
-            modifyFormDeadline = [dateFormatter dateFromString:[object objectForKey:@"modifyFormDeadline"]];
-            
-            
-            marryPlace = object[@"marryPlace"];
-            engagePlace = object[@"engagePlace"];
-            onlyOneSession = [object[@"onlyOneSession"] boolValue];
+            modifyFormDeadline = [dateFormatter dateFromString:[weddingInformation objectForKey:@"modifyFormDeadline"]];
+            marryPlace = weddingInformation[@"marryPlace"];
+            engagePlace = weddingInformation[@"engagePlace"];
+            onlyOneSession = [weddingInformation[@"onlyOneSession"] boolValue];
             if (onlyOneSession) {
                 dispatch_async(dispatch_get_main_queue(),^{
                     [chooseSessionCell setHidden:YES];
@@ -163,7 +154,6 @@ extern BOOL checkAttendantDeadLine;
             else{
                 sessionPlace.text = @"";
             }
-            NSLog(@"dismissviewcoasdfasdfasdfasdfntrollerrrrr");
             if ([modifyFormDeadline compare:[NSDate date]] == NSOrderedAscending) {
                 [cleanButton setEnabled:NO];
                 [modifyButton setEnabled:NO];
@@ -179,10 +169,9 @@ extern BOOL checkAttendantDeadLine;
                         [self presentViewController:message animated:YES completion:nil];
                     }];
                 });
-
+                
             }
             else{
-                NSLog(@"dismissssssssss");
                 dispatch_async(dispatch_get_main_queue(),^{
                     [processing dismissViewControllerAnimated:YES completion:nil];
                 });
@@ -191,12 +180,13 @@ extern BOOL checkAttendantDeadLine;
                 [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
             });
         }
-        checkAttendantDeadLine = NO;
+        dispatch_async(dispatch_get_main_queue(),^{
+            [processing dismissViewControllerAnimated:YES completion:nil];
+        });
     }];
 }
 
 - (void)applicationEnteredForeground:(NSNotification *)notification {
-    NSLog(@"Application Entered Foreground");
     [self checkDeadLine];
 }
 
@@ -261,7 +251,6 @@ extern BOOL checkAttendantDeadLine;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"indexpath = %d", indexPath.row);
     [self.view endEditing:YES];
 }
 
@@ -312,7 +301,6 @@ extern BOOL checkAttendantDeadLine;
 - (IBAction)chooseWilling:(id)sender {
     [self.view endEditing:YES];
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-    NSLog(@"chooseWilling = %d",segmentedControl.selectedSegmentIndex);
     if (segmentedControl.selectedSegmentIndex == 1) {
         [addressRegion setEnabled:NO];
         [addressRegion setText:@""];
@@ -400,7 +388,6 @@ extern BOOL checkAttendantDeadLine;
 }
 
 - (IBAction)saveData:(id)sender {
-    
     if ([modifyFormDeadline compare:[NSDate date]] == NSOrderedAscending) {
         [cleanButton setEnabled:NO];
         [modifyButton setEnabled:NO];
@@ -415,8 +402,6 @@ extern BOOL checkAttendantDeadLine;
         });
         return;
     }
-    
-    
     BOOL uploadingData = NO;
     NSString *alertString = @"";
     
@@ -452,58 +437,55 @@ extern BOOL checkAttendantDeadLine;
         }
     }
     if (![alertString isEqualToString:@""]) {
-        //dispatch_async(dispatch_get_main_queue(),^{
-        //[processing dismissViewControllerAnimated:YES completion:^{
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-            [alert addAction:okAction];
-            [self presentViewController:alert animated:YES completion:nil];
-        //}];
-        
-        //});
-        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:alertString preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:okAction];
+        [self presentViewController:alert animated:YES completion:nil];
     }
     else{
         [self presentViewController:processing animated:YES completion:nil];
         MainTabBarController *tabBarController = (MainTabBarController *)self.tabBarController;
         NSString *weddingObjectId = tabBarController.weddingObjectId;
-        PFQuery *query = [PFQuery queryWithClassName:@"AttendantList"];
-        [query whereKey:@"InstallationID" equalTo:[PFInstallation currentInstallation].installationId];
-        [query whereKey:@"weddingObjectId" equalTo:weddingObjectId];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *registrationData, NSError *error) {
-            if (!registrationData) {
-                registrationData = [PFObject objectWithClassName:@"AttendantList"];
+        NSMutableDictionary *registrationData = [[NSMutableDictionary alloc] init];
+        registrationData[@"name"] = name.text;
+        registrationData[@"phone"] = phone.text;
+        registrationData[@"relation"] = @(relation.selectedSegmentIndex);
+        registrationData[@"attendingWilling"] = @(attendWilling.selectedSegmentIndex);
+        registrationData[@"shooter"] = @"";
+        if (attendWilling.selectedSegmentIndex == 0) {
+            registrationData[@"addressRegion"] = addressRegion.text;
+            registrationData[@"addressDetail"] = addressDetail.text;
+            registrationData[@"peopleNumber"] = @([peopleNumber.text integerValue]);
+            registrationData[@"vagetableNumber"] = @([vagetableNumber.text integerValue]);
+            registrationData[@"meatNumber"] = @([meatNumber.text integerValue]);
+            if (onlyOneSession) {
+                registrationData[@"session"] = @(-1);
             }
-            registrationData[@"Name"] = name.text;
-            registrationData[@"Phone"] = phone.text;
-            registrationData[@"Relation"] = @(relation.selectedSegmentIndex);
-            registrationData[@"AttendingWilling"] = @(attendWilling.selectedSegmentIndex);
-            registrationData[@"Shooter"] = @"";
-            if (attendWilling.selectedSegmentIndex == 0) {
-                registrationData[@"AddressRegion"] = addressRegion.text;
-                registrationData[@"AddressDetail"] = addressDetail.text;
-                registrationData[@"PeopleNumber"] = @([peopleNumber.text integerValue]);
-                registrationData[@"VagetableNumber"] = @([vagetableNumber.text integerValue]);
-                registrationData[@"MeatNumber"] = @([meatNumber.text integerValue]);
-                if (onlyOneSession) {
-                    registrationData[@"Session"] = @(-1);
-                }
-                else{
-                    registrationData[@"Session"] = @(session.selectedSegmentIndex);
-                }
+            else{
+                registrationData[@"session"] = @(session.selectedSegmentIndex);
             }
-            registrationData[@"InstallationID"] = [PFInstallation currentInstallation].installationId;
-            registrationData[@"Notation"] = notation.text;
-            registrationData[@"weddingObjectId"] = weddingObjectId;
-            [registrationData saveInBackground];
-            [saveDataButton setEnabled:NO];
-            [self disableAllObjects];
-            [processing dismissViewControllerAnimated:YES completion:nil];
-        }];
+        }
+        registrationData[@"notation"] = notation.text;
+        NSString *theInstallationId = [userDefaults objectForKey:@"InstallationId"];
+        NSLog(@"the Installation id = %@", theInstallationId);
+        if (theInstallationId) {
+            [[databaseRef child:[NSString stringWithFormat:@"AttendantList/%@/%@",weddingObjectId, theInstallationId]] setValue:registrationData withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                [processing dismissViewControllerAnimated:YES completion:nil];
+            }];
+        }
+        else{
+            [[[databaseRef child:[NSString stringWithFormat:@"AttendantList/%@",weddingObjectId]] childByAutoId] setValue:registrationData withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                NSLog(@"the ref.key = %@", ref.key);
+                [userDefaults setObject:ref.key forKey:@"InstallationId"];
+                [processing dismissViewControllerAnimated:YES completion:nil];
+            }];
+        }
+        [saveDataButton setEnabled:NO];
+        [self disableAllObjects];
         [userDefaults setObject:name.text forKey:@"NickName"];
-        [userDefaults synchronize];
+        BOOL synchronizeResult = [userDefaults synchronize];
+        NSLog(@"synchronizeResult = %d", synchronizeResult);
         [modifyButton setEnabled:YES];
-        
     }
 }
 
@@ -555,22 +537,6 @@ extern BOOL checkAttendantDeadLine;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    /*
-    if (indexPath.row == 8) {
-        if (onlyOneSession) {
-            return 0;
-        }
-        else{
-            return 75;
-        }
-    }
-    else if (indexPath.row<=6 || indexPath.row == 9){
-        return 44;
-    }
-    else {
-        return 75;
-    }
-     */
     if (indexPath.row == 7) {
         return 75;
     }

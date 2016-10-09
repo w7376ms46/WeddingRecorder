@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
 #import "MainTabBarController.h"
+@import Firebase;
+@import FirebaseDatabase;
 
 @interface AttendantTableViewController : UITableViewController<UITextFieldDelegate, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *name;

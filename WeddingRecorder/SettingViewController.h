@@ -13,8 +13,9 @@
 #import "MainTabBarController.h"
 #import "GuestListTableViewController.h"
 #import "ModifyWeddingTableViewController.h"
+@import Firebase;
+@import FirebaseAuth;
 @import GoogleMobileAds;
-
 @interface SettingViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *settingTableView;
 - (IBAction)leaveWedding:(id)sender;

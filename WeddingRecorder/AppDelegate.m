@@ -16,7 +16,6 @@
 
 NSString *deviceName;
 NSString *osVersion;
-BOOL checkAttendantDeadLine;
 @interface AppDelegate ()
 
 @end
@@ -35,8 +34,6 @@ BOOL checkAttendantDeadLine;
     */
     NSLog(@"DidFinishLaunchingWithOptions");
     deviceName = [self currentDeviceName];
-    checkAttendantDeadLine = YES;
-    NSLog(@"%@",[NSUUID UUID].UUIDString);
     
     [FIRApp configure];
     return YES;
@@ -69,12 +66,10 @@ BOOL checkAttendantDeadLine;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     NSLog(@"applicationWillEnterForeground");
-    checkAttendantDeadLine = YES;
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    checkAttendantDeadLine = YES;
     NSLog(@"applicationDidBecomeActive");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }

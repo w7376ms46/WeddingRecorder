@@ -119,24 +119,6 @@
             [self performSegueWithIdentifier:@"segueModifyWeddingInfo" sender:self];
         }
     }
-    
-    /*
-    else if (indexPath.section == 1){
-        UINavigationController *nav = (UINavigationController *)self.presentingViewController;
-        [self dismissViewControllerAnimated:NO completion:^{
-            NSLog(@"class = %@", [nav.topViewController class]);
-            if ([nav.topViewController class] == [CreateWeddingTableViewController class]) {
-                [nav dismissViewControllerAnimated:YES completion:nil];
-            }
-            else if ([nav.topViewController class] == [WeddingListTableViewController class]){
-                [nav popViewControllerAnimated:NO];
-            }
-            else if ([nav.topViewController class] == [AttendWeddingTableViewController class]){
-                [nav dismissViewControllerAnimated:YES completion:nil];
-            }
-        }];
-    }
-     */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -162,17 +144,24 @@
 
 - (IBAction)leaveWedding:(id)sender {
     UINavigationController *nav = (UINavigationController *)self.presentingViewController;
-    [self dismissViewControllerAnimated:NO completion:^{
-        NSLog(@"class = %@", [nav.topViewController class]);
-        if ([nav.topViewController class] == [CreateWeddingTableViewController class]) {
-            [nav dismissViewControllerAnimated:YES completion:nil];
-        }
-        else if ([nav.topViewController class] == [WeddingListTableViewController class]){
-            [nav popViewControllerAnimated:NO];
-        }
-        else if ([nav.topViewController class] == [AttendWeddingViewController class]){
-            [nav dismissViewControllerAnimated:YES completion:nil];
-        }
-    }];
+    NSLog(@"~~~class = %@", [nav.topViewController class]);
+    
+    NSError *error;
+    [[FIRAuth auth]signOut:&error];
+    if (!error) {
+        [self dismissViewControllerAnimated:NO completion:^{
+            NSLog(@"class = %@", [nav.topViewController class]);
+            if ([nav.topViewController class] == [CreateWeddingTableViewController class]) {
+                [nav dismissViewControllerAnimated:YES completion:nil];
+            }
+            else if ([nav.topViewController class] == [WeddingListTableViewController class]){
+                [nav popViewControllerAnimated:NO];
+            }
+            else if ([nav.topViewController class] == [AttendWeddingViewController class]){
+                [nav dismissViewControllerAnimated:YES completion:nil];
+            }
+        }];
+    }
+    
 }
 @end

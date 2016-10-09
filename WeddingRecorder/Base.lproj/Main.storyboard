@@ -1716,7 +1716,7 @@
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell3" id="92y-HP-re0" customClass="GeneralTableViewCell">
-                                        <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="92y-HP-re0" id="SkI-rV-i3E">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -1751,7 +1751,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell0" id="BMH-uf-bz3" customClass="GeneralTableViewCell">
-                                        <rect key="frame" x="0.0" y="100" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BMH-uf-bz3" id="kmw-Sn-cW5">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -1795,7 +1795,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell1" id="zpF-db-mbS" customClass="GeneralTableViewCell">
-                                        <rect key="frame" x="0.0" y="144" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="143.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zpF-db-mbS" id="IrJ-at-vY9">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -1839,7 +1839,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell2" id="pVt-Ba-OyV" customClass="GeneralTableViewCell">
-                                        <rect key="frame" x="0.0" y="188" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="187.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pVt-Ba-OyV" id="PgK-de-Ufj">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -1891,7 +1891,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell4" id="ITX-Mv-SqZ" customClass="GeneralTableViewCell">
-                                        <rect key="frame" x="0.0" y="232" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="231.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ITX-Mv-SqZ" id="f2i-I0-c86">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -2355,7 +2355,7 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell" rowHeight="88" id="wnp-kU-c6R" customClass="WeddingListTableViewCell">
-                                <rect key="frame" x="0.0" y="120" width="375" height="88"/>
+                                <rect key="frame" x="0.0" y="119.5" width="375" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wnp-kU-c6R" id="b5D-gm-Jpa">
                                     <frame key="frameInset" width="342" height="87.5"/>
@@ -4806,11 +4806,11 @@
         <image name="Willing" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="WeS-JG-qoY"/>
-        <segue reference="MmB-L0-8VO"/>
-        <segue reference="pE6-JO-TOF"/>
-        <segue reference="fjm-St-hAU"/>
-        <segue reference="DTH-kB-6H7"/>
         <segue reference="lzU-1b-eKA"/>
+        <segue reference="MmB-L0-8VO"/>
+        <segue reference="cHk-N0-NAV"/>
+        <segue reference="WUa-b6-C0Q"/>
+        <segue reference="DTH-kB-6H7"/>
+        <segue reference="WeS-JG-qoY"/>
     </inferredMetricsTieBreakers>
 </document>

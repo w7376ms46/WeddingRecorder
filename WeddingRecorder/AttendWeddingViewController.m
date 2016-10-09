@@ -15,14 +15,15 @@
 @property (weak, nonatomic) GeneralTableViewCell *weddingPasswordCell;
 @property (weak, nonatomic) GeneralTableViewCell *rememberInfoCell;
 @property (weak, nonatomic) GeneralTableViewCell *mobileNumberCell;
-
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 @property (nonatomic)NSInteger searchMode;
+@property (nonatomic, strong) FIRDatabaseReference *databaseRef;
+
 @end
 
 @implementation AttendWeddingViewController
 
-@synthesize attendTableView, processing, weddingNameCell, weddingPasswordCell, rememberInfoCell, userDefaults, advertisementBanner, searchMode, mobileNumberCell;
+@synthesize attendTableView, processing, weddingNameCell, weddingPasswordCell, rememberInfoCell, userDefaults, advertisementBanner, searchMode, mobileNumberCell, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,6 +32,8 @@
     attendTableView.dataSource = self;
     processing = [UIAlertController alertControllerWithTitle:nil message:@"處理中..." preferredStyle:UIAlertControllerStyleAlert];
     userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    databaseRef = [[FIRDatabase database]reference];
     advertisementBanner.adUnitID = @"ca-app-pub-6991194125878512/9446351751";
     advertisementBanner.rootViewController = self;
     [advertisementBanner loadRequest:[GADRequest request]];
@@ -154,9 +157,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueMainTab"]) {
         MainTabBarController *tabBarController = segue.destinationViewController;
-        PFObject *tempObject = (PFObject *)sender;
-        tabBarController.weddingObjectId = tempObject.objectId;
-        tabBarController.weddingName = tempObject[@"weddingAccount"];
+        
+        NSDictionary *tempObject = (NSDictionary *)sender;
+        NSString *weddingObjectId = [tempObject allKeys][0];
+        NSDictionary *weddingInformation = tempObject[weddingObjectId];
+        tabBarController.weddingObjectId = weddingObjectId;
+        tabBarController.weddingName = weddingInformation[@"weddingAccount"];
         tabBarController.manager = NO;
     }
     else if( [segue.identifier isEqualToString:@"segueWeddingList"]) {
@@ -223,56 +229,58 @@
             [self presentViewController:processing animated:YES completion:nil];
         });
         if (searchMode == 0) {
-            PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-            [query whereKey:@"MobileNumber" equalTo:mobileNumberCell.mobileNumber.text];
-            [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-                if (error) {
-                    if ([error.userInfo[@"code"] isEqual:@100]) {
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"請連上網路！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                        }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
+            [[[[databaseRef child:@"weddingInformation"]queryOrderedByChild:@"mobileNumber"] queryEqualToValue:mobileNumber]observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                if ([snapshot hasChildren]) {
+                    NSMutableArray *weddingList = [[NSMutableArray alloc] init];
+                    for (NSString *keyString in [snapshot.value allKeys]) {
+                        NSMutableDictionary *weddingInformationPackage = [[NSMutableDictionary alloc] init];
+                        [weddingInformationPackage setValue: [snapshot.value objectForKey:keyString] forKey:keyString];
+                        [weddingList addObject:weddingInformationPackage];
                     }
-                    else{
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"無法取得婚禮資訊，請稍候再試！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self performSegueWithIdentifier:@"segueWeddingList" sender:weddingList];
                         }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
+                    });
                 }
                 else{
-                    if([objects count] == 0){
-                        UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"無法取得婚禮資訊，請確認手機號碼是否正確！" preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"無法取得婚禮資訊，請確認手機號碼是否正確！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    }];
+                    [message addAction:okButton];
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self presentViewController:message animated:YES completion:nil];
                         }];
-                        [message addAction:okButton];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self presentViewController:message animated:YES completion:nil];
-                            }];
-                        });
-                    }
-                    else{
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            [processing dismissViewControllerAnimated:YES completion:^{
-                                [self performSegueWithIdentifier:@"segueWeddingList" sender:[objects mutableCopy]];
-                            }];
-                        });
-                    }
+                    });
                 }
             }];
         }
         else if (searchMode == 1){
+            NSLog(@"currentUser = %@", [[FIRAuth auth]currentUser].uid);
+            [[[[databaseRef child:@"weddingInformation"]queryOrderedByChild:@"weddingNameAndWeddingPassword"] queryEqualToValue:[NSString stringWithFormat:@"%@---%@",weddingName,weddingPassword]]observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                NSLog(@"!!!snapshot = %@",snapshot);
+                if ([snapshot hasChildren]) {
+                    
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self performSegueWithIdentifier:@"segueMainTab" sender:snapshot.value];
+                        }];
+                    });
+                }
+                else{
+                    UIAlertController *message = [UIAlertController alertControllerWithTitle:nil message:@"無法取得婚禮資訊，請與新郎/新娘確認婚宴名稱及通關密語！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"好！" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    }];
+                    [message addAction:okButton];
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        [processing dismissViewControllerAnimated:YES completion:^{
+                            [self presentViewController:message animated:YES completion:nil];
+                        }];
+                    });
+                }
+            }];
+            /*
             PFQuery *query = [PFQuery queryWithClassName:@"Information"];
             [query whereKey:@"weddingPassword" equalTo:weddingPassword];
             [query whereKey:@"weddingAccount" equalTo:weddingName];
@@ -312,6 +320,7 @@
                     });
                 }
             }];
+            */
         }
     }
 }

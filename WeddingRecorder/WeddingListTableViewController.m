@@ -46,27 +46,6 @@
                 });
             }
         }];
-        /*
-        PFUser *currentUser = [PFUser currentUser];
-        PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-        [query whereKey:@"managerAccount" equalTo:currentUser.username];
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                if ([objects count] == 0) {
-                }
-                else{
-                    weddingList = [objects mutableCopy];
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        [self.tableView reloadData];
-                    });
-                }
-            }
-            else {
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
-            }
-        }];
-         */
     }
     else{
         NSLog(@"objects count = %d in weddingList", [weddingList count]);
@@ -143,6 +122,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [self presentViewController:processing animated:YES completion:^{
+            //TODO: change to firebase
             PFObject *deletedObject = weddingList[indexPath.row];
             [deletedObject deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 [weddingList removeObjectAtIndex:indexPath.row];
