@@ -10,6 +10,9 @@
 #import <Parse/Parse.h>
 #import <EventKit/EventKit.h>
 #import "MainTabBarController.h"
+@import Firebase;
+@import FirebaseDatabase;
+
 @interface WeddingInformationTableViewController : UITableViewController
 @property (weak, nonatomic) IBOutlet UIButton *engageTime;
 @property (weak, nonatomic) IBOutlet UIButton *engageAddress;

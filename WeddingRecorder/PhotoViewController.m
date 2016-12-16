@@ -29,11 +29,15 @@ extern NSString *deviceName;
 @property (nonatomic) BOOL comeFromAnotherTab; // 是否是從別的tab進入此頁面，若是，則要check是否活動已開始。
 @property (strong, nonatomic) NSString *weddingName;
 @property (strong, nonatomic) NSString *weddingInfoObjectId;
+
+@property (strong, nonatomic) FIRStorage *storage;
+@property (strong, nonatomic) FIRStorageReference *storageRef;
+
 @end
 
 @implementation PhotoViewController
 
-@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, weddingName, weddingInfoObjectId;
+@synthesize photoCollectionView, photoData, imagePicker, userDefaults, selectButton, selection, photoDictionary, photoDictionaryKey, processing, refreshControl, usePullRefresh, selectedIndexpath, eachPhotoUploadProgress, uploadingImageCount, totalProgress, uploading, uploadFromAlbum, downloadButton, loadingPhoto, comeFromAnotherTab, weddingName, weddingInfoObjectId, storage,storageRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -64,6 +68,9 @@ extern NSString *deviceName;
     weddingInfoObjectId = tabBarController.weddingObjectId;
     
     NSLog(@"installation object id = %@", [PFInstallation currentInstallation].objectId);
+    
+    storage = [FIRStorage storage];
+    storageRef = [storage reference];
 }
 
 - (void) viewDidAppear:(BOOL)animated{
@@ -464,6 +471,40 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
     totalProgress = totalProgress + 100;
     
     NSLog(@"start save in background with block");
+    
+    
+    
+    FIRStorageReference *photoRef = [storageRef child:[NSString stringWithFormat:@"photo/%@/%@",weddingInfoObjectId,[[NSUUID UUID] UUIDString]]];
+    FIRStorageUploadTask *uploadTask = [photoRef putData:imageData metadata:nil completion:^(FIRStorageMetadata * _Nullable metadata, NSError * _Nullable error) {
+        if (error != nil) {
+            // Uh-oh, an error occurred!
+            NSLog(@"upload with error = %@", error);
+        } else {
+            // Metadata contains file metadata such as size, content-type, and download URL.
+            NSURL *downloadURL = metadata.downloadURL;
+            NSLog(@"the downloadurl = %@", downloadURL);
+        }
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount]];
+    });
+    
+    [uploadTask observeStatus:FIRStorageTaskStatusProgress handler:^(FIRStorageTaskSnapshot *snapshot) {
+        double percentComplete = 100.0 * (snapshot.progress.completedUnitCount) / (snapshot.progress.totalUnitCount);
+        NSLog(@"the upload progress = %f", percentComplete);
+    }];
+    
+    [uploadTask observeStatus:FIRStorageTaskStatusSuccess handler:^(FIRStorageTaskSnapshot *snapshot) {
+        // Upload completed successfully
+        uploadingImageCount--;
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.navigationItem setPrompt:[NSString stringWithFormat:@"上傳中...還有%d張等待上傳！", uploadingImageCount]];
+        });
+        NSLog(@"upload completed!!!");
+    }];
+    
+    /*
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         NSLog(@"save file succeededdddddddd object id ");
         PFUser *currentUser = [PFUser currentUser];
@@ -518,7 +559,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger) section {
                                });
                            }];
     
-    
+    */
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     

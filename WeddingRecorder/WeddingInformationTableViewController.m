@@ -12,12 +12,12 @@
 @interface WeddingInformationTableViewController ()
 @property (nonatomic, strong) UIAlertController *processing;
 @property (nonatomic, strong) PFObject *weddingInformation;
-
+@property (nonatomic, strong) FIRDatabaseReference *databaseRef;
 @end
 
 @implementation WeddingInformationTableViewController
 
-@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName, shareButton, engageLabel;
+@synthesize engageAddress, marryAddress, engageTime, marryTime, engagePlace, marryPlace, processing, weddingInformation, weddingName, groomAndBrideName, shareButton, engageLabel, databaseRef;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,33 +30,28 @@
     if (!currentUser) {
         self.navigationItem.rightBarButtonItem = nil;
     }
-    PFQuery *query = [PFQuery queryWithClassName:@"Information"];
-    //[query whereKey:@"managerAccount" equalTo:currentUser.username];
-    //[query whereKey:@"weddingAccount" equalTo:tabBarController.weddingName];
     
-    //[query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-    [query getObjectInBackgroundWithId:tabBarController.weddingObjectId block:^(PFObject *object, NSError * error) {
-        if (!object) {
-            NSLog(@"No object retrieved");
-        }
-        else {
-            NSLog(@"getttttt object");
-            [engageTime setTitle:object[@"engageDate"] forState:UIControlStateNormal];
-            [marryTime setTitle:object[@"marryDate"] forState:UIControlStateNormal];
-            [engagePlace setTitle:object[@"engagePlace"] forState:UIControlStateNormal];
-            [marryPlace setTitle:object[@"marryPlace"] forState:UIControlStateNormal];
-            [engageAddress setTitle:object[@"engageAddress"] forState:UIControlStateNormal];
-            [marryAddress setTitle:object[@"marryAddress"] forState:UIControlStateNormal];
-            [groomAndBrideName setText:[NSString stringWithFormat:@"%@&%@",object[@"groomName"],object[@"brideName"]]];
-            if ([object[@"onlyOneSession"] boolValue]) {
+    databaseRef = [[FIRDatabase database]reference];
+    [[databaseRef child:[NSString stringWithFormat:@"weddingInformation/%@", tabBarController.weddingObjectId]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSLog(@"the snapshot = %@", snapshot);
+        NSDictionary *weddingInfo = snapshot.value;
+        if ([snapshot hasChildren]) {
+            [engageTime setTitle:weddingInfo[@"engageDate"] forState:UIControlStateNormal];
+            [marryTime setTitle:weddingInfo[@"marryDate"] forState:UIControlStateNormal];
+            [engagePlace setTitle:weddingInfo[@"engagePlace"] forState:UIControlStateNormal];
+            [marryPlace setTitle:weddingInfo[@"marryPlace"] forState:UIControlStateNormal];
+            [engageAddress setTitle:weddingInfo[@"engageAddress"] forState:UIControlStateNormal];
+            [marryAddress setTitle:weddingInfo[@"marryAddress"] forState:UIControlStateNormal];
+            [groomAndBrideName setText:[NSString stringWithFormat:@"%@&%@",weddingInfo[@"groomName"],weddingInfo[@"brideName"]]];
+            if ([weddingInfo[@"onlyOneSession"] boolValue]) {
                 engageLabel.text = @"婚宴";
             }
-            weddingInformation = object;
+            weddingInformation = weddingInfo;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
-            
         }
+        
     }];
 }
 

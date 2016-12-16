@@ -15,6 +15,9 @@
 #import "MainTabBarController.h"
 #import "SlideShowViewController.h"
 
+
+@import Firebase;
+
 @interface PhotoViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *photoCollectionView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *selectButton;
